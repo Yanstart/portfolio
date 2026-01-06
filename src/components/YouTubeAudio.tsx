@@ -593,60 +593,47 @@ export default function YouTubeAudio() {
       </div>
 
       <motion.div
-        className="fixed bottom-6 right-6 z-50"
+        className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50"
         initial={{ opacity: 0, y: 50, scale: 0.8 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ delay: 1, duration: 0.5, type: "spring" }}
       >
         <div className="relative">
-          {/* Prompt bubble */}
+          {/* Prompt bubble - hidden on mobile */}
           <AnimatePresence>
             {showPrompt && !hasInteracted && (
               <motion.div
                 initial={{ opacity: 0, x: 20, scale: 0.8 }}
                 animate={{ opacity: 1, x: 0, scale: 1 }}
                 exit={{ opacity: 0, x: 20, scale: 0.8 }}
-                className="absolute right-full mr-4 top-1/2 -translate-y-1/2 whitespace-nowrap"
+                className="hidden sm:block absolute right-full mr-3 top-1/2 -translate-y-1/2 whitespace-nowrap"
               >
                 <motion.div
                   animate={{ scale: [1, 1.02, 1] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
-                  className="bg-gradient-to-r from-[#FF0000] to-[var(--tech-blue)] text-white px-5 py-3 shadow-lg flex items-center gap-3"
+                  className="bg-gradient-to-r from-[#FF0000] to-[var(--tech-blue)] text-white px-3 py-2 shadow-lg flex items-center gap-2 text-sm"
                   style={{ fontFamily: "'Special Elite', monospace" }}
                 >
-                  <motion.div
-                    animate={{ rotate: [0, 10, -10, 0] }}
-                    transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 1 }}
-                  >
-                    <Volume2 className="w-5 h-5" />
-                  </motion.div>
-                  <span className="text-base font-medium">Cliquez pour la musique!</span>
-                  <div className="absolute -right-2 top-1/2 -translate-y-1/2 w-0 h-0 border-t-[10px] border-b-[10px] border-l-[10px] border-transparent border-l-[var(--tech-blue)]" />
+                  <Volume2 className="w-4 h-4" />
+                  <span>Musique!</span>
+                  <div className="absolute -right-2 top-1/2 -translate-y-1/2 w-0 h-0 border-t-[8px] border-b-[8px] border-l-[8px] border-transparent border-l-[var(--tech-blue)]" />
                 </motion.div>
               </motion.div>
             )}
           </AnimatePresence>
 
-          {/* Main player container */}
+          {/* Main player container - Compact on mobile */}
           <motion.div
-            className={`flex items-center gap-4 bg-[var(--card-bg)]/98 backdrop-blur-md border-3 border-[var(--western-brown)] shadow-[5px_5px_0_var(--western-brown-dark)] px-5 py-4 transition-all group relative overflow-hidden ${!isReady && !godfatherPlaying ? 'opacity-70' : ''}`}
+            className={`flex items-center gap-1.5 sm:gap-2 md:gap-3 bg-[var(--card-bg)]/98 backdrop-blur-md border-2 border-[var(--western-brown)] shadow-[3px_3px_0_var(--western-brown-dark)] px-2 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-2.5 transition-all group relative overflow-hidden ${!isReady && !godfatherPlaying ? 'opacity-70' : ''}`}
             style={{
               borderColor: isPlaying ? '#FF0000' : godfatherPlaying ? 'var(--western-gold)' : undefined,
               boxShadow: isPlaying
-                ? '5px 5px 0 var(--western-brown-dark), 0 0 20px #FF000040'
+                ? '3px 3px 0 var(--western-brown-dark), 0 0 15px #FF000040'
                 : godfatherPlaying
-                  ? '5px 5px 0 var(--western-brown-dark), 0 0 15px rgba(218, 165, 32, 0.4)'
+                  ? '3px 3px 0 var(--western-brown-dark), 0 0 10px rgba(218, 165, 32, 0.4)'
                   : undefined,
             }}
             whileHover={{ scale: isReady ? 1.02 : 1 }}
-            animate={!hasInteracted && showPrompt && isReady ? {
-              boxShadow: [
-                '5px 5px 0 var(--western-brown-dark)',
-                '5px 5px 25px #FF000060',
-                '5px 5px 0 var(--western-brown-dark)',
-              ],
-            } : {}}
-            transition={!hasInteracted ? { duration: 1.5, repeat: Infinity } : {}}
           >
             {/* Animated background when playing */}
             {(isPlaying || godfatherPlaying) && (
@@ -665,7 +652,7 @@ export default function YouTubeAudio() {
             <motion.button
               onClick={togglePlay}
               disabled={!isReady && !godfatherPlaying}
-              className="relative z-10 p-2 rounded-full cursor-pointer disabled:cursor-not-allowed"
+              className="relative z-10 p-1.5 sm:p-2 rounded-full cursor-pointer disabled:cursor-not-allowed"
               style={{
                 backgroundColor: isPlaying
                   ? '#FF0000'
@@ -677,81 +664,76 @@ export default function YouTubeAudio() {
               }}
               animate={(isPlaying || godfatherPlaying) ? { scale: [1, 1.1, 1] } : {}}
               transition={{ duration: 1, repeat: Infinity }}
-              whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               aria-label={isPlaying ? 'Pause' : 'Play'}
             >
               {isPlaying ? (
-                <Pause className="w-5 h-5 text-white" />
+                <Pause className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
               ) : godfatherPlaying ? (
-                <Volume2 className="w-5 h-5 text-white" />
+                <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
               ) : (
-                <Play className="w-5 h-5 text-white ml-0.5" />
+                <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white ml-0.5" />
               )}
             </motion.button>
 
-            {/* Music info */}
+            {/* Music info - hidden on very small screens */}
             <button
               onClick={togglePlay}
               disabled={!isReady && !godfatherPlaying}
-              className="relative z-10 text-left min-w-0 max-w-[120px] cursor-pointer disabled:cursor-not-allowed bg-transparent border-none"
+              className="hidden xs:block relative z-10 text-left min-w-0 max-w-[80px] sm:max-w-[100px] cursor-pointer disabled:cursor-not-allowed bg-transparent border-none"
             >
               <p
-                className="text-sm font-bold transition-colors truncate"
+                className="text-[11px] sm:text-xs font-bold transition-colors truncate"
                 style={{
                   fontFamily: "'Cinzel', serif",
                   color: isPlaying || godfatherPlaying ? '#FF0000' : 'var(--text-primary)',
                 }}
                 title={godfatherPlaying && !isPlaying ? 'The Godfather Theme' : currentTheme.title}
               >
-                {godfatherPlaying && !isPlaying ? '🎺 The Godfather' : currentTheme.title}
+                {godfatherPlaying && !isPlaying ? '🎺 Godfather' : currentTheme.title}
               </p>
-              <p className="text-xs text-[var(--text-muted)] truncate" style={{ fontFamily: "'Special Elite', monospace" }} title={currentTheme.artist}>
+              <p className="text-[9px] sm:text-[10px] text-[var(--text-muted)] truncate" style={{ fontFamily: "'Special Elite', monospace" }}>
                 {godfatherPlaying && !isPlaying
-                  ? (isReady ? 'YouTube prêt...' : 'Chargement YouTube...')
-                  : (!isReady ? 'Chargement...' : isPlaying ? currentTheme.artist : 'Cliquez pour jouer')}
+                  ? (isReady ? 'Prêt' : '...')
+                  : (!isReady ? '...' : isPlaying ? currentTheme.category : 'Play')}
               </p>
-              {!godfatherPlaying && currentTheme.category && (
-                <span className="text-[10px] text-[var(--western-rust)] opacity-70">{currentTheme.category}</span>
-              )}
             </button>
 
             {/* Skip button */}
             <motion.button
               onClick={skipTrack}
               disabled={!isReady}
-              className="relative z-10 p-2 hover:bg-[var(--western-brown)]/20 transition-colors disabled:opacity-50"
-              whileHover={{ scale: 1.1 }}
+              className="relative z-10 p-1 sm:p-1.5 hover:bg-[var(--western-brown)]/20 transition-colors disabled:opacity-50"
               whileTap={{ scale: 0.9 }}
               title="Piste suivante"
               aria-label="Skip track"
             >
-              <SkipForward className="w-4 h-4 text-[var(--text-muted)] hover:text-[#FF0000]" />
+              <SkipForward className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[var(--text-muted)]" />
             </motion.button>
 
-            {/* Shuffle button */}
+            {/* Shuffle button - hidden on mobile */}
             <motion.button
               onClick={shuffleTrack}
               disabled={!isReady}
-              className="relative z-10 p-2 hover:bg-[var(--western-brown)]/20 transition-colors disabled:opacity-50"
-              whileHover={{ scale: 1.1, rotate: 180 }}
+              className="hidden sm:block relative z-10 p-1.5 hover:bg-[var(--western-brown)]/20 transition-colors disabled:opacity-50"
+              whileHover={{ rotate: 180 }}
               whileTap={{ scale: 0.9 }}
               title="Musique aléatoire"
               aria-label="Shuffle track"
             >
-              <Shuffle className="w-4 h-4 text-[var(--text-muted)] hover:text-[#FF0000]" />
+              <Shuffle className="w-4 h-4 text-[var(--text-muted)]" />
             </motion.button>
 
-            {/* Sound wave animation when playing (YouTube or Godfather) */}
+            {/* Sound wave animation - smaller, hidden on mobile */}
             {(isPlaying || godfatherPlaying) && (
-              <div className="relative z-10 flex items-end gap-1 h-6 ml-1">
-                {[0, 1, 2, 3].map((i) => (
+              <div className="hidden sm:flex relative z-10 items-end gap-0.5 h-4">
+                {[0, 1, 2].map((i) => (
                   <motion.div
                     key={i}
-                    className={`w-1 rounded-full ${godfatherPlaying && !isPlaying ? 'bg-[var(--western-gold)]' : 'bg-[#FF0000]'}`}
+                    className={`w-0.5 rounded-full ${godfatherPlaying && !isPlaying ? 'bg-[var(--western-gold)]' : 'bg-[#FF0000]'}`}
                     animate={{ height: ['40%', '100%', '40%'] }}
                     transition={{
-                      duration: godfatherPlaying && !isPlaying ? 0.8 : 0.5,
+                      duration: 0.5,
                       repeat: Infinity,
                       delay: i * 0.1,
                       ease: "easeInOut",
@@ -761,8 +743,8 @@ export default function YouTubeAudio() {
               </div>
             )}
 
-            {/* Volume control */}
-            <div className="relative z-10 flex items-center gap-2 ml-1 pl-3 border-l border-[var(--western-brown-light)]">
+            {/* Volume control - simplified on mobile */}
+            <div className="relative z-10 flex items-center gap-1 sm:gap-1.5 pl-1.5 sm:pl-2 border-l border-[var(--western-brown-light)]">
               <button
                 onClick={() => {
                   if (playerRef.current) {
@@ -775,15 +757,16 @@ export default function YouTubeAudio() {
                     }
                   }
                 }}
-                className="p-1 hover:bg-[var(--western-brown)]/20 transition-colors"
+                className="p-0.5 sm:p-1 hover:bg-[var(--western-brown)]/20 transition-colors"
                 aria-label={volume === 0 ? 'Unmute' : 'Mute'}
               >
                 {volume === 0 ? (
-                  <VolumeX className="w-5 h-5 text-[var(--text-muted)]" />
+                  <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[var(--text-muted)]" />
                 ) : (
-                  <Volume2 className="w-5 h-5 text-[#FF0000]" />
+                  <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#FF0000]" />
                 )}
               </button>
+              {/* Volume slider - hidden on mobile */}
               <input
                 type="range"
                 min="0"
@@ -791,7 +774,7 @@ export default function YouTubeAudio() {
                 step="1"
                 value={volume}
                 onChange={(e) => setVolume(parseInt(e.target.value))}
-                className="w-16 h-2 bg-[var(--western-brown-light)] rounded-none appearance-none cursor-pointer"
+                className="hidden sm:block w-12 md:w-14 h-1.5 bg-[var(--western-brown-light)] rounded-none appearance-none cursor-pointer"
                 style={{
                   background: `linear-gradient(to right, #FF0000 0%, #FF0000 ${volume}%, var(--western-brown-light) ${volume}%, var(--western-brown-light) 100%)`
                 }}
@@ -799,9 +782,9 @@ export default function YouTubeAudio() {
               />
             </div>
 
-            {/* YouTube logo */}
-            <div className="relative z-10 ml-1">
-              <svg viewBox="0 0 24 24" className="w-5 h-5 text-[#FF0000] fill-current" aria-hidden="true">
+            {/* YouTube logo - smaller */}
+            <div className="relative z-10">
+              <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#FF0000] fill-current" aria-hidden="true">
                 <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
               </svg>
             </div>
