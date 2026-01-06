@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface WesternLoaderProps {
@@ -13,6 +13,150 @@ interface BulletHole {
   y: number;
 }
 
+// Web Audio API sound generator
+class WesternSoundEngine {
+  private audioContext: AudioContext | null = null;
+  private windNode: OscillatorNode | null = null;
+  private windGain: GainNode | null = null;
+
+  init() {
+    if (this.audioContext) return;
+    this.audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+  }
+
+  // Play gunshot sound using Web Audio synthesis
+  playGunshot() {
+    if (!this.audioContext) this.init();
+    if (!this.audioContext) return;
+
+    const ctx = this.audioContext;
+    const now = ctx.currentTime;
+
+    // Create noise buffer for gunshot
+    const bufferSize = ctx.sampleRate * 0.3;
+    const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const output = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      output[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 3);
+    }
+
+    // Noise source
+    const noise = ctx.createBufferSource();
+    noise.buffer = noiseBuffer;
+
+    // Filter for gunshot character
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(3000, now);
+    filter.frequency.exponentialRampToValueAtTime(300, now + 0.15);
+
+    // Gain envelope
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.8, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+
+    // Low thump for body
+    const osc = ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(150, now);
+    osc.frequency.exponentialRampToValueAtTime(30, now + 0.1);
+
+    const oscGain = ctx.createGain();
+    oscGain.gain.setValueAtTime(0.5, now);
+    oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+
+    // Connect
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.connect(oscGain);
+    oscGain.connect(ctx.destination);
+
+    // Play
+    noise.start(now);
+    noise.stop(now + 0.3);
+    osc.start(now);
+    osc.stop(now + 0.15);
+  }
+
+  // Start ambient wind sound
+  startWind() {
+    if (!this.audioContext) this.init();
+    if (!this.audioContext || this.windNode) return;
+
+    const ctx = this.audioContext;
+
+    // Create brownian noise for wind
+    const bufferSize = 2 * ctx.sampleRate;
+    const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const output = noiseBuffer.getChannelData(0);
+    let lastOut = 0;
+    for (let i = 0; i < bufferSize; i++) {
+      const white = Math.random() * 2 - 1;
+      output[i] = (lastOut + (0.02 * white)) / 1.02;
+      lastOut = output[i];
+      output[i] *= 3.5;
+    }
+
+    const noise = ctx.createBufferSource();
+    noise.buffer = noiseBuffer;
+    noise.loop = true;
+
+    // Multiple filters for wind character
+    const lowpass = ctx.createBiquadFilter();
+    lowpass.type = 'lowpass';
+    lowpass.frequency.value = 400;
+
+    const highpass = ctx.createBiquadFilter();
+    highpass.type = 'highpass';
+    highpass.frequency.value = 20;
+
+    // LFO for wind modulation
+    const lfo = ctx.createOscillator();
+    lfo.type = 'sine';
+    lfo.frequency.value = 0.3;
+
+    const lfoGain = ctx.createGain();
+    lfoGain.gain.value = 100;
+
+    lfo.connect(lfoGain);
+    lfoGain.connect(lowpass.frequency);
+
+    // Main gain
+    this.windGain = ctx.createGain();
+    this.windGain.gain.value = 0.15;
+
+    // Connect
+    noise.connect(highpass);
+    highpass.connect(lowpass);
+    lowpass.connect(this.windGain);
+    this.windGain.connect(ctx.destination);
+
+    this.windNode = noise as unknown as OscillatorNode;
+    noise.start();
+    lfo.start();
+  }
+
+  stopWind() {
+    if (this.windGain && this.audioContext) {
+      this.windGain.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + 0.5);
+      setTimeout(() => {
+        this.windNode = null;
+        this.windGain = null;
+      }, 600);
+    }
+  }
+
+  destroy() {
+    this.stopWind();
+    if (this.audioContext) {
+      this.audioContext.close();
+      this.audioContext = null;
+    }
+  }
+}
+
 export default function WesternLoader({
   onLoadingComplete,
 }: WesternLoaderProps) {
@@ -21,10 +165,29 @@ export default function WesternLoader({
   const [isReady, setIsReady] = useState(false);
   const [bulletHoles, setBulletHoles] = useState<BulletHole[]>([]);
   const [bulletCount, setBulletCount] = useState(0);
+  const soundEngineRef = useRef<WesternSoundEngine | null>(null);
 
-  // Add bullet holes with visual effect
+  // Initialize sound engine and start ambient wind
+  useEffect(() => {
+    soundEngineRef.current = new WesternSoundEngine();
+
+    // Start wind sound after a short delay
+    const windTimer = setTimeout(() => {
+      soundEngineRef.current?.startWind();
+    }, 300);
+
+    return () => {
+      clearTimeout(windTimer);
+      soundEngineRef.current?.destroy();
+    };
+  }, []);
+
+  // Add bullet holes with sound effect
   const addBulletHole = useCallback(() => {
     if (bulletCount >= 4) return;
+
+    // Play gunshot sound
+    soundEngineRef.current?.playGunshot();
 
     const newHole: BulletHole = {
       id: Date.now(),
@@ -57,6 +220,8 @@ export default function WesternLoader({
   }, [addBulletHole]);
 
   const handleEnter = () => {
+    // Stop ambient wind sound
+    soundEngineRef.current?.stopWind();
     setIsLoading(false);
     onLoadingComplete?.();
   };
