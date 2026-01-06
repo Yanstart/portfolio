@@ -1,0 +1,78 @@
+{
+  "metadata": {
+    "title": "Portfolio - Noel Yando Fotso",
+    "description": "Professioneel Portfolio in Informatietechnologie"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "Over mij",
+    "cv": "CV",
+    "project": "Carriere",
+    "skills": "Vaardigheden",
+    "activities": "Activiteiten",
+    "contact": "Contact"
+  },
+  "hero": {
+    "greeting": "Hallo, ik ben",
+    "title": "Ontwikkelaar & IT-ingenieur",
+    "subtitle": "Gepassioneerd door informatietechnologie en software-engineering",
+    "cta": "Ontdek mijn reis",
+    "downloadCV": "CV Downloaden"
+  },
+  "about": {
+    "title": "Over mij",
+    "professionalProject": "Carriere Doelen",
+    "strengths": "Sterke punten",
+    "weaknesses": "Verbeterpunten",
+    "strengthsIntro": "Mijn belangrijkste troeven voor succes",
+    "weaknessesIntro": "Vaardigheden die ik actief ontwikkel"
+  },
+  "skills": {
+    "title": "Technische Vaardigheden",
+    "subtitle": "Technologieen en tools die ik beheers",
+    "categories": {
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "database": "Databases",
+      "devops": "DevOps & Cloud",
+      "tools": "Tools",
+      "soft": "Soft Skills",
+      "healthtech": "Gezondheidstech"
+    }
+  },
+  "activities": {
+    "title": "Vaardigheidsverwervingsactiviteiten",
+    "subtitle": "Minimum 6 thema's - Maximum 10 uur per thema",
+    "hours": "uren",
+    "theme": "Thema",
+    "description": "Activiteitsbeschrijving",
+    "reflection": "Reflectieve Analyse",
+    "proof": "Bewijs van deelname",
+    "viewMore": "Meer bekijken"
+  },
+  "cv": {
+    "title": "Curriculum Vitae",
+    "download": "Volledig CV downloaden",
+    "experience": "Werkervaring",
+    "education": "Opleiding",
+    "certifications": "Certificeringen"
+  },
+  "contact": {
+    "title": "Neem contact op",
+    "subtitle": "Neem gerust contact op voor elke mogelijkheid",
+    "email": "E-mail",
+    "phone": "Telefoon",
+    "location": "Locatie",
+    "linkedin": "LinkedIn",
+    "github": "GitHub"
+  },
+  "footer": {
+    "rights": "Alle rechten voorbehouden",
+    "madeWith": "Gemaakt met"
+  },
+  "language": {
+    "fr": "Francais",
+    "en": "English",
+    "nl": "Nederlands"
+  }
+}

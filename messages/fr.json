@@ -1,0 +1,78 @@
+{
+  "metadata": {
+    "title": "Portfolio - Noel Yando Fotso",
+    "description": "Portfolio professionnel en Technologies de l'Informatique"
+  },
+  "nav": {
+    "home": "Accueil",
+    "about": "A propos",
+    "cv": "CV",
+    "project": "Projet Pro",
+    "skills": "Competences",
+    "activities": "Activites",
+    "contact": "Contact"
+  },
+  "hero": {
+    "greeting": "Bonjour, je suis",
+    "title": "Developpeur & Ingenieur IT",
+    "subtitle": "Passionne par les technologies de l'informatique et l'ingenierie logicielle",
+    "cta": "Decouvrir mon parcours",
+    "downloadCV": "Telecharger CV"
+  },
+  "about": {
+    "title": "A propos de moi",
+    "professionalProject": "Projet Professionnel",
+    "strengths": "Points Forts",
+    "weaknesses": "Points a Ameliorer",
+    "strengthsIntro": "Mes atouts cles pour reussir",
+    "weaknessesIntro": "Les competences que je developpe activement"
+  },
+  "skills": {
+    "title": "Competences Techniques",
+    "subtitle": "Technologies et outils que je maitrise",
+    "categories": {
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "database": "Bases de donnees",
+      "devops": "DevOps & Cloud",
+      "tools": "Outils",
+      "soft": "Soft Skills",
+      "healthtech": "Tech Sante"
+    }
+  },
+  "activities": {
+    "title": "Activites d'Acquisition de Competences",
+    "subtitle": "",
+    "hours": "heures",
+    "theme": "Theme",
+    "description": "Description des activites",
+    "reflection": "Analyse Reflexive",
+    "proof": "Certifications",
+    "viewMore": "Voir plus"
+  },
+  "cv": {
+    "title": "Curriculum Vitae",
+    "download": "Telecharger le CV complet",
+    "experience": "Experience Professionnelle",
+    "education": "Formation",
+    "certifications": "Certifications"
+  },
+  "contact": {
+    "title": "Me Contacter",
+    "subtitle": "N'hesitez pas a me contacter pour toute opportunite",
+    "email": "Email",
+    "phone": "Telephone",
+    "location": "Localisation",
+    "linkedin": "LinkedIn",
+    "github": "GitHub"
+  },
+  "footer": {
+    "rights": "Tous droits reserves",
+    "madeWith": "Realise avec"
+  },
+  "language": {
+    "fr": "Francais",
+    "en": "English",
+    "nl": "Nederlands"
+  }
+}

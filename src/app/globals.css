@@ -1,26 +1,702 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   WESTERN FRONTIER THEME - Old West Design System
+   Inspired by Wanted Posters & Saloon Aesthetics
+   ============================================ */
+
+/* Google Fonts - Western Style */
+@import url('https://fonts.googleapis.com/css2?family=Rye&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=IM+Fell+English:ital@0;1&family=Special+Elite&family=Cinzel:wght@400;600;700&display=swap');
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Western Color Palette */
+  --western-brown: #5D4037;
+  --western-brown-dark: #3E2723;
+  --western-brown-light: #8D6E63;
+  --western-gold: #C9A227;
+  --western-gold-light: #D4AF37;
+  --western-rust: #8B4513;
+  --western-cream: #F5E6D3;
+  --western-parchment: #E8D4B8;
+  --western-ink: #2C1810;
+  --western-red: #8B0000;
+  --western-leather: #654321;
+
+  /* Tech Blue - Living Technology Accent */
+  --tech-blue: #0EA5E9;
+  --tech-blue-dark: #0284C7;
+  --tech-blue-light: #38BDF8;
+  --tech-cyan: #06B6D4;
+  --tech-teal: #14B8A6;
+
+  /* Semantic Colors */
+  --background: var(--western-cream);
+  --foreground: var(--western-ink);
+  --card-bg: var(--western-parchment);
+  --card-border: var(--western-brown-light);
+  --accent: var(--western-rust);
+  --accent-secondary: var(--western-gold);
+  --accent-tech: var(--tech-blue);
+  --text-primary: var(--western-ink);
+  --text-secondary: var(--western-brown);
+  --text-muted: var(--western-brown-light);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Light Mode - Parchment Style */
+.light {
+  --background: #F5E6D3;
+  --foreground: #2C1810;
+  --card-bg: #E8D4B8;
+  --card-border: #C4A77D;
+  --accent: #8B4513;
+  --accent-secondary: #C9A227;
+  --text-primary: #2C1810;
+  --text-secondary: #5D4037;
+  --text-muted: #8D6E63;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Dark Mode - Saloon Night */
+.dark {
+  --background: #1A120B;
+  --foreground: #E8D4B8;
+  --card-bg: #2C1810;
+  --card-border: #5D4037;
+  --accent: #C9A227;
+  --accent-secondary: #8B4513;
+  --text-primary: #E8D4B8;
+  --text-secondary: #C4A77D;
+  --text-muted: #8D6E63;
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'IM Fell English', 'Playfair Display', Georgia, serif;
+  font-size: 20px;
+  line-height: 1.85;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  body {
+    font-size: 22px;
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    font-size: 24px;
+  }
+}
+
+/* Parchment texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Burned edges effect for dark mode */
+.dark body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.4) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+/* Focus styles for keyboard navigation */
+:focus-visible {
+  outline: 2px dashed var(--western-gold);
+  outline-offset: 3px;
+}
+
+/* Skip to main content link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--western-rust);
+  color: var(--western-cream);
+  padding: 8px 16px;
+  z-index: 100;
+  transition: top 0.3s;
+  font-family: 'Special Elite', monospace;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Reduced motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Screen reader only class */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--card-bg);
+  border-left: 1px solid var(--card-border);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--western-brown-light) 0%, var(--western-brown) 100%);
+  border-radius: 0;
+  border: 2px solid var(--western-brown-dark);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--western-gold) 0%, var(--western-rust) 100%);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--western-brown) var(--card-bg);
+}
+
+/* ============================================
+   SELECTION
+   ============================================ */
+
+::selection {
+  background: var(--western-rust);
+  color: var(--western-cream);
+}
+
+/* ============================================
+   TYPOGRAPHY - Western Frontier Style
+   ============================================ */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Rye', 'Cinzel', serif;
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: 4.5rem;
+  text-shadow: 3px 3px 0 var(--western-brown-dark);
+}
+h2 {
+  font-size: 3.5rem;
+  text-shadow: 2px 2px 0 var(--western-brown-dark);
+}
+h3 {
+  font-size: 2.5rem;
+}
+h4 {
+  font-size: 1.875rem;
+}
+h5 {
+  font-size: 1.5rem;
+}
+h6 {
+  font-size: 1.25rem;
+}
+
+@media (max-width: 768px) {
+  h1 { font-size: 3rem; }
+  h2 { font-size: 2.5rem; }
+  h3 { font-size: 1.875rem; }
+  h4 { font-size: 1.5rem; }
+}
+
+/* Paragraph and text elements */
+p {
+  font-size: 1.25rem;
+  line-height: 1.85;
+  margin-bottom: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  p {
+    font-size: 1.35rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  p {
+    font-size: 1.45rem;
+  }
+}
+
+/* Larger text utility */
+.text-lg {
+  font-size: 1.25rem !important;
+}
+
+.text-xl {
+  font-size: 1.5rem !important;
+}
+
+.text-2xl {
+  font-size: 1.75rem !important;
+}
+
+/* Western decorative fonts */
+.font-western {
+  font-family: 'Rye', serif;
+  letter-spacing: 0.1em;
+}
+
+.font-typewriter {
+  font-family: 'Special Elite', 'Courier New', monospace;
+  letter-spacing: 0.02em;
+}
+
+.font-elegant {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+}
+
+.font-cinzel {
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.15em;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--western-rust), var(--western-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, var(--western-gold-light), var(--western-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bg-gradient-western {
+  background: linear-gradient(135deg, var(--western-rust) 0%, var(--western-gold) 100%);
+}
+
+.border-gradient {
+  border-image: linear-gradient(135deg, var(--western-rust), var(--western-gold)) 1;
+}
+
+.glow-rust {
+  box-shadow: 0 0 15px var(--western-rust), 0 0 30px rgba(139, 69, 19, 0.3);
+}
+
+.glow-gold {
+  box-shadow: 0 0 15px var(--western-gold), 0 0 30px rgba(201, 162, 39, 0.3);
+}
+
+.glow-tech {
+  box-shadow: 0 0 15px var(--tech-blue), 0 0 30px rgba(14, 165, 233, 0.3);
+}
+
+.text-gradient-tech {
+  background: linear-gradient(135deg, var(--tech-blue), var(--tech-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bg-gradient-tech {
+  background: linear-gradient(135deg, var(--tech-blue) 0%, var(--tech-teal) 100%);
+}
+
+/* Card styles - Wanted Poster Style */
+.card {
+  background: var(--card-bg);
+  border: 3px solid var(--western-brown);
+  border-radius: 0;
+  transition: all 0.3s ease;
+  position: relative;
+  box-shadow: 4px 4px 0 var(--western-brown-dark);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px dashed var(--western-brown-light);
+  pointer-events: none;
+}
+
+.card:hover {
+  border-color: var(--western-gold);
+  box-shadow: 6px 6px 0 var(--western-brown-dark);
+  transform: translate(-2px, -2px);
+}
+
+/* Wanted poster style card */
+.wanted-card {
+  background: var(--western-parchment);
+  border: 4px double var(--western-brown);
+  padding: 1.5rem;
+  position: relative;
+}
+
+.wanted-card::before {
+  content: 'WANTED';
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--western-parchment);
+  padding: 0 1rem;
+  font-family: 'Rye', serif;
+  font-size: 0.75rem;
+  color: var(--western-rust);
+  letter-spacing: 0.2em;
+}
+
+/* Ornamental divider */
+.divider-western {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.divider-western::before,
+.divider-western::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--western-brown), transparent);
+}
+
+.divider-western-icon {
+  color: var(--western-gold);
+  font-size: 1.5rem;
+}
+
+/* Line clamp utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes swing {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 15px var(--western-gold); }
+  50% { box-shadow: 0 0 30px var(--western-gold), 0 0 45px rgba(201, 162, 39, 0.4); }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  0%, 100% { border-color: transparent; }
+  50% { border-color: var(--western-gold); }
+}
+
+@keyframes wanted-stamp {
+  0% { transform: scale(2) rotate(-15deg); opacity: 0; }
+  50% { transform: scale(1.1) rotate(-12deg); opacity: 0.8; }
+  100% { transform: scale(1) rotate(-12deg); opacity: 1; }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-swing {
+  animation: swing 3s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2.5s ease-in-out infinite;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 4s ease infinite;
+}
+
+.animate-wanted-stamp {
+  animation: wanted-stamp 0.5s ease-out forwards;
+}
+
+/* ============================================
+   WESTERN DECORATIVE ELEMENTS
+   ============================================ */
+
+/* Rope border decoration */
+.rope-border {
+  position: relative;
+  border: 4px solid var(--western-brown);
+}
+
+.rope-border::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border: 2px dashed var(--western-brown-light);
+  pointer-events: none;
+}
+
+/* Sheriff badge decoration */
+.badge-decoration::after {
+  content: '\2605';
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 1.5rem;
+  color: var(--western-gold);
+  text-shadow: 1px 1px 0 var(--western-brown-dark);
+}
+
+/* Horseshoe decoration */
+.horseshoe-decoration {
+  position: relative;
+}
+
+.horseshoe-decoration::before,
+.horseshoe-decoration::after {
+  font-size: 1.25rem;
+  color: var(--western-rust);
+}
+
+.horseshoe-decoration::before {
+  content: '\1F3EF';
+  position: absolute;
+  left: -2rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Wanted poster corners */
+.wanted-corners {
+  position: relative;
+}
+
+.wanted-corners::before,
+.wanted-corners::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 3px solid var(--western-rust);
+}
+
+.wanted-corners::before {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+}
+
+.wanted-corners::after {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+}
+
+/* ============================================
+   WESTERN DESERT BACKGROUND
+   ============================================ */
+
+/* Global western background for light mode */
+.western-global {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(--background);
+}
+
+/* Light mode - Parchment with subtle aged texture */
+.light .western-global {
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(201, 162, 39, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(139, 69, 19, 0.08) 0%, transparent 50%),
+    linear-gradient(180deg, #F5E6D3 0%, #E8D4B8 50%, #DCC8A8 100%);
+}
+
+/* Dark mode - Saloon night with warm glow */
+.dark .western-global {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(201, 162, 39, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 100%, rgba(139, 69, 19, 0.2) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(139, 69, 19, 0.2) 0%, transparent 50%),
+    linear-gradient(180deg, #1A120B 0%, #2C1810 50%, #1A120B 100%);
+}
+
+/* Dust particles floating animation */
+@keyframes dust-float {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translateY(-20px) translateX(10px);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-10px) translateX(-5px);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translateY(-30px) translateX(15px);
+    opacity: 0.3;
+  }
+}
+
+.dark .western-global::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, rgba(201, 162, 39, 0.4), transparent),
+    radial-gradient(1px 1px at 25% 45%, rgba(232, 212, 184, 0.3), transparent),
+    radial-gradient(2px 2px at 40% 15%, rgba(201, 162, 39, 0.3), transparent),
+    radial-gradient(1px 1px at 55% 70%, rgba(232, 212, 184, 0.2), transparent),
+    radial-gradient(1px 1px at 70% 35%, rgba(201, 162, 39, 0.4), transparent),
+    radial-gradient(2px 2px at 85% 60%, rgba(232, 212, 184, 0.3), transparent),
+    radial-gradient(1px 1px at 15% 80%, rgba(201, 162, 39, 0.2), transparent),
+    radial-gradient(1px 1px at 30% 90%, rgba(232, 212, 184, 0.3), transparent),
+    radial-gradient(2px 2px at 60% 85%, rgba(201, 162, 39, 0.3), transparent),
+    radial-gradient(1px 1px at 90% 25%, rgba(232, 212, 184, 0.4), transparent);
+  background-size: 100% 100%;
+  animation: dust-float 20s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Lantern glow effect for dark mode */
+.lantern-glow {
+  position: relative;
+}
+
+.lantern-glow::after {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(201, 162, 39, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: lantern-flicker 3s ease-in-out infinite;
+}
+
+@keyframes lantern-flicker {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+/* Tumbleweed animation */
+@keyframes tumbleweed {
+  0% {
+    transform: translateX(-100px) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateX(calc(100vw + 100px)) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* Wood grain texture for cards */
+.wood-texture {
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(93, 64, 55, 0.1) 2px,
+      rgba(93, 64, 55, 0.1) 4px
+    );
 }

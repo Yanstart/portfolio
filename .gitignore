@@ -9,9 +9,12 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
-
+/Docs/
+.claude/
 # testing
 /coverage
+*.md
+!README.md
 
 # next.js
 /.next/
