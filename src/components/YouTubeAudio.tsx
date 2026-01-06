@@ -2,10 +2,34 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Volume2, VolumeX, Music, Play, Pause } from 'lucide-react';
+import { Volume2, VolumeX, Play, Pause, Shuffle } from 'lucide-react';
 
-// Wakanda Origins - Ludwig Göransson
-const YOUTUBE_VIDEO_ID = 'SKRVqrOp-Uk';
+// Famous movie/TV/game themes - completely random selection
+const FAMOUS_THEMES = [
+  { id: 'SKRVqrOp-Uk', title: 'Wakanda Origins', artist: 'Ludwig Göransson' },
+  { id: 'vbttZVTSJRU', title: 'Interstellar Main Theme', artist: 'Hans Zimmer' },
+  { id: 'ASj81daun5Q', title: 'Pirates of the Caribbean', artist: 'Hans Zimmer' },
+  { id: 'XYKUeZQbMF0', title: 'Star Wars Main Theme', artist: 'John Williams' },
+  { id: 'm3zvVGJrTP8', title: 'Avengers Theme', artist: 'Alan Silvestri' },
+  { id: 'EG3sLpzKr6g', title: 'Game of Thrones', artist: 'Ramin Djawadi' },
+  { id: '1gpXMGit4P8', title: 'The Dark Knight', artist: 'Hans Zimmer' },
+  { id: 'afa-5HQHiAs', title: 'Inception - Time', artist: 'Hans Zimmer' },
+  { id: 'Vyu_IYHuBhE', title: 'Daft Punk - Tron Legacy', artist: 'Daft Punk' },
+  { id: 'e8X3ACToii0', title: 'Gladiator - Now We Are Free', artist: 'Hans Zimmer' },
+  { id: 'RgKAFK5djSk', title: 'See You Again', artist: 'Wiz Khalifa ft. Charlie Puth' },
+  { id: '2bosouX_d8Y', title: 'The Last of Us', artist: 'Gustavo Santaolalla' },
+  { id: 'KpmgYmHDLVs', title: 'Skyrim Main Theme', artist: 'Jeremy Soule' },
+  { id: 'cWA_JBrLnT4', title: 'The Witcher 3 - Geralt of Rivia', artist: 'Marcin Przybyłowicz' },
+  { id: 'AOAtz8xWM0w', title: 'Stranger Things', artist: 'Kyle Dixon & Michael Stein' },
+  { id: '0J2QdDbelmY', title: 'Narcos', artist: 'Rodrigo Amarante' },
+  { id: 'csL-usHr4FI', title: 'Money Heist - Bella Ciao', artist: 'Manu Pilas' },
+  { id: 'IcrbM1l_BoI', title: 'Attack on Titan', artist: 'Hiroyuki Sawano' },
+  { id: 'psuRGfAaju4', title: 'One Punch Man', artist: 'JAM Project' },
+  { id: 'd2hRTLdvdnk', title: 'Demon Slayer - Gurenge', artist: 'LiSA' },
+];
+
+// Pick a random theme on component mount
+const getRandomTheme = () => FAMOUS_THEMES[Math.floor(Math.random() * FAMOUS_THEMES.length)];
 
 declare global {
   interface Window {
@@ -20,6 +44,7 @@ export default function YouTubeAudio() {
   const [volume, setVolume] = useState(30);
   const [showPrompt, setShowPrompt] = useState(true);
   const [hasInteracted, setHasInteracted] = useState(false);
+  const [currentTheme, setCurrentTheme] = useState(() => getRandomTheme());
   const playerRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -44,6 +69,7 @@ export default function YouTubeAudio() {
         playerRef.current.destroy();
       }
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const initPlayer = () => {
@@ -52,7 +78,7 @@ export default function YouTubeAudio() {
     playerRef.current = new window.YT.Player('youtube-player', {
       height: '0',
       width: '0',
-      videoId: YOUTUBE_VIDEO_ID,
+      videoId: currentTheme.id,
       playerVars: {
         autoplay: 0,
         controls: 0,
@@ -63,7 +89,7 @@ export default function YouTubeAudio() {
         rel: 0,
         showinfo: 0,
         loop: 1,
-        playlist: YOUTUBE_VIDEO_ID, // Required for loop to work
+        playlist: currentTheme.id, // Required for loop to work
       },
       events: {
         onReady: (event: any) => {
@@ -78,6 +104,24 @@ export default function YouTubeAudio() {
           }
         },
       },
+    });
+  };
+
+  // Shuffle to next random track
+  const shuffleTrack = () => {
+    if (!playerRef.current) return;
+
+    let newTheme = getRandomTheme();
+    // Ensure we get a different track
+    while (newTheme.id === currentTheme.id && FAMOUS_THEMES.length > 1) {
+      newTheme = getRandomTheme();
+    }
+    setCurrentTheme(newTheme);
+
+    // Load and play new video
+    playerRef.current.loadVideoById({
+      videoId: newTheme.id,
+      startSeconds: 0,
     });
   };
 
@@ -194,20 +238,35 @@ export default function YouTubeAudio() {
             </motion.div>
 
             {/* Music info */}
-            <div className="relative z-10 text-left">
+            <div className="relative z-10 text-left min-w-0 max-w-[140px]">
               <p
-                className="text-lg font-bold transition-colors"
+                className="text-sm font-bold transition-colors truncate"
                 style={{
                   fontFamily: "'Cinzel', serif",
                   color: isPlaying ? '#FF0000' : 'var(--text-primary)',
                 }}
+                title={currentTheme.title}
               >
-                Wakanda Origins
+                {currentTheme.title}
               </p>
-              <p className="text-sm text-[var(--text-muted)]" style={{ fontFamily: "'Special Elite', monospace" }}>
-                {!isReady ? 'Chargement...' : isPlaying ? 'Ludwig Göransson' : 'Cliquez pour jouer'}
+              <p className="text-xs text-[var(--text-muted)] truncate" style={{ fontFamily: "'Special Elite', monospace" }} title={currentTheme.artist}>
+                {!isReady ? 'Chargement...' : isPlaying ? currentTheme.artist : 'Cliquez pour jouer'}
               </p>
             </div>
+
+            {/* Shuffle button */}
+            <motion.button
+              onClick={(e) => {
+                e.stopPropagation();
+                shuffleTrack();
+              }}
+              className="relative z-10 p-2 hover:bg-[var(--western-brown)]/20 transition-colors"
+              whileHover={{ scale: 1.1, rotate: 180 }}
+              whileTap={{ scale: 0.9 }}
+              title="Musique aléatoire"
+            >
+              <Shuffle className="w-4 h-4 text-[var(--text-muted)] hover:text-[#FF0000]" />
+            </motion.button>
 
             {/* Sound wave animation when playing */}
             {isPlaying && (

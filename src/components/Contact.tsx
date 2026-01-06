@@ -115,7 +115,7 @@ export default function Contact() {
                 className="text-3xl sm:text-4xl bg-gradient-to-r from-[var(--tech-blue)] via-[var(--western-gold)] to-[#10B981] bg-clip-text text-transparent"
                 style={{ fontFamily: "'Rye', serif" }}
               >
-                {t('title')}
+                {t("title")}
               </h2>
               <motion.div
                 animate={{ rotate: [0, -10, 10, 0] }}
@@ -124,8 +124,11 @@ export default function Contact() {
                 <Sparkles className="w-6 h-6 text-[#10B981]" />
               </motion.div>
             </div>
-            <p className="text-[var(--text-secondary)] text-lg mt-4" style={{ fontFamily: "'IM Fell English', serif" }}>
-              {t('subtitle')}
+            <p
+              className="text-[var(--text-secondary)] text-lg mt-4"
+              style={{ fontFamily: "'IM Fell English', serif" }}
+            >
+              {t("subtitle")}
             </p>
           </div>
         </motion.div>
@@ -146,7 +149,8 @@ export default function Contact() {
               <motion.div
                 className="absolute top-0 right-0 w-20 h-20"
                 style={{
-                  background: 'linear-gradient(135deg, var(--tech-blue) 0%, transparent 50%)',
+                  background:
+                    "linear-gradient(135deg, var(--tech-blue) 0%, transparent 50%)",
                   opacity: 0.2,
                 }}
                 animate={{ opacity: [0.1, 0.3, 0.1] }}
@@ -169,7 +173,11 @@ export default function Contact() {
                   className="text-xl text-[var(--text-primary)]"
                   style={{ fontFamily: "'Rye', serif" }}
                 >
-                  {locale === 'fr' ? 'Coordonnees' : locale === 'nl' ? 'Contactgegevens' : 'Contact Info'}
+                  {locale === "fr"
+                    ? "Coordonnees"
+                    : locale === "nl"
+                    ? "Contactgegevens"
+                    : "Contact Info"}
                 </h3>
               </div>
 
@@ -186,20 +194,26 @@ export default function Contact() {
                     {info.href ? (
                       <a
                         href={info.href}
-                        target={info.href.startsWith('http') ? '_blank' : undefined}
-                        rel={info.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                        target={
+                          info.href.startsWith("http") ? "_blank" : undefined
+                        }
+                        rel={
+                          info.href.startsWith("http")
+                            ? "noopener noreferrer"
+                            : undefined
+                        }
                         className="flex items-center gap-3 p-3 border-2 border-[var(--western-brown-light)] hover:border-transparent transition-all group bg-[var(--western-parchment)]/10 dark:bg-transparent relative overflow-hidden"
                         style={{
-                          boxShadow: 'none',
-                          transition: 'all 0.3s ease',
+                          boxShadow: "none",
+                          transition: "all 0.3s ease",
                         }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.boxShadow = `0 0 20px ${info.hoverGlow}, inset 0 0 20px ${info.hoverGlow}`;
                           e.currentTarget.style.borderColor = info.color;
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.boxShadow = 'none';
-                          e.currentTarget.style.borderColor = '';
+                          e.currentTarget.style.boxShadow = "none";
+                          e.currentTarget.style.borderColor = "";
                         }}
                       >
                         <motion.div
@@ -214,18 +228,22 @@ export default function Contact() {
                           {info.icon}
                         </motion.div>
                         <div>
-                          <p className="text-[var(--text-muted)] text-xs uppercase tracking-wider" style={{ fontFamily: "'Special Elite', monospace" }}>
+                          <p
+                            className="text-[var(--text-muted)] text-xs uppercase tracking-wider"
+                            style={{ fontFamily: "'Special Elite', monospace" }}
+                          >
                             {info.label}
                           </p>
-                          <p className="text-[var(--text-primary)] text-sm group-hover:text-[var(--tech-blue)] transition-colors" style={{ fontFamily: "'IM Fell English', serif" }}>
+                          <p
+                            className="text-[var(--text-primary)] text-sm group-hover:text-[var(--tech-blue)] transition-colors"
+                            style={{ fontFamily: "'IM Fell English', serif" }}
+                          >
                             {info.value}
                           </p>
                         </div>
                       </a>
                     ) : (
-                      <div
-                        className="flex items-center gap-3 p-3 border-2 border-[var(--western-brown-light)] bg-[var(--western-parchment)]/10 dark:bg-transparent"
-                      >
+                      <div className="flex items-center gap-3 p-3 border-2 border-[var(--western-brown-light)] bg-[var(--western-parchment)]/10 dark:bg-transparent">
                         <div
                           className="p-2 border"
                           style={{
@@ -237,10 +255,16 @@ export default function Contact() {
                           {info.icon}
                         </div>
                         <div>
-                          <p className="text-[var(--text-muted)] text-xs uppercase tracking-wider" style={{ fontFamily: "'Special Elite', monospace" }}>
+                          <p
+                            className="text-[var(--text-muted)] text-xs uppercase tracking-wider"
+                            style={{ fontFamily: "'Special Elite', monospace" }}
+                          >
                             {info.label}
                           </p>
-                          <p className="text-[var(--text-primary)] text-sm" style={{ fontFamily: "'IM Fell English', serif" }}>
+                          <p
+                            className="text-[var(--text-primary)] text-sm"
+                            style={{ fontFamily: "'IM Fell English', serif" }}
+                          >
                             {info.value}
                           </p>
                         </div>
@@ -264,14 +288,28 @@ export default function Contact() {
                   transition={{ duration: 2, repeat: Infinity }}
                 />
                 <div className="absolute -top-2 -right-2 text-[#10B981] text-lg">
-                  <motion.span animate={{ rotate: [0, 360] }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }}>
+                  <motion.span
+                    animate={{ rotate: [0, 360] }}
+                    transition={{
+                      duration: 10,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
+                  >
                     ★
                   </motion.span>
                 </div>
                 <div className="flex items-start gap-3 relative z-10">
                   <MessageSquare className="w-5 h-5 text-[#10B981] mt-0.5" />
-                  <p className="text-[var(--text-secondary)] text-sm" style={{ fontFamily: "'Special Elite', monospace" }}>
-                    {locale === 'fr' ? 'References disponibles sur demande' : locale === 'nl' ? 'Referenties beschikbaar op aanvraag' : 'References available upon request'}
+                  <p
+                    className="text-[var(--text-secondary)] text-sm"
+                    style={{ fontFamily: "'Special Elite', monospace" }}
+                  >
+                    {locale === "fr"
+                      ? "References disponibles sur demande"
+                      : locale === "nl"
+                      ? "Referenties beschikbaar op aanvraag"
+                      : "References available upon request"}
                   </p>
                 </div>
               </motion.div>
@@ -290,7 +328,10 @@ export default function Contact() {
               {/* Animated background gradient */}
               <motion.div
                 className="absolute -bottom-20 -right-20 w-60 h-60 rounded-full blur-3xl"
-                style={{ background: 'linear-gradient(135deg, var(--tech-blue), var(--tech-cyan))' }}
+                style={{
+                  background:
+                    "linear-gradient(135deg, var(--tech-blue), var(--tech-cyan))",
+                }}
                 animate={{
                   opacity: [0.05, 0.15, 0.05],
                   scale: [1, 1.2, 1],
@@ -313,18 +354,26 @@ export default function Contact() {
                   className="text-xl text-[var(--text-primary)]"
                   style={{ fontFamily: "'Rye', serif" }}
                 >
-                  {locale === 'fr' ? 'Envoyez un Message' : locale === 'nl' ? 'Stuur een Bericht' : 'Send a Message'}
+                  {locale === "fr"
+                    ? "Envoyez un Message"
+                    : locale === "nl"
+                    ? "Stuur een Bericht"
+                    : "Send a Message"}
                 </h3>
               </div>
 
               <form
-                action="https://formspree.io/f/xpwzgvqr"
+                action="https://formspree.io/f/maqngkze"
                 method="POST"
                 className="space-y-5 relative z-10"
               >
                 {/* Hidden field for Formspree to know reply-to */}
                 <input type="hidden" name="_replyto" />
-                <input type="hidden" name="_subject" value="Nouveau message depuis le Portfolio" />
+                <input
+                  type="hidden"
+                  name="_subject"
+                  value="Nouveau message depuis le Portfolio"
+                />
 
                 {/* Name field */}
                 <div>
@@ -389,19 +438,24 @@ export default function Contact() {
                   className="w-full px-8 py-4 uppercase tracking-wider transition-all flex items-center justify-center gap-3 border-2 border-[var(--western-brown-dark)] shadow-[4px_4px_0_var(--western-brown-dark)] relative overflow-hidden group"
                   style={{
                     fontFamily: "'Cinzel', serif",
-                    background: 'linear-gradient(135deg, var(--tech-blue), #10B981)',
-                    color: 'white',
+                    background:
+                      "linear-gradient(135deg, var(--tech-blue), #10B981)",
+                    color: "white",
                   }}
                   whileHover={{
                     scale: 1.02,
-                    boxShadow: '2px 2px 0 var(--western-brown-dark)',
+                    boxShadow: "2px 2px 0 var(--western-brown-dark)",
                   }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                    animate={{ x: ['-100%', '100%'] }}
-                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                    animate={{ x: ["-100%", "100%"] }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      repeatDelay: 1,
+                    }}
                   />
                   <Send className="w-5 h-5 relative z-10" />
                   <span className="relative z-10">{labels.send}</span>
