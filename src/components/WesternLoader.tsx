@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface WesternLoaderProps {
-  onLoadingComplete?: () => void;
+  onLoadingComplete?: (soundEnabled: boolean) => void;
 }
 
 interface BulletHole {
@@ -13,81 +13,110 @@ interface BulletHole {
   y: number;
 }
 
+// Famous Western movie quotes and saloon references
+const WESTERN_QUOTES = [
+  { quote: "This town ain't big enough for the both of us.", film: "Western Classic" },
+  { quote: "Go ahead, make my day.", film: "Dirty Harry" },
+  { quote: "I'll be your Huckleberry.", film: "Tombstone" },
+  { quote: "You gonna pull those pistols or whistle Dixie?", film: "The Outlaw Josey Wales" },
+  { quote: "When you have to shoot, shoot. Don't talk.", film: "The Good, the Bad and the Ugly" },
+  { quote: "Fill your hands, you son of a bitch!", film: "True Grit" },
+  { quote: "I'm your huckleberry.", film: "Tombstone" },
+  { quote: "Dying ain't much of a living, boy.", film: "The Outlaw Josey Wales" },
+  { quote: "There's two kinds of people in this world...", film: "The Good, the Bad and the Ugly" },
+  { quote: "You see, in this world there's two kinds of people, my friend.", film: "The Good, the Bad and the Ugly" },
+  { quote: "The name's Blondie.", film: "The Good, the Bad and the Ugly" },
+  { quote: "Get three coffins ready.", film: "A Fistful of Dollars" },
+  { quote: "You called down the thunder, well now you've got it!", film: "Tombstone" },
+  { quote: "I'm afraid the strain was more than he could bear.", film: "Tombstone" },
+  { quote: "I have not yet begun to defile myself.", film: "Tombstone" },
+];
+
 // Web Audio API sound generator
 class WesternSoundEngine {
   private audioContext: AudioContext | null = null;
-  private windNode: OscillatorNode | null = null;
+  private windNode: AudioBufferSourceNode | null = null;
   private windGain: GainNode | null = null;
+  private lfoNode: OscillatorNode | null = null;
 
   init() {
     if (this.audioContext) return;
-    this.audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+    try {
+      this.audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+    } catch {
+      console.warn('Web Audio API not supported');
+    }
   }
 
-  // Play gunshot sound using Web Audio synthesis
+  resume() {
+    if (this.audioContext?.state === 'suspended') {
+      this.audioContext.resume();
+    }
+  }
+
   playGunshot() {
     if (!this.audioContext) this.init();
     if (!this.audioContext) return;
+    this.resume();
 
     const ctx = this.audioContext;
     const now = ctx.currentTime;
 
-    // Create noise buffer for gunshot
-    const bufferSize = ctx.sampleRate * 0.3;
+    // Noise buffer for gunshot crack
+    const bufferSize = Math.floor(ctx.sampleRate * 0.4);
     const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
     const output = noiseBuffer.getChannelData(0);
     for (let i = 0; i < bufferSize; i++) {
-      output[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 3);
+      const decay = Math.pow(1 - i / bufferSize, 2.5);
+      output[i] = (Math.random() * 2 - 1) * decay;
     }
 
-    // Noise source
     const noise = ctx.createBufferSource();
     noise.buffer = noiseBuffer;
 
-    // Filter for gunshot character
-    const filter = ctx.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(3000, now);
-    filter.frequency.exponentialRampToValueAtTime(300, now + 0.15);
+    // Bandpass for gunshot character
+    const bandpass = ctx.createBiquadFilter();
+    bandpass.type = 'bandpass';
+    bandpass.frequency.setValueAtTime(2000, now);
+    bandpass.Q.value = 0.5;
 
-    // Gain envelope
+    // Main gain
     const gain = ctx.createGain();
-    gain.gain.setValueAtTime(0.8, now);
-    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+    gain.gain.setValueAtTime(1, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
 
-    // Low thump for body
+    // Low thump
     const osc = ctx.createOscillator();
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(150, now);
-    osc.frequency.exponentialRampToValueAtTime(30, now + 0.1);
+    osc.frequency.setValueAtTime(100, now);
+    osc.frequency.exponentialRampToValueAtTime(20, now + 0.15);
 
     const oscGain = ctx.createGain();
-    oscGain.gain.setValueAtTime(0.5, now);
-    oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+    oscGain.gain.setValueAtTime(0.8, now);
+    oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
 
     // Connect
-    noise.connect(filter);
-    filter.connect(gain);
+    noise.connect(bandpass);
+    bandpass.connect(gain);
     gain.connect(ctx.destination);
 
     osc.connect(oscGain);
     oscGain.connect(ctx.destination);
 
-    // Play
     noise.start(now);
-    noise.stop(now + 0.3);
+    noise.stop(now + 0.4);
     osc.start(now);
-    osc.stop(now + 0.15);
+    osc.stop(now + 0.2);
   }
 
-  // Start ambient wind sound
   startWind() {
     if (!this.audioContext) this.init();
     if (!this.audioContext || this.windNode) return;
+    this.resume();
 
     const ctx = this.audioContext;
 
-    // Create brownian noise for wind
+    // Brownian noise for wind
     const bufferSize = 2 * ctx.sampleRate;
     const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
     const output = noiseBuffer.getChannelData(0);
@@ -103,73 +132,83 @@ class WesternSoundEngine {
     noise.buffer = noiseBuffer;
     noise.loop = true;
 
-    // Multiple filters for wind character
     const lowpass = ctx.createBiquadFilter();
     lowpass.type = 'lowpass';
-    lowpass.frequency.value = 400;
+    lowpass.frequency.value = 500;
 
     const highpass = ctx.createBiquadFilter();
     highpass.type = 'highpass';
-    highpass.frequency.value = 20;
+    highpass.frequency.value = 40;
 
-    // LFO for wind modulation
+    // LFO for modulation
     const lfo = ctx.createOscillator();
     lfo.type = 'sine';
-    lfo.frequency.value = 0.3;
+    lfo.frequency.value = 0.2;
 
     const lfoGain = ctx.createGain();
-    lfoGain.gain.value = 100;
+    lfoGain.gain.value = 150;
 
     lfo.connect(lfoGain);
     lfoGain.connect(lowpass.frequency);
 
-    // Main gain
     this.windGain = ctx.createGain();
-    this.windGain.gain.value = 0.15;
+    this.windGain.gain.value = 0.2;
 
-    // Connect
     noise.connect(highpass);
     highpass.connect(lowpass);
     lowpass.connect(this.windGain);
     this.windGain.connect(ctx.destination);
 
-    this.windNode = noise as unknown as OscillatorNode;
+    this.windNode = noise;
+    this.lfoNode = lfo;
     noise.start();
     lfo.start();
   }
 
   stopWind() {
     if (this.windGain && this.audioContext) {
-      this.windGain.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + 0.5);
+      const now = this.audioContext.currentTime;
+      this.windGain.gain.setValueAtTime(this.windGain.gain.value, now);
+      this.windGain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
       setTimeout(() => {
+        try {
+          this.windNode?.stop();
+          this.lfoNode?.stop();
+        } catch {}
         this.windNode = null;
         this.windGain = null;
-      }, 600);
+        this.lfoNode = null;
+      }, 900);
     }
   }
 
   destroy() {
     this.stopWind();
-    if (this.audioContext) {
-      this.audioContext.close();
-      this.audioContext = null;
-    }
+    setTimeout(() => {
+      if (this.audioContext) {
+        this.audioContext.close().catch(() => {});
+        this.audioContext = null;
+      }
+    }, 1000);
   }
 }
 
-export default function WesternLoader({
-  onLoadingComplete,
-}: WesternLoaderProps) {
+export default function WesternLoader({ onLoadingComplete }: WesternLoaderProps) {
   const [isLoading, setIsLoading] = useState(true);
-  const [hasStarted, setHasStarted] = useState(false); // User clicked to start
+  const [hasStarted, setHasStarted] = useState(false);
   const [showSign, setShowSign] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const [bulletHoles, setBulletHoles] = useState<BulletHole[]>([]);
   const [bulletCount, setBulletCount] = useState(0);
+  const [soundEnabled, setSoundEnabled] = useState(false);
   const soundEngineRef = useRef<WesternSoundEngine | null>(null);
   const timersRef = useRef<NodeJS.Timeout[]>([]);
 
-  // Initialize sound engine on mount
+  // Random western quote
+  const randomQuote = useMemo(() =>
+    WESTERN_QUOTES[Math.floor(Math.random() * WESTERN_QUOTES.length)],
+  []);
+
   useEffect(() => {
     soundEngineRef.current = new WesternSoundEngine();
     return () => {
@@ -178,15 +217,15 @@ export default function WesternLoader({
     };
   }, []);
 
-  // Add bullet holes with sound effect
-  const addBulletHole = useCallback(() => {
+  const addBulletHole = useCallback((withSound: boolean) => {
     if (bulletCount >= 4) return;
 
-    // Play gunshot sound
-    soundEngineRef.current?.playGunshot();
+    if (withSound) {
+      soundEngineRef.current?.playGunshot();
+    }
 
     const newHole: BulletHole = {
-      id: Date.now(),
+      id: Date.now() + Math.random(),
       x: 15 + Math.random() * 70,
       y: 15 + Math.random() * 70,
     };
@@ -195,32 +234,34 @@ export default function WesternLoader({
     setBulletCount(prev => prev + 1);
   }, [bulletCount]);
 
-  // Start the experience after user click
-  const handleStart = useCallback(() => {
+  const startExperience = useCallback((withSound: boolean) => {
     if (hasStarted) return;
     setHasStarted(true);
+    setSoundEnabled(withSound);
 
-    // Start wind sound immediately after user interaction
-    soundEngineRef.current?.startWind();
+    // Store preference in localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('portfolio-sound-enabled', withSound ? 'true' : 'false');
+    }
 
-    // Show sign after short delay
+    if (withSound) {
+      soundEngineRef.current?.startWind();
+    }
+
     timersRef.current.push(setTimeout(() => setShowSign(true), 400));
-
-    // Fire gunshots with delays
-    timersRef.current.push(setTimeout(() => addBulletHole(), 1000));
-    timersRef.current.push(setTimeout(() => addBulletHole(), 1400));
-    timersRef.current.push(setTimeout(() => addBulletHole(), 1900));
-    timersRef.current.push(setTimeout(() => addBulletHole(), 2300));
-
-    // Ready to enter
+    timersRef.current.push(setTimeout(() => addBulletHole(withSound), 1000));
+    timersRef.current.push(setTimeout(() => addBulletHole(withSound), 1400));
+    timersRef.current.push(setTimeout(() => addBulletHole(withSound), 1900));
+    timersRef.current.push(setTimeout(() => addBulletHole(withSound), 2300));
     timersRef.current.push(setTimeout(() => setIsReady(true), 2800));
   }, [hasStarted, addBulletHole]);
 
   const handleEnter = () => {
-    // Stop ambient wind sound
-    soundEngineRef.current?.stopWind();
+    if (soundEnabled) {
+      soundEngineRef.current?.stopWind();
+    }
     setIsLoading(false);
-    onLoadingComplete?.();
+    onLoadingComplete?.(soundEnabled);
   };
 
   return (
@@ -231,71 +272,164 @@ export default function WesternLoader({
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
           className="fixed inset-0 z-[9999] overflow-hidden"
-          onClick={!hasStarted ? handleStart : undefined}
         >
           {/* Click to start overlay */}
           <AnimatePresence>
             {!hasStarted && (
               <motion.div
-                className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 cursor-pointer"
+                className="absolute inset-0 z-50 flex items-center justify-center"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.4 }}
               >
+                {/* Saloon doors background effect */}
+                <div className="absolute inset-0 bg-gradient-to-b from-[#1a0f00] via-[#2d1a0a] to-[#1a0f00]" />
+
+                {/* Wooden frame */}
+                <div className="absolute inset-4 md:inset-12 border-8 border-[#4a3020] rounded-lg opacity-40" />
+                <div className="absolute inset-6 md:inset-14 border-4 border-[#6b4530] rounded-lg opacity-30" />
+
+                {/* Content */}
                 <motion.div
-                  className="text-center p-8"
-                  animate={{ scale: [1, 1.05, 1] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
+                  className="relative z-10 text-center px-6 max-w-2xl"
+                  initial={{ y: 20 }}
+                  animate={{ y: 0 }}
                 >
+                  {/* Saloon sign */}
                   <motion.div
-                    className="text-6xl mb-4"
-                    animate={{ rotate: [0, 10, -10, 0] }}
-                    transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 1 }}
+                    className="mb-8"
+                    animate={{ rotate: [-1, 1, -1] }}
+                    transition={{ duration: 3, repeat: Infinity }}
                   >
-                    🤠
+                    <div className="inline-block bg-gradient-to-b from-[#8B4513] to-[#5D3A1A] px-8 py-4 border-4 border-[#3d2010] shadow-2xl"
+                      style={{ boxShadow: '0 10px 30px rgba(0,0,0,0.8), inset 0 2px 4px rgba(255,255,255,0.1)' }}
+                    >
+                      <h1
+                        className="text-3xl md:text-5xl text-[#FFD700]"
+                        style={{ fontFamily: "'Rye', serif", textShadow: '3px 3px 0 #2d1a0a' }}
+                      >
+                        🍺 SALOON 🍺
+                      </h1>
+                    </div>
+                    {/* Hanging chains */}
+                    <div className="flex justify-center gap-32 -mt-1">
+                      <div className="w-1 h-8 bg-gradient-to-b from-[#666] to-[#333]" />
+                      <div className="w-1 h-8 bg-gradient-to-b from-[#666] to-[#333]" />
+                    </div>
                   </motion.div>
-                  <h2
-                    className="text-2xl md:text-4xl text-[#FFD700] mb-2"
-                    style={{ fontFamily: "'Rye', serif", textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}
+
+                  {/* Western quote */}
+                  <motion.div
+                    className="mb-8 p-4 bg-black/40 backdrop-blur-sm border border-[#8B4513]/50"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.3 }}
                   >
-                    HOWDY PARTNER
-                  </h2>
-                  <p
-                    className="text-lg text-[#E8D4B8]"
+                    <p
+                      className="text-xl md:text-2xl text-[#E8D4B8] italic mb-2"
+                      style={{ fontFamily: "'IM Fell English', serif" }}
+                    >
+                      &ldquo;{randomQuote.quote}&rdquo;
+                    </p>
+                    <p
+                      className="text-sm text-[#8B7355]"
+                      style={{ fontFamily: "'Special Elite', monospace" }}
+                    >
+                      — {randomQuote.film}
+                    </p>
+                  </motion.div>
+
+                  {/* Two buttons */}
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    {/* With sound button */}
+                    <motion.button
+                      onClick={() => startExperience(true)}
+                      className="group relative px-8 py-4 min-w-[200px]"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-b from-[#8B4513] via-[#A0522D] to-[#654321] border-2 border-[#FFD700] shadow-lg"
+                        style={{ boxShadow: '0 4px 15px rgba(255,215,0,0.3), inset 0 1px 2px rgba(255,255,255,0.2)' }}
+                      />
+                      <div className="relative flex items-center justify-center gap-2">
+                        <span className="text-2xl">🔊</span>
+                        <span
+                          className="text-lg text-[#FFD700] uppercase tracking-wider"
+                          style={{ fontFamily: "'Rye', serif" }}
+                        >
+                          Avec Son
+                        </span>
+                      </div>
+                      <p className="relative text-xs text-[#E8D4B8] mt-1 opacity-80" style={{ fontFamily: "'Special Elite', monospace" }}>
+                        Ambiance western complète
+                      </p>
+                    </motion.button>
+
+                    {/* Without sound button */}
+                    <motion.button
+                      onClick={() => startExperience(false)}
+                      className="group relative px-8 py-4 min-w-[200px]"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-b from-[#3d3d3d] via-[#2a2a2a] to-[#1a1a1a] border-2 border-[#666] shadow-lg" />
+                      <div className="relative flex items-center justify-center gap-2">
+                        <span className="text-2xl">🔇</span>
+                        <span
+                          className="text-lg text-[#ccc] uppercase tracking-wider"
+                          style={{ fontFamily: "'Rye', serif" }}
+                        >
+                          Sans Son
+                        </span>
+                      </div>
+                      <p className="relative text-xs text-[#888] mt-1" style={{ fontFamily: "'Special Elite', monospace" }}>
+                        Mode silencieux, partner
+                      </p>
+                    </motion.button>
+                  </div>
+
+                  {/* Bottom quote */}
+                  <motion.p
+                    className="mt-8 text-sm text-[#6b5540]"
                     style={{ fontFamily: "'Special Elite', monospace" }}
+                    animate={{ opacity: [0.5, 1, 0.5] }}
+                    transition={{ duration: 2, repeat: Infinity }}
                   >
-                    Cliquez pour entrer dans le Far West 🔊
-                  </p>
-                  <motion.div
-                    className="mt-6 inline-block px-6 py-3 border-2 border-[#FFD700] text-[#FFD700]"
-                    style={{ fontFamily: "'Cinzel', serif" }}
-                    whileHover={{ scale: 1.1, backgroundColor: 'rgba(255,215,0,0.2)' }}
-                  >
-                    🎵 ACTIVER LE SON 🎵
-                  </motion.div>
+                    🌵 Bienvenue dans le Far West du code 🌵
+                  </motion.p>
                 </motion.div>
               </motion.div>
             )}
           </AnimatePresence>
 
-          {/* Sky gradient */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#87CEEB] via-[#F4A460] to-[#DEB887]">
+          {/* Sky gradient - visible when animation starts */}
+          <div className={`absolute inset-0 bg-gradient-to-b from-[#87CEEB] via-[#F4A460] to-[#DEB887] transition-opacity duration-500 ${hasStarted ? 'opacity-100' : 'opacity-0'}`}>
             {/* Sun with rays */}
             <motion.div
-              className="absolute top-12 right-16 md:right-24"
+              className="absolute top-8 right-12 md:right-20"
               animate={{ rotate: 360 }}
               transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
             >
               <div className="relative">
-                <div className="w-20 h-20 md:w-28 md:h-28 rounded-full bg-gradient-to-br from-yellow-200 via-yellow-400 to-orange-500" />
+                {/* Sun rays */}
+                {[...Array(12)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute top-1/2 left-1/2 w-32 h-1 bg-gradient-to-r from-yellow-300 to-transparent origin-left"
+                    style={{ transform: `rotate(${i * 30}deg)` }}
+                    animate={{ opacity: [0.3, 0.6, 0.3] }}
+                    transition={{ duration: 2, repeat: Infinity, delay: i * 0.1 }}
+                  />
+                ))}
+                <div className="w-16 h-16 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-yellow-200 via-yellow-400 to-orange-500 relative z-10" />
                 <motion.div
                   className="absolute inset-0 rounded-full"
                   animate={{
                     boxShadow: [
-                      "0 0 40px 20px rgba(255,200,50,0.3)",
-                      "0 0 60px 30px rgba(255,200,50,0.5)",
-                      "0 0 40px 20px rgba(255,200,50,0.3)"
+                      "0 0 30px 15px rgba(255,200,50,0.4)",
+                      "0 0 50px 25px rgba(255,200,50,0.6)",
+                      "0 0 30px 15px rgba(255,200,50,0.4)"
                     ]
                   }}
                   transition={{ duration: 2, repeat: Infinity }}
@@ -303,160 +437,157 @@ export default function WesternLoader({
               </div>
             </motion.div>
 
-            {/* Distant mountains */}
-            <svg className="absolute bottom-32 left-0 w-full h-40 opacity-30" viewBox="0 0 1440 160" preserveAspectRatio="none">
-              <path d="M0,160 L100,80 L200,120 L350,40 L500,100 L650,20 L800,90 L950,50 L1100,110 L1250,30 L1440,100 L1440,160 Z" fill="#8B4513" />
+            {/* Clouds */}
+            <motion.div
+              className="absolute top-16 left-[10%] w-24 h-8 bg-white/30 rounded-full blur-sm"
+              animate={{ x: [0, 50, 0] }}
+              transition={{ duration: 20, repeat: Infinity }}
+            />
+            <motion.div
+              className="absolute top-24 left-[30%] w-32 h-10 bg-white/20 rounded-full blur-sm"
+              animate={{ x: [0, -30, 0] }}
+              transition={{ duration: 25, repeat: Infinity }}
+            />
+
+            {/* Distant mountains - layered */}
+            <svg className="absolute bottom-28 left-0 w-full h-32 opacity-20" viewBox="0 0 1440 128" preserveAspectRatio="none">
+              <path d="M0,128 L80,70 L180,100 L300,30 L450,80 L600,10 L750,60 L900,25 L1050,75 L1200,20 L1350,65 L1440,40 L1440,128 Z" fill="#6B4423" />
+            </svg>
+            <svg className="absolute bottom-24 left-0 w-full h-28 opacity-30" viewBox="0 0 1440 112" preserveAspectRatio="none">
+              <path d="M0,112 L100,60 L200,90 L350,35 L500,75 L650,15 L800,55 L950,30 L1100,70 L1250,25 L1440,60 L1440,112 Z" fill="#8B4513" />
             </svg>
 
-            {/* Mesa/plateau */}
-            <div className="absolute bottom-24 left-[10%] w-32 h-16 bg-gradient-to-t from-[#A0522D] to-[#CD853F] opacity-40" style={{ clipPath: 'polygon(10% 100%, 0% 0%, 100% 0%, 90% 100%)' }} />
-            <div className="absolute bottom-24 right-[15%] w-24 h-12 bg-gradient-to-t from-[#8B4513] to-[#D2691E] opacity-35" style={{ clipPath: 'polygon(15% 100%, 0% 0%, 100% 0%, 85% 100%)' }} />
+            {/* Mesa/plateaus */}
+            <div className="absolute bottom-20 left-[8%] w-28 h-14 bg-gradient-to-t from-[#A0522D] to-[#CD853F] opacity-50"
+              style={{ clipPath: 'polygon(15% 100%, 0% 0%, 100% 0%, 85% 100%)' }} />
+            <div className="absolute bottom-20 right-[12%] w-20 h-10 bg-gradient-to-t from-[#8B4513] to-[#D2691E] opacity-40"
+              style={{ clipPath: 'polygon(10% 100%, 0% 0%, 100% 0%, 90% 100%)' }} />
+            <div className="absolute bottom-24 left-[45%] w-16 h-8 bg-gradient-to-t from-[#A0522D] to-[#CD853F] opacity-30"
+              style={{ clipPath: 'polygon(20% 100%, 0% 0%, 100% 0%, 80% 100%)' }} />
           </div>
 
-          {/* Cactus silhouettes */}
-          <div className="absolute bottom-20 left-[5%] opacity-60">
-            <svg width="40" height="80" viewBox="0 0 40 80">
-              <path d="M18,80 L18,30 M18,45 L8,45 L8,35 M18,35 L28,35 L28,25" stroke="#2F4F2F" strokeWidth="6" strokeLinecap="round" fill="none"/>
-            </svg>
-          </div>
-          <div className="absolute bottom-20 right-[8%] opacity-50">
-            <svg width="50" height="100" viewBox="0 0 50 100">
-              <path d="M25,100 L25,25 M25,50 L10,50 L10,35 M25,40 L40,40 L40,30 M25,60 L35,60 L35,50" stroke="#3D5C3D" strokeWidth="7" strokeLinecap="round" fill="none"/>
-            </svg>
-          </div>
-          <div className="absolute bottom-16 left-[25%] opacity-40">
-            <svg width="30" height="60" viewBox="0 0 30 60">
-              <path d="M15,60 L15,20 M15,35 L5,35 L5,28" stroke="#4A6741" strokeWidth="5" strokeLinecap="round" fill="none"/>
-            </svg>
-          </div>
+          {/* Cactus silhouettes - more detailed */}
+          {hasStarted && (
+            <>
+              <div className="absolute bottom-16 left-[3%] opacity-70 z-10">
+                <svg width="50" height="100" viewBox="0 0 50 100">
+                  <path d="M25,100 L25,35 M25,55 L12,55 L12,42 M25,45 L38,45 L38,32" stroke="#1a3a1a" strokeWidth="8" strokeLinecap="round" fill="none"/>
+                  <path d="M25,100 L25,35 M25,55 L12,55 L12,42 M25,45 L38,45 L38,32" stroke="#2d5a2d" strokeWidth="5" strokeLinecap="round" fill="none"/>
+                </svg>
+              </div>
+              <div className="absolute bottom-16 right-[5%] opacity-60 z-10">
+                <svg width="60" height="120" viewBox="0 0 60 120">
+                  <path d="M30,120 L30,30 M30,60 L12,60 L12,45 M30,50 L48,50 L48,35 M30,75 L42,75 L42,60" stroke="#1a3a1a" strokeWidth="9" strokeLinecap="round" fill="none"/>
+                  <path d="M30,120 L30,30 M30,60 L12,60 L12,45 M30,50 L48,50 L48,35 M30,75 L42,75 L42,60" stroke="#2d5a2d" strokeWidth="6" strokeLinecap="round" fill="none"/>
+                </svg>
+              </div>
+              <div className="absolute bottom-14 left-[22%] opacity-50 z-10">
+                <svg width="35" height="70" viewBox="0 0 35 70">
+                  <path d="M17,70 L17,25 M17,40 L8,40 L8,32" stroke="#1a3a1a" strokeWidth="6" strokeLinecap="round" fill="none"/>
+                  <path d="M17,70 L17,25 M17,40 L8,40 L8,32" stroke="#2d5a2d" strokeWidth="4" strokeLinecap="round" fill="none"/>
+                </svg>
+              </div>
+              {/* Skull decoration */}
+              <div className="absolute bottom-14 left-[15%] text-3xl opacity-40">💀</div>
+            </>
+          )}
 
           {/* Ground with texture */}
-          <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#C19A6B] via-[#D2B48C] to-[#DEB887]">
-            {/* Ground texture lines */}
-            <div className="absolute inset-0 opacity-20">
-              {[...Array(20)].map((_, i) => (
+          <div className={`absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#B8860B] via-[#D2B48C] to-[#DEB887] transition-opacity ${hasStarted ? 'opacity-100' : 'opacity-0'}`}>
+            <div className="absolute inset-0 opacity-30">
+              {[...Array(30)].map((_, i) => (
                 <div
                   key={i}
                   className="absolute h-px bg-[#8B4513]"
                   style={{
-                    left: `${Math.random() * 100}%`,
+                    left: `${(i * 3.3) + Math.random() * 2}%`,
                     top: `${Math.random() * 100}%`,
-                    width: `${20 + Math.random() * 60}px`,
-                    transform: `rotate(${-5 + Math.random() * 10}deg)`,
+                    width: `${15 + Math.random() * 40}px`,
+                    transform: `rotate(${-3 + Math.random() * 6}deg)`,
                   }}
                 />
               ))}
             </div>
-            {/* Small rocks */}
-            {[...Array(12)].map((_, i) => (
+            {[...Array(15)].map((_, i) => (
               <div
                 key={i}
                 className="absolute rounded-full bg-[#8B7355]"
                 style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${20 + Math.random() * 60}%`,
-                  width: `${3 + Math.random() * 6}px`,
-                  height: `${2 + Math.random() * 4}px`,
-                  opacity: 0.4 + Math.random() * 0.3,
+                  left: `${(i * 6.5) + Math.random() * 3}%`,
+                  top: `${30 + Math.random() * 50}%`,
+                  width: `${4 + Math.random() * 8}px`,
+                  height: `${3 + Math.random() * 5}px`,
+                  opacity: 0.5 + Math.random() * 0.3,
                 }}
               />
             ))}
           </div>
 
-          {/* Dust particles floating */}
-          {[...Array(20)].map((_, i) => (
+          {/* Dust particles */}
+          {hasStarted && [...Array(25)].map((_, i) => (
             <motion.div
               key={i}
               className="absolute rounded-full bg-[#D2B48C]"
               style={{
                 left: `${Math.random() * 100}%`,
-                bottom: `${20 + Math.random() * 40}%`,
-                width: `${2 + Math.random() * 3}px`,
-                height: `${2 + Math.random() * 3}px`,
+                bottom: `${16 + Math.random() * 35}%`,
+                width: `${2 + Math.random() * 4}px`,
+                height: `${2 + Math.random() * 4}px`,
               }}
               animate={{
-                x: [0, 30, -20, 40],
-                y: [0, -40, -20, -60],
-                opacity: [0.3, 0.6, 0.4, 0],
+                x: [0, 40, -30, 50],
+                y: [0, -50, -30, -70],
+                opacity: [0.4, 0.7, 0.5, 0],
               }}
               transition={{
-                duration: 4 + Math.random() * 3,
+                duration: 5 + Math.random() * 4,
                 repeat: Infinity,
-                delay: Math.random() * 3,
+                delay: Math.random() * 4,
               }}
             />
           ))}
 
-          {/* Realistic Tumbleweed 1 */}
-          <motion.div
-            className="absolute bottom-16 z-10"
-            initial={{ x: "-120px", rotate: 0 }}
-            animate={{ x: "calc(100vw + 120px)", rotate: 1080 }}
-            transition={{ duration: 7, ease: "linear", repeat: Infinity }}
-          >
-            <svg width="70" height="70" viewBox="0 0 100 100">
-              <defs>
-                <radialGradient id="tw1" cx="40%" cy="40%">
-                  <stop offset="0%" stopColor="#A08060" />
-                  <stop offset="100%" stopColor="#5D4E37" />
-                </radialGradient>
-              </defs>
-              <circle cx="50" cy="50" r="35" fill="url(#tw1)" opacity="0.85"/>
-              {[...Array(16)].map((_, i) => {
-                const angle = (i * 22.5) * Math.PI / 180;
-                const r1 = 15, r2 = 38 + Math.random() * 8;
-                return (
-                  <line key={i} x1={50 + r1 * Math.cos(angle)} y1={50 + r1 * Math.sin(angle)}
-                    x2={50 + r2 * Math.cos(angle + 0.1)} y2={50 + r2 * Math.sin(angle + 0.1)}
-                    stroke="#4A3C2A" strokeWidth="1.5" opacity="0.7"/>
-                );
-              })}
-              {[...Array(8)].map((_, i) => {
-                const angle = (i * 45 + 20) * Math.PI / 180;
-                return <circle key={i} cx={50 + 22 * Math.cos(angle)} cy={50 + 22 * Math.sin(angle)} r="4" fill="none" stroke="#6B5B4A" strokeWidth="1" opacity="0.5"/>;
-              })}
-            </svg>
-          </motion.div>
+          {/* Tumbleweeds */}
+          {hasStarted && (
+            <>
+              <motion.div
+                className="absolute bottom-14 z-10"
+                initial={{ x: "-100px", rotate: 0 }}
+                animate={{ x: "calc(100vw + 100px)", rotate: 1080 }}
+                transition={{ duration: 8, ease: "linear", repeat: Infinity }}
+              >
+                <svg width="60" height="60" viewBox="0 0 100 100">
+                  <defs>
+                    <radialGradient id="tw1" cx="40%" cy="40%">
+                      <stop offset="0%" stopColor="#A08060" />
+                      <stop offset="100%" stopColor="#5D4E37" />
+                    </radialGradient>
+                  </defs>
+                  <circle cx="50" cy="50" r="30" fill="url(#tw1)" opacity="0.9"/>
+                  {[...Array(14)].map((_, i) => {
+                    const angle = (i * 25.7) * Math.PI / 180;
+                    return (
+                      <line key={i} x1={50 + 12 * Math.cos(angle)} y1={50 + 12 * Math.sin(angle)}
+                        x2={50 + 35 * Math.cos(angle)} y2={50 + 35 * Math.sin(angle)}
+                        stroke="#4A3C2A" strokeWidth="2" opacity="0.7"/>
+                    );
+                  })}
+                </svg>
+              </motion.div>
+              <motion.div
+                className="absolute bottom-12 z-10 opacity-70"
+                initial={{ x: "-60px", rotate: 0 }}
+                animate={{ x: "calc(100vw + 60px)", rotate: -900 }}
+                transition={{ duration: 11, ease: "linear", repeat: Infinity, delay: 3 }}
+              >
+                <svg width="40" height="40" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="30" fill="#8A7A6A" opacity="0.8"/>
+                </svg>
+              </motion.div>
+            </>
+          )}
 
-          {/* Realistic Tumbleweed 2 (smaller, slower) */}
-          <motion.div
-            className="absolute bottom-14 z-10 opacity-70"
-            initial={{ x: "-80px", rotate: 0 }}
-            animate={{ x: "calc(100vw + 80px)", rotate: -900 }}
-            transition={{ duration: 10, ease: "linear", repeat: Infinity, delay: 2.5 }}
-          >
-            <svg width="45" height="45" viewBox="0 0 100 100">
-              <defs>
-                <radialGradient id="tw2" cx="35%" cy="35%">
-                  <stop offset="0%" stopColor="#B8A080" />
-                  <stop offset="100%" stopColor="#6B5D4A" />
-                </radialGradient>
-              </defs>
-              <circle cx="50" cy="50" r="35" fill="url(#tw2)" opacity="0.8"/>
-              {[...Array(12)].map((_, i) => {
-                const angle = (i * 30) * Math.PI / 180;
-                return (
-                  <line key={i} x1={50 + 12 * Math.cos(angle)} y1={50 + 12 * Math.sin(angle)}
-                    x2={50 + 40 * Math.cos(angle)} y2={50 + 40 * Math.sin(angle)}
-                    stroke="#5D4E37" strokeWidth="1.2" opacity="0.6"/>
-                );
-              })}
-            </svg>
-          </motion.div>
-
-          {/* Third tumbleweed in background */}
-          <motion.div
-            className="absolute bottom-24 z-5 opacity-40"
-            initial={{ x: "-60px", rotate: 0 }}
-            animate={{ x: "calc(100vw + 60px)", rotate: 720 }}
-            transition={{ duration: 14, ease: "linear", repeat: Infinity, delay: 5 }}
-          >
-            <svg width="30" height="30" viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="35" fill="#7A6B5A" opacity="0.7"/>
-            </svg>
-          </motion.div>
-
-          {/* Western Wooden Sign with Bullet Holes */}
+          {/* Western Wooden Sign */}
           <AnimatePresence>
             {showSign && (
               <motion.div
@@ -467,38 +598,42 @@ export default function WesternLoader({
                 transition={{ type: "spring", stiffness: 150, damping: 12 }}
               >
                 <div className="relative">
-                  {/* Sign posts */}
-                  <div className="absolute -bottom-16 left-8 w-4 h-20 bg-gradient-to-r from-[#5D4037] to-[#4E342E] rounded-sm" />
-                  <div className="absolute -bottom-16 right-8 w-4 h-20 bg-gradient-to-r from-[#5D4037] to-[#4E342E] rounded-sm" />
+                  {/* Sign posts with rope */}
+                  <div className="absolute -bottom-20 left-6 w-5 h-24 bg-gradient-to-r from-[#5D4037] to-[#4E342E] rounded-sm" />
+                  <div className="absolute -bottom-20 right-6 w-5 h-24 bg-gradient-to-r from-[#5D4037] to-[#4E342E] rounded-sm" />
+
+                  {/* Rope details */}
+                  <div className="absolute -top-3 left-4 w-8 h-3 border-2 border-[#8B7355] rounded-full opacity-60" />
+                  <div className="absolute -top-3 right-4 w-8 h-3 border-2 border-[#8B7355] rounded-full opacity-60" />
 
                   {/* Main Wooden Plank */}
                   <motion.div
-                    className="relative bg-gradient-to-br from-[#8B4513] via-[#A0522D] to-[#6B3E26] px-6 py-5 md:px-10 md:py-6 rounded-sm"
+                    className="relative bg-gradient-to-br from-[#8B4513] via-[#A0522D] to-[#6B3E26] px-8 py-6 md:px-12 md:py-8 rounded-sm"
                     style={{
                       boxShadow: `
-                        inset 0 2px 4px rgba(255,255,255,0.15),
-                        inset 0 -3px 6px rgba(0,0,0,0.4),
-                        0 8px 25px rgba(0,0,0,0.6),
-                        5px 5px 0 #3E2723
+                        inset 0 3px 6px rgba(255,255,255,0.15),
+                        inset 0 -4px 8px rgba(0,0,0,0.4),
+                        0 10px 30px rgba(0,0,0,0.6),
+                        6px 6px 0 #3E2723
                       `,
                     }}
                     animate={{ rotate: [-0.5, 0.5, -0.5] }}
                     transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                   >
-                    {/* Wood grain texture */}
-                    <div className="absolute inset-0 opacity-15 pointer-events-none"
+                    {/* Wood grain */}
+                    <div className="absolute inset-0 opacity-20 pointer-events-none"
                       style={{
-                        backgroundImage: `repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px)`,
+                        backgroundImage: `repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(0,0,0,0.1) 3px, rgba(0,0,0,0.1) 6px)`,
                       }}
                     />
 
                     {/* Nails */}
-                    {[[8, 8], [8, 'calc(100% - 8px)'], ['calc(100% - 8px)', 8], ['calc(100% - 8px)', 'calc(100% - 8px)']].map(([top, left], i) => (
-                      <div key={i} className="absolute w-3 h-3 rounded-full bg-gradient-to-br from-gray-400 to-gray-600 shadow-inner"
+                    {[[10, 10], [10, 'calc(100% - 10px)'], ['calc(100% - 10px)', 10], ['calc(100% - 10px)', 'calc(100% - 10px)']].map(([top, left], i) => (
+                      <div key={i} className="absolute w-4 h-4 rounded-full bg-gradient-to-br from-gray-300 to-gray-600 shadow-inner"
                         style={{ top: top as string, left: left as string }} />
                     ))}
 
-                    {/* BULLET HOLES */}
+                    {/* Bullet holes */}
                     {bulletHoles.map((hole, index) => (
                       <motion.div
                         key={hole.id}
@@ -507,51 +642,47 @@ export default function WesternLoader({
                         initial={{ scale: 0, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                       >
-                        {/* Bullet hole */}
                         <motion.div
                           className="relative"
-                          initial={{ scale: 2 }}
+                          initial={{ scale: 2.5 }}
                           animate={{ scale: 1 }}
-                          transition={{ duration: 0.1 }}
+                          transition={{ duration: 0.08 }}
                         >
-                          {/* Splintered wood around hole */}
-                          <div className="absolute -inset-2 opacity-60">
-                            {[...Array(6)].map((_, i) => (
+                          <div className="absolute -inset-3 opacity-50">
+                            {[...Array(8)].map((_, i) => (
                               <div
                                 key={i}
                                 className="absolute bg-[#5D4037]"
                                 style={{
-                                  width: '8px',
+                                  width: `${6 + Math.random() * 6}px`,
                                   height: '2px',
                                   left: '50%',
                                   top: '50%',
-                                  transform: `rotate(${i * 60}deg) translateX(6px)`,
+                                  transform: `rotate(${i * 45}deg) translateX(5px)`,
                                   transformOrigin: 'left center',
                                 }}
                               />
                             ))}
                           </div>
-                          {/* Dark hole center */}
-                          <div className="w-3 h-3 rounded-full bg-gradient-to-br from-[#1a1a1a] to-[#000] shadow-inner border border-[#3E2723]" />
-                          {/* Smoke puff */}
+                          <div className="w-4 h-4 rounded-full bg-gradient-to-br from-[#1a1a1a] to-[#000] shadow-inner border-2 border-[#3E2723]" />
                           <motion.div
-                            className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-gray-400"
-                            initial={{ opacity: 0.8, scale: 0.5, y: 0 }}
-                            animate={{ opacity: 0, scale: 2, y: -20 }}
-                            transition={{ duration: 0.8, delay: index * 0.05 }}
+                            className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 rounded-full bg-gray-400/80"
+                            initial={{ opacity: 0.9, scale: 0.3, y: 0 }}
+                            animate={{ opacity: 0, scale: 2.5, y: -25 }}
+                            transition={{ duration: 0.6, delay: index * 0.03 }}
                           />
                         </motion.div>
                       </motion.div>
                     ))}
 
-                    {/* Sign Text - TRASH STYLE */}
-                    <div className="text-center space-y-2 relative z-10">
+                    {/* Sign Text */}
+                    <div className="text-center space-y-3 relative z-10">
                       <motion.h1
-                        className="text-2xl md:text-4xl font-bold tracking-wider"
+                        className="text-3xl md:text-5xl font-bold tracking-wider"
                         style={{
                           fontFamily: "'Rye', serif",
                           color: '#1C1208',
-                          textShadow: '1px 1px 0 rgba(255,255,255,0.1)',
+                          textShadow: '2px 2px 0 rgba(255,255,255,0.1)',
                         }}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -561,7 +692,7 @@ export default function WesternLoader({
                       </motion.h1>
 
                       <motion.p
-                        className="text-sm md:text-base"
+                        className="text-base md:text-lg"
                         style={{ fontFamily: "'Special Elite', monospace", color: '#2C1810' }}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -571,30 +702,30 @@ export default function WesternLoader({
                       </motion.p>
 
                       <motion.div
-                        className="py-1"
+                        className="py-2"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.6 }}
                       >
-                        <p className="text-xs md:text-sm" style={{ fontFamily: "'IM Fell English', serif", color: '#3E2723' }}>
+                        <p className="text-sm md:text-base" style={{ fontFamily: "'IM Fell English', serif", color: '#3E2723' }}>
                           ici on kode kom on tire
                         </p>
-                        <p className="text-[10px] md:text-xs" style={{ fontFamily: "'Special Elite', monospace", color: '#5D4037' }}>
+                        <p className="text-xs md:text-sm" style={{ fontFamily: "'Special Elite', monospace", color: '#5D4037' }}>
                           vite & sal 💀
                         </p>
                       </motion.div>
 
                       <motion.div
-                        className="flex items-center justify-center gap-2 pt-1"
+                        className="flex items-center justify-center gap-3 pt-2"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.8 }}
                       >
-                        <span>🔫</span>
-                        <span className="text-[10px] md:text-xs uppercase" style={{ fontFamily: "'Rye', serif", color: '#8B0000' }}>
+                        <span className="text-xl">🔫</span>
+                        <span className="text-xs md:text-sm uppercase" style={{ fontFamily: "'Rye', serif", color: '#8B0000' }}>
                           Kolt.js charge
                         </span>
-                        <span>🔫</span>
+                        <span className="text-xl">🔫</span>
                       </motion.div>
                     </div>
                   </motion.div>
@@ -607,7 +738,7 @@ export default function WesternLoader({
           <AnimatePresence>
             {isReady && (
               <motion.div
-                className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30"
+                className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
@@ -615,57 +746,57 @@ export default function WesternLoader({
               >
                 <motion.button
                   onClick={handleEnter}
-                  className="group relative px-8 py-4 cursor-pointer"
+                  className="group relative px-10 py-5 cursor-pointer"
                   whileHover={{ scale: 1.08 }}
                   whileTap={{ scale: 0.95 }}
-                  animate={{ y: [0, -6, 0] }}
+                  animate={{ y: [0, -8, 0] }}
                   transition={{ y: { duration: 1.5, repeat: Infinity, ease: "easeInOut" } }}
                 >
                   <div
-                    className="absolute inset-0 bg-gradient-to-b from-[#654321] via-[#8B4513] to-[#4A3728] rounded-sm"
+                    className="absolute inset-0 bg-gradient-to-b from-[#654321] via-[#8B4513] to-[#4A3728] rounded-sm border-2 border-[#8B4513]"
                     style={{
-                      boxShadow: `inset 0 2px 4px rgba(255,255,255,0.2), inset 0 -2px 4px rgba(0,0,0,0.4), 0 4px 15px rgba(0,0,0,0.5), 3px 3px 0 #2C1810`,
+                      boxShadow: `inset 0 3px 6px rgba(255,255,255,0.2), inset 0 -3px 6px rgba(0,0,0,0.4), 0 6px 20px rgba(0,0,0,0.5), 4px 4px 0 #2C1810`,
                     }}
                   />
-                  <div className="relative flex items-center gap-3">
-                    <motion.span className="text-xl" animate={{ x: [0, 5, 0] }} transition={{ duration: 0.8, repeat: Infinity }}>
+                  <div className="relative flex items-center gap-4">
+                    <motion.span className="text-2xl" animate={{ x: [0, 6, 0] }} transition={{ duration: 0.8, repeat: Infinity }}>
                       👆
                     </motion.span>
                     <span
-                      className="text-sm md:text-base uppercase tracking-widest text-[#E8D4B8] group-hover:text-[#FFD700] transition-colors"
-                      style={{ fontFamily: "'Rye', serif", textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}
+                      className="text-base md:text-lg uppercase tracking-widest text-[#E8D4B8] group-hover:text-[#FFD700] transition-colors"
+                      style={{ fontFamily: "'Rye', serif", textShadow: '2px 2px 3px rgba(0,0,0,0.6)' }}
                     >
                       Entre Cowboi
                     </span>
-                    <motion.span className="text-lg" animate={{ rotate: [0, 15, 0, -15, 0] }} transition={{ duration: 1, repeat: Infinity }}>
+                    <motion.span className="text-xl" animate={{ rotate: [0, 15, 0, -15, 0] }} transition={{ duration: 1, repeat: Infinity }}>
                       🤠
                     </motion.span>
                   </div>
                 </motion.button>
                 <motion.p
-                  className="text-center mt-2 text-xs text-[#5D4037]"
+                  className="text-center mt-3 text-sm text-[#5D4037]"
                   style={{ fontFamily: "'Special Elite', monospace" }}
                   animate={{ opacity: [0.4, 1, 0.4] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 >
-                  clik ou degaj 🌵
+                  {soundEnabled ? '🔊' : '🔇'} clik ou degaj 🌵
                 </motion.p>
               </motion.div>
             )}
           </AnimatePresence>
 
-          {/* Loading dots */}
-          {!isReady && (
+          {/* Loading animation when started but not ready */}
+          {hasStarted && !isReady && (
             <motion.div
-              className="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-2 z-30"
+              className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3 z-30"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
-              {[0, 0.2, 0.4].map((delay, i) => (
+              {[0, 0.15, 0.3].map((delay, i) => (
                 <motion.div
                   key={i}
-                  className="w-2 h-2 rounded-full bg-[#8B4513]"
-                  animate={{ scale: [1, 1.5, 1] }}
+                  className="w-3 h-3 rounded-full bg-[#8B4513]"
+                  animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
                   transition={{ duration: 0.6, repeat: Infinity, delay }}
                 />
               ))}
