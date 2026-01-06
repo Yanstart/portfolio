@@ -4,6 +4,192 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Volume2, VolumeX, Play, Pause, Shuffle, SkipForward } from 'lucide-react';
 
+// Western Ambient Music Generator - plays instantly while YouTube loads
+class WesternAmbientMusic {
+  private audioContext: AudioContext | null = null;
+  private masterGain: GainNode | null = null;
+  private isPlaying = false;
+  private oscillators: OscillatorNode[] = [];
+  private intervalId: NodeJS.Timeout | null = null;
+
+  // Western pentatonic scale (A minor pentatonic - classic western feel)
+  private readonly notes = [220, 261.63, 293.66, 329.63, 392, 440, 523.25, 587.33];
+
+  init() {
+    if (this.audioContext) return;
+    try {
+      this.audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+      this.masterGain = this.audioContext.createGain();
+      this.masterGain.gain.value = 0;
+      this.masterGain.connect(this.audioContext.destination);
+    } catch {
+      console.warn('Web Audio API not supported');
+    }
+  }
+
+  start() {
+    if (this.isPlaying || !this.audioContext || !this.masterGain) {
+      this.init();
+      if (!this.audioContext || !this.masterGain) return;
+    }
+
+    if (this.audioContext.state === 'suspended') {
+      this.audioContext.resume();
+    }
+
+    this.isPlaying = true;
+
+    // Fade in
+    const now = this.audioContext.currentTime;
+    this.masterGain.gain.setValueAtTime(0, now);
+    this.masterGain.gain.linearRampToValueAtTime(0.15, now + 1);
+
+    // Start ambient drone (low humming like wind through canyon)
+    this.startDrone();
+
+    // Start melody loop
+    this.startMelody();
+  }
+
+  private startDrone() {
+    if (!this.audioContext || !this.masterGain) return;
+
+    const ctx = this.audioContext;
+
+    // Low drone note
+    const drone = ctx.createOscillator();
+    drone.type = 'sine';
+    drone.frequency.value = 110; // Low A
+
+    const droneGain = ctx.createGain();
+    droneGain.gain.value = 0.3;
+
+    // Add slight vibrato
+    const vibrato = ctx.createOscillator();
+    vibrato.type = 'sine';
+    vibrato.frequency.value = 0.5;
+    const vibratoGain = ctx.createGain();
+    vibratoGain.gain.value = 2;
+    vibrato.connect(vibratoGain);
+    vibratoGain.connect(drone.frequency);
+
+    // Filter for warmth
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 400;
+
+    drone.connect(droneGain);
+    droneGain.connect(filter);
+    filter.connect(this.masterGain);
+
+    drone.start();
+    vibrato.start();
+
+    this.oscillators.push(drone, vibrato);
+  }
+
+  private startMelody() {
+    if (!this.audioContext || !this.masterGain) return;
+
+    let noteIndex = 0;
+
+    // Play a note every 800-1500ms (random for natural feel)
+    const playNote = () => {
+      if (!this.isPlaying || !this.audioContext || !this.masterGain) return;
+
+      const ctx = this.audioContext;
+      const now = ctx.currentTime;
+
+      // Pick a note from the scale
+      const freq = this.notes[noteIndex % this.notes.length];
+      noteIndex++;
+
+      // Create harmonica-like sound (multiple oscillators)
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
+
+      osc1.type = 'sine';
+      osc2.type = 'triangle';
+
+      osc1.frequency.value = freq;
+      osc2.frequency.value = freq * 2.01; // Slight detune for richness
+
+      // Envelope
+      const noteGain = ctx.createGain();
+      noteGain.gain.setValueAtTime(0, now);
+      noteGain.gain.linearRampToValueAtTime(0.4, now + 0.1);
+      noteGain.gain.exponentialRampToValueAtTime(0.01, now + 2);
+
+      // Vibrato for harmonica feel
+      const noteVibrato = ctx.createOscillator();
+      noteVibrato.type = 'sine';
+      noteVibrato.frequency.value = 5;
+      const noteVibratoGain = ctx.createGain();
+      noteVibratoGain.gain.value = 3;
+      noteVibrato.connect(noteVibratoGain);
+      noteVibratoGain.connect(osc1.frequency);
+
+      // Filter
+      const noteFilter = ctx.createBiquadFilter();
+      noteFilter.type = 'lowpass';
+      noteFilter.frequency.value = 2000;
+
+      osc1.connect(noteGain);
+      osc2.connect(noteGain);
+      noteGain.connect(noteFilter);
+      noteFilter.connect(this.masterGain!);
+
+      osc1.start(now);
+      osc2.start(now);
+      noteVibrato.start(now);
+
+      osc1.stop(now + 2.5);
+      osc2.stop(now + 2.5);
+      noteVibrato.stop(now + 2.5);
+
+      // Schedule next note
+      const nextDelay = 800 + Math.random() * 700;
+      this.intervalId = setTimeout(playNote, nextDelay);
+    };
+
+    // Start first note after short delay
+    this.intervalId = setTimeout(playNote, 500);
+  }
+
+  fadeOut(duration = 2) {
+    if (!this.audioContext || !this.masterGain || !this.isPlaying) return;
+
+    const now = this.audioContext.currentTime;
+    this.masterGain.gain.setValueAtTime(this.masterGain.gain.value, now);
+    this.masterGain.gain.linearRampToValueAtTime(0, now + duration);
+
+    // Stop after fade
+    setTimeout(() => this.stop(), duration * 1000 + 100);
+  }
+
+  stop() {
+    this.isPlaying = false;
+
+    if (this.intervalId) {
+      clearTimeout(this.intervalId);
+      this.intervalId = null;
+    }
+
+    this.oscillators.forEach(osc => {
+      try { osc.stop(); } catch {}
+    });
+    this.oscillators = [];
+  }
+
+  destroy() {
+    this.stop();
+    if (this.audioContext) {
+      this.audioContext.close().catch(() => {});
+      this.audioContext = null;
+    }
+  }
+}
+
 // Extensive list of famous themes - movies, TV, games, anime
 const FAMOUS_THEMES = [
   // MOVIES - Action/Adventure
@@ -131,12 +317,22 @@ export default function YouTubeAudio() {
   const [currentTheme, setCurrentTheme] = useState(() => getRandomTheme());
   const [soundEnabled, setSoundEnabled] = useState(false);
   const [errorCount, setErrorCount] = useState(0);
+  const [ambientPlaying, setAmbientPlaying] = useState(false);
   const playerRef = useRef<YTPlayer | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const lastErrorTimeRef = useRef<number>(0);
   const soundEnabledRef = useRef<boolean>(false);
+  const ambientMusicRef = useRef<WesternAmbientMusic | null>(null);
 
-  // Check localStorage for sound preference
+  // Initialize ambient music
+  useEffect(() => {
+    ambientMusicRef.current = new WesternAmbientMusic();
+    return () => {
+      ambientMusicRef.current?.destroy();
+    };
+  }, []);
+
+  // Check localStorage for sound preference and start ambient music immediately
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const enabled = getSoundPreference();
@@ -145,6 +341,9 @@ export default function YouTubeAudio() {
       if (enabled) {
         setHasInteracted(true);
         setShowPrompt(false);
+        // Start ambient music IMMEDIATELY
+        ambientMusicRef.current?.start();
+        setAmbientPlaying(true);
       }
     }
   }, []);
@@ -221,6 +420,11 @@ export default function YouTubeAudio() {
           if (event.data === window.YT.PlayerState.PLAYING) {
             setIsPlaying(true);
             setErrorCount(0);
+            // Fade out ambient music when YouTube starts
+            if (ambientMusicRef.current) {
+              ambientMusicRef.current.fadeOut(2);
+              setAmbientPlaying(false);
+            }
           } else if (event.data === window.YT.PlayerState.PAUSED || event.data === window.YT.PlayerState.ENDED) {
             setIsPlaying(false);
           }
@@ -355,10 +559,14 @@ export default function YouTubeAudio() {
 
           {/* Main player container */}
           <motion.div
-            className={`flex items-center gap-4 bg-[var(--card-bg)]/98 backdrop-blur-md border-3 border-[var(--western-brown)] shadow-[5px_5px_0_var(--western-brown-dark)] px-5 py-4 transition-all group relative overflow-hidden ${!isReady ? 'opacity-70' : ''}`}
+            className={`flex items-center gap-4 bg-[var(--card-bg)]/98 backdrop-blur-md border-3 border-[var(--western-brown)] shadow-[5px_5px_0_var(--western-brown-dark)] px-5 py-4 transition-all group relative overflow-hidden ${!isReady && !ambientPlaying ? 'opacity-70' : ''}`}
             style={{
-              borderColor: isPlaying ? '#FF0000' : undefined,
-              boxShadow: isPlaying ? '5px 5px 0 var(--western-brown-dark), 0 0 20px #FF000040' : undefined,
+              borderColor: isPlaying ? '#FF0000' : ambientPlaying ? 'var(--western-gold)' : undefined,
+              boxShadow: isPlaying
+                ? '5px 5px 0 var(--western-brown-dark), 0 0 20px #FF000040'
+                : ambientPlaying
+                  ? '5px 5px 0 var(--western-brown-dark), 0 0 15px rgba(218, 165, 32, 0.4)'
+                  : undefined,
             }}
             whileHover={{ scale: isReady ? 1.02 : 1 }}
             animate={!hasInteracted && showPrompt && isReady ? {
@@ -371,21 +579,33 @@ export default function YouTubeAudio() {
             transition={!hasInteracted ? { duration: 1.5, repeat: Infinity } : {}}
           >
             {/* Animated background when playing */}
-            {isPlaying && (
+            {(isPlaying || ambientPlaying) && (
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-[#FF0000]/10 via-[var(--western-gold)]/10 to-[#FF0000]/10"
+                className={`absolute inset-0 ${
+                  isPlaying
+                    ? 'bg-gradient-to-r from-[#FF0000]/10 via-[var(--western-gold)]/10 to-[#FF0000]/10'
+                    : 'bg-gradient-to-r from-[var(--western-gold)]/10 via-[var(--western-brown)]/10 to-[var(--western-gold)]/10'
+                }`}
                 animate={{ x: ['-100%', '100%'] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                transition={{ duration: isPlaying ? 3 : 5, repeat: Infinity, ease: "linear" }}
               />
             )}
 
             {/* Play/Pause button */}
             <motion.button
               onClick={togglePlay}
-              disabled={!isReady}
+              disabled={!isReady && !ambientPlaying}
               className="relative z-10 p-2 rounded-full cursor-pointer disabled:cursor-not-allowed"
-              style={{ backgroundColor: isPlaying ? '#FF0000' : isReady ? 'var(--western-rust)' : 'var(--western-brown-light)' }}
-              animate={isPlaying ? { scale: [1, 1.1, 1] } : {}}
+              style={{
+                backgroundColor: isPlaying
+                  ? '#FF0000'
+                  : ambientPlaying
+                    ? 'var(--western-gold)'
+                    : isReady
+                      ? 'var(--western-rust)'
+                      : 'var(--western-brown-light)'
+              }}
+              animate={(isPlaying || ambientPlaying) ? { scale: [1, 1.1, 1] } : {}}
               transition={{ duration: 1, repeat: Infinity }}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
@@ -393,6 +613,8 @@ export default function YouTubeAudio() {
             >
               {isPlaying ? (
                 <Pause className="w-5 h-5 text-white" />
+              ) : ambientPlaying ? (
+                <Volume2 className="w-5 h-5 text-white" />
               ) : (
                 <Play className="w-5 h-5 text-white ml-0.5" />
               )}
@@ -401,23 +623,25 @@ export default function YouTubeAudio() {
             {/* Music info */}
             <button
               onClick={togglePlay}
-              disabled={!isReady}
+              disabled={!isReady && !ambientPlaying}
               className="relative z-10 text-left min-w-0 max-w-[120px] cursor-pointer disabled:cursor-not-allowed bg-transparent border-none"
             >
               <p
                 className="text-sm font-bold transition-colors truncate"
                 style={{
                   fontFamily: "'Cinzel', serif",
-                  color: isPlaying ? '#FF0000' : 'var(--text-primary)',
+                  color: isPlaying || ambientPlaying ? '#FF0000' : 'var(--text-primary)',
                 }}
-                title={currentTheme.title}
+                title={ambientPlaying && !isPlaying ? 'Western Ambient' : currentTheme.title}
               >
-                {currentTheme.title}
+                {ambientPlaying && !isPlaying ? '🎸 Western Ambient' : currentTheme.title}
               </p>
               <p className="text-xs text-[var(--text-muted)] truncate" style={{ fontFamily: "'Special Elite', monospace" }} title={currentTheme.artist}>
-                {!isReady ? 'Chargement...' : isPlaying ? currentTheme.artist : 'Cliquez pour jouer'}
+                {ambientPlaying && !isPlaying
+                  ? (isReady ? 'YouTube prêt...' : 'Chargement YouTube...')
+                  : (!isReady ? 'Chargement...' : isPlaying ? currentTheme.artist : 'Cliquez pour jouer')}
               </p>
-              {currentTheme.category && (
+              {!ambientPlaying && currentTheme.category && (
                 <span className="text-[10px] text-[var(--western-rust)] opacity-70">{currentTheme.category}</span>
               )}
             </button>
@@ -448,16 +672,16 @@ export default function YouTubeAudio() {
               <Shuffle className="w-4 h-4 text-[var(--text-muted)] hover:text-[#FF0000]" />
             </motion.button>
 
-            {/* Sound wave animation when playing */}
-            {isPlaying && (
+            {/* Sound wave animation when playing (YouTube or Ambient) */}
+            {(isPlaying || ambientPlaying) && (
               <div className="relative z-10 flex items-end gap-1 h-6 ml-1">
                 {[0, 1, 2, 3].map((i) => (
                   <motion.div
                     key={i}
-                    className="w-1 bg-[#FF0000] rounded-full"
+                    className={`w-1 rounded-full ${ambientPlaying && !isPlaying ? 'bg-[var(--western-gold)]' : 'bg-[#FF0000]'}`}
                     animate={{ height: ['40%', '100%', '40%'] }}
                     transition={{
-                      duration: 0.5,
+                      duration: ambientPlaying && !isPlaying ? 0.8 : 0.5,
                       repeat: Infinity,
                       delay: i * 0.1,
                       ease: "easeInOut",
