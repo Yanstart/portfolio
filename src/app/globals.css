@@ -87,7 +87,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: 'IM Fell English', 'Playfair Display', Georgia, serif;
-  font-size: 20px;
+  font-size: 18px;
   line-height: 1.85;
   transition: background-color 0.3s ease, color 0.3s ease;
   position: relative;
@@ -95,13 +95,25 @@ body {
 
 @media (min-width: 768px) {
   body {
-    font-size: 22px;
+    font-size: 20px;
   }
 }
 
 @media (min-width: 1024px) {
   body {
+    font-size: 22px;
+  }
+}
+
+@media (min-width: 1280px) {
+  body {
     font-size: 24px;
+  }
+}
+
+@media (min-width: 1536px) {
+  body {
+    font-size: 26px;
   }
 }
 
@@ -252,28 +264,54 @@ h6 {
 }
 
 @media (max-width: 768px) {
-  h1 { font-size: 3rem; }
-  h2 { font-size: 2.5rem; }
-  h3 { font-size: 1.875rem; }
-  h4 { font-size: 1.5rem; }
+  h1 { font-size: 2.5rem; }
+  h2 { font-size: 2rem; }
+  h3 { font-size: 1.5rem; }
+  h4 { font-size: 1.25rem; }
+}
+
+@media (min-width: 1280px) {
+  h1 { font-size: 5rem; }
+  h2 { font-size: 4rem; }
+  h3 { font-size: 2.75rem; }
+  h4 { font-size: 2rem; }
+}
+
+@media (min-width: 1536px) {
+  h1 { font-size: 5.5rem; }
+  h2 { font-size: 4.5rem; }
+  h3 { font-size: 3rem; }
+  h4 { font-size: 2.25rem; }
 }
 
 /* Paragraph and text elements */
 p {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   line-height: 1.85;
   margin-bottom: 1.25rem;
 }
 
 @media (min-width: 768px) {
   p {
-    font-size: 1.35rem;
+    font-size: 1.2rem;
   }
 }
 
 @media (min-width: 1024px) {
   p {
-    font-size: 1.45rem;
+    font-size: 1.3rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  p {
+    font-size: 1.4rem;
+  }
+}
+
+@media (min-width: 1536px) {
+  p {
+    font-size: 1.5rem;
   }
 }
 
