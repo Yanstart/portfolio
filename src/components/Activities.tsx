@@ -145,12 +145,14 @@ export default function Activities() {
           <div className="flex flex-wrap justify-center gap-2">
             <button
               onClick={() => handleThemeChange(null)}
-              className={`px-3 py-1.5 text-xs font-medium transition-all flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 text-xs font-medium transition-all flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-[var(--western-gold)] focus-visible:ring-offset-2 ${
                 selectedTheme === null
                   ? 'bg-[var(--tech-blue)] text-white border-2 border-[var(--tech-blue)]'
                   : 'bg-[var(--card-bg)] text-[var(--text-secondary)] border-2 border-[var(--western-brown-light)] hover:border-[var(--tech-blue)]'
               }`}
               style={{ fontFamily: "'Cinzel', serif" }}
+              aria-label={locale === 'fr' ? 'Afficher toutes les activités' : locale === 'nl' ? 'Toon alle activiteiten' : 'Show all activities'}
+              aria-pressed={selectedTheme === null}
             >
               {locale === 'fr' ? 'Tous' : locale === 'nl' ? 'Alles' : 'All'}
             </button>
@@ -160,30 +162,35 @@ export default function Activities() {
                 <button
                   key={theme.id}
                   onClick={() => handleThemeChange(theme.id)}
-                  className={`px-3 py-1.5 text-xs font-medium transition-all flex items-center gap-1.5 ${
+                  className={`px-3 py-1.5 text-xs font-medium transition-all flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-[var(--western-gold)] focus-visible:ring-offset-2 ${
                     selectedTheme === theme.id
                       ? 'bg-[var(--tech-blue)] text-white border-2 border-[var(--tech-blue)]'
                       : 'bg-[var(--card-bg)] text-[var(--text-secondary)] border-2 border-[var(--western-brown-light)] hover:border-[var(--tech-blue)]'
                   }`}
                   style={{ fontFamily: "'Cinzel', serif" }}
+                  aria-label={`${locale === 'fr' ? 'Filtrer par' : locale === 'nl' ? 'Filter op' : 'Filter by'} ${theme.name[locale]}`}
+                  aria-pressed={selectedTheme === theme.id}
                 >
-                  {ThemeIcon && <ThemeIcon className="w-3.5 h-3.5" />}
+                  {ThemeIcon && <ThemeIcon className="w-3.5 h-3.5" aria-hidden="true" />}
                   <span className="hidden sm:inline">{theme.name[locale]}</span>
+                  <span className="sr-only sm:hidden">{theme.name[locale]}</span>
                 </button>
               );
             })}
           </div>
 
           {/* Type Filter */}
-          <div className="flex flex-wrap justify-center gap-1.5">
+          <div className="flex flex-wrap justify-center gap-1.5" role="group" aria-label={locale === 'fr' ? 'Filtrer par type' : locale === 'nl' ? 'Filter op type' : 'Filter by type'}>
             <button
               onClick={() => handleTypeChange(null)}
-              className={`px-2 py-1 text-xs transition-all ${
+              className={`px-2 py-1 text-xs transition-all focus-visible:ring-2 focus-visible:ring-[var(--western-gold)] focus-visible:ring-offset-2 ${
                 selectedType === null
                   ? 'bg-[var(--western-gold)] text-[var(--western-ink)]'
                   : 'bg-transparent text-[var(--text-muted)] hover:text-[var(--western-gold)]'
               }`}
               style={{ fontFamily: "'Special Elite', monospace" }}
+              aria-label={locale === 'fr' ? 'Afficher tous les types' : locale === 'nl' ? 'Toon alle types' : 'Show all types'}
+              aria-pressed={selectedType === null}
             >
               All types
             </button>
@@ -194,15 +201,18 @@ export default function Activities() {
                 <button
                   key={key}
                   onClick={() => handleTypeChange(key)}
-                  className={`px-2 py-1 text-xs transition-all flex items-center gap-1 ${
+                  className={`px-2 py-1 text-xs transition-all flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-[var(--western-gold)] focus-visible:ring-offset-2 ${
                     selectedType === key
                       ? `${typeInfo.color} text-white`
                       : 'bg-transparent text-[var(--text-muted)] hover:text-[var(--western-gold)]'
                   }`}
                   style={{ fontFamily: "'Special Elite', monospace" }}
+                  aria-label={`${locale === 'fr' ? 'Filtrer par' : locale === 'nl' ? 'Filter op' : 'Filter by'} ${typeInfo[locale]}`}
+                  aria-pressed={selectedType === key}
                 >
-                  {IconComponent && <IconComponent className="w-3 h-3" />}
+                  {IconComponent && <IconComponent className="w-3 h-3" aria-hidden="true" />}
                   <span className="hidden md:inline">{typeInfo[locale]}</span>
+                  <span className="sr-only md:hidden">{typeInfo[locale]}</span>
                 </button>
               );
             })}
@@ -236,22 +246,25 @@ export default function Activities() {
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="p-2 border-2 border-[var(--western-brown)] text-[var(--text-secondary)] hover:border-[var(--tech-blue)] hover:text-[var(--tech-blue)] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              className="p-2 border-2 border-[var(--western-brown)] text-[var(--text-secondary)] hover:border-[var(--tech-blue)] hover:text-[var(--tech-blue)] disabled:opacity-30 disabled:cursor-not-allowed transition-all focus-visible:ring-2 focus-visible:ring-[var(--western-gold)] focus-visible:ring-offset-2"
+              aria-label={locale === 'fr' ? 'Page précédente' : locale === 'nl' ? 'Vorige pagina' : 'Previous page'}
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="w-4 h-4" aria-hidden="true" />
             </button>
 
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1" role="group" aria-label="Pagination">
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                 <button
                   key={page}
                   onClick={() => setCurrentPage(page)}
-                  className={`w-8 h-8 text-xs font-bold transition-all ${
+                  className={`w-8 h-8 text-xs font-bold transition-all focus-visible:ring-2 focus-visible:ring-[var(--western-gold)] focus-visible:ring-offset-2 ${
                     currentPage === page
                       ? 'bg-[var(--tech-blue)] text-white border-2 border-[var(--tech-blue)]'
                       : 'border-2 border-[var(--western-brown-light)] text-[var(--text-muted)] hover:border-[var(--tech-blue)]'
                   }`}
                   style={{ fontFamily: "'Special Elite', monospace" }}
+                  aria-label={`Page ${page}`}
+                  aria-current={currentPage === page ? 'page' : undefined}
                 >
                   {page}
                 </button>
@@ -261,9 +274,10 @@ export default function Activities() {
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="p-2 border-2 border-[var(--western-brown)] text-[var(--text-secondary)] hover:border-[var(--tech-blue)] hover:text-[var(--tech-blue)] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              className="p-2 border-2 border-[var(--western-brown)] text-[var(--text-secondary)] hover:border-[var(--tech-blue)] hover:text-[var(--tech-blue)] disabled:opacity-30 disabled:cursor-not-allowed transition-all focus-visible:ring-2 focus-visible:ring-[var(--western-gold)] focus-visible:ring-offset-2"
+              aria-label={locale === 'fr' ? 'Page suivante' : locale === 'nl' ? 'Volgende pagina' : 'Next page'}
             >
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-4 h-4" aria-hidden="true" />
             </button>
           </motion.div>
         )}
@@ -303,12 +317,13 @@ function ActivityCard({ activity, index, locale, isExpanded, onToggle, t }: Acti
     >
       {/* Card Header */}
       <div
-        className="p-3 cursor-pointer"
+        className="p-3 cursor-pointer focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--western-gold)]"
         onClick={onToggle}
         role="button"
         tabIndex={0}
-        onKeyDown={(e) => e.key === 'Enter' && onToggle()}
+        onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onToggle()}
         aria-expanded={isExpanded}
+        aria-label={`${activity.title[locale]} - ${isExpanded ? t('collapse') || 'Collapse' : t('expand') || 'Expand'}`}
       >
         {/* Type & Theme badges */}
         <div className="flex flex-wrap items-center gap-1.5 mb-2">
@@ -342,13 +357,13 @@ function ActivityCard({ activity, index, locale, isExpanded, onToggle, t }: Acti
               {activity.date}
             </span>
           </div>
-          <button className="p-1 hover:bg-[var(--tech-blue)]/10 transition-colors">
+          <span className="p-1 hover:bg-[var(--tech-blue)]/10 transition-colors" aria-hidden="true">
             {isExpanded ? (
               <ChevronUp className="w-4 h-4 text-[var(--tech-blue)]" />
             ) : (
               <ChevronDown className="w-4 h-4 text-[var(--text-muted)]" />
             )}
-          </button>
+          </span>
         </div>
       </div>
 

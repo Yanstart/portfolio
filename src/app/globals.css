@@ -53,8 +53,8 @@
   --accent: #8B4513;
   --accent-secondary: #C9A227;
   --text-primary: #2C1810;
-  --text-secondary: #5D4037;
-  --text-muted: #8D6E63;
+  --text-secondary: #4A3228; /* Darkened for better contrast (was #5D4037) */
+  --text-muted: #5D4A42; /* Darkened for WCAG AA compliance (was #8D6E63) */
 }
 
 /* Dark Mode - Saloon Night */
@@ -66,8 +66,8 @@
   --accent: #C9A227;
   --accent-secondary: #8B4513;
   --text-primary: #E8D4B8;
-  --text-secondary: #C4A77D;
-  --text-muted: #8D6E63;
+  --text-secondary: #D4C4A8; /* Lightened for better contrast (was #C4A77D) */
+  --text-muted: #A89078; /* Lightened for WCAG AA compliance (was #8D6E63) */
 }
 
 /* ============================================

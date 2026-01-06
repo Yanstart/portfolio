@@ -274,7 +274,7 @@ function FloatingTechIcon({
       >
         <img
           src={tech.icon}
-          alt=""
+          alt={`${tech.name} logo`}
           width={40}
           height={40}
           className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
@@ -402,7 +402,7 @@ export default function FloatingTechBackground() {
           >
             <img
               src={tech.icon}
-              alt=""
+              alt={`${tech.name} logo`}
               width={32}
               height={32}
               className="w-6 h-6 object-contain"
