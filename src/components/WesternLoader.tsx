@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface WesternLoaderProps {
@@ -13,13 +13,6 @@ interface BulletHole {
   y: number;
 }
 
-// Free sound URLs (royalty free)
-const WESTERN_AMBIENT_URL = 'https://cdn.pixabay.com/audio/2022/10/30/audio_e457fc7f58.mp3'; // Desert wind
-const GUNSHOT_URLS = [
-  'https://cdn.pixabay.com/audio/2022/03/10/audio_c8c8a73467.mp3', // Gunshot 1
-  'https://cdn.pixabay.com/audio/2021/08/04/audio_0625c1539c.mp3', // Gunshot 2
-];
-
 export default function WesternLoader({
   onLoadingComplete,
 }: WesternLoaderProps) {
@@ -28,47 +21,10 @@ export default function WesternLoader({
   const [isReady, setIsReady] = useState(false);
   const [bulletHoles, setBulletHoles] = useState<BulletHole[]>([]);
   const [bulletCount, setBulletCount] = useState(0);
-  const ambientAudioRef = useRef<HTMLAudioElement | null>(null);
-  const gunshotIndexRef = useRef(0);
 
-  // Initialize ambient sound
-  useEffect(() => {
-    ambientAudioRef.current = new Audio(WESTERN_AMBIENT_URL);
-    ambientAudioRef.current.loop = true;
-    ambientAudioRef.current.volume = 0.3;
-
-    // Try to play ambient sound (may be blocked by browser autoplay policy)
-    const playAmbient = async () => {
-      try {
-        await ambientAudioRef.current?.play();
-      } catch {
-        // Autoplay blocked - will play on user interaction
-      }
-    };
-    playAmbient();
-
-    return () => {
-      if (ambientAudioRef.current) {
-        ambientAudioRef.current.pause();
-        ambientAudioRef.current = null;
-      }
-    };
-  }, []);
-
-  // Play gunshot sound
-  const playGunshot = useCallback(() => {
-    const gunshot = new Audio(GUNSHOT_URLS[gunshotIndexRef.current % GUNSHOT_URLS.length]);
-    gunshot.volume = 0.5;
-    gunshot.play().catch(() => {}); // Ignore autoplay errors
-    gunshotIndexRef.current++;
-  }, []);
-
-  // Add bullet holes with gunshot sound effect
+  // Add bullet holes with visual effect
   const addBulletHole = useCallback(() => {
     if (bulletCount >= 4) return;
-
-    // Play gunshot sound
-    playGunshot();
 
     const newHole: BulletHole = {
       id: Date.now(),
@@ -78,7 +34,7 @@ export default function WesternLoader({
 
     setBulletHoles(prev => [...prev, newHole]);
     setBulletCount(prev => prev + 1);
-  }, [bulletCount, playGunshot]);
+  }, [bulletCount]);
 
   useEffect(() => {
     const signTimer = setTimeout(() => setShowSign(true), 600);
@@ -101,10 +57,6 @@ export default function WesternLoader({
   }, [addBulletHole]);
 
   const handleEnter = () => {
-    // Stop ambient sound
-    if (ambientAudioRef.current) {
-      ambientAudioRef.current.pause();
-    }
     setIsLoading(false);
     onLoadingComplete?.();
   };

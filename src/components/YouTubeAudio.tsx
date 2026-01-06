@@ -194,17 +194,14 @@ export default function YouTubeAudio() {
             )}
           </AnimatePresence>
 
-          {/* Main player button */}
-          <motion.button
-            onClick={togglePlay}
-            disabled={!isReady}
-            className="flex items-center gap-4 bg-[var(--card-bg)]/98 backdrop-blur-md border-3 border-[var(--western-brown)] shadow-[5px_5px_0_var(--western-brown-dark)] px-5 py-4 transition-all group relative overflow-hidden disabled:opacity-70"
+          {/* Main player container */}
+          <motion.div
+            className={`flex items-center gap-4 bg-[var(--card-bg)]/98 backdrop-blur-md border-3 border-[var(--western-brown)] shadow-[5px_5px_0_var(--western-brown-dark)] px-5 py-4 transition-all group relative overflow-hidden ${!isReady ? 'opacity-70' : ''}`}
             style={{
               borderColor: isPlaying ? '#FF0000' : undefined,
               boxShadow: isPlaying ? '5px 5px 0 var(--western-brown-dark), 0 0 20px #FF000040' : undefined,
             }}
-            whileHover={{ scale: isReady ? 1.05 : 1 }}
-            whileTap={{ scale: isReady ? 0.95 : 1 }}
+            whileHover={{ scale: isReady ? 1.02 : 1 }}
             animate={!hasInteracted && showPrompt && isReady ? {
               boxShadow: [
                 '5px 5px 0 var(--western-brown-dark)',
@@ -223,22 +220,31 @@ export default function YouTubeAudio() {
               />
             )}
 
-            {/* Play/Pause icon */}
-            <motion.div
-              className="relative z-10 p-2 rounded-full"
+            {/* Play/Pause button - now a proper button */}
+            <motion.button
+              onClick={togglePlay}
+              disabled={!isReady}
+              className="relative z-10 p-2 rounded-full cursor-pointer disabled:cursor-not-allowed"
               style={{ backgroundColor: isPlaying ? '#FF0000' : isReady ? 'var(--western-rust)' : 'var(--western-brown-light)' }}
               animate={isPlaying ? { scale: [1, 1.1, 1] } : {}}
               transition={{ duration: 1, repeat: Infinity }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              aria-label={isPlaying ? 'Pause' : 'Play'}
             >
               {isPlaying ? (
                 <Pause className="w-5 h-5 text-white" />
               ) : (
                 <Play className="w-5 h-5 text-white ml-0.5" />
               )}
-            </motion.div>
+            </motion.button>
 
-            {/* Music info */}
-            <div className="relative z-10 text-left min-w-0 max-w-[140px]">
+            {/* Music info - clickable area for play/pause */}
+            <button
+              onClick={togglePlay}
+              disabled={!isReady}
+              className="relative z-10 text-left min-w-0 max-w-[140px] cursor-pointer disabled:cursor-not-allowed bg-transparent border-none"
+            >
               <p
                 className="text-sm font-bold transition-colors truncate"
                 style={{
@@ -252,18 +258,16 @@ export default function YouTubeAudio() {
               <p className="text-xs text-[var(--text-muted)] truncate" style={{ fontFamily: "'Special Elite', monospace" }} title={currentTheme.artist}>
                 {!isReady ? 'Chargement...' : isPlaying ? currentTheme.artist : 'Cliquez pour jouer'}
               </p>
-            </div>
+            </button>
 
             {/* Shuffle button */}
             <motion.button
-              onClick={(e) => {
-                e.stopPropagation();
-                shuffleTrack();
-              }}
+              onClick={shuffleTrack}
               className="relative z-10 p-2 hover:bg-[var(--western-brown)]/20 transition-colors"
               whileHover={{ scale: 1.1, rotate: 180 }}
               whileTap={{ scale: 0.9 }}
               title="Musique aléatoire"
+              aria-label="Shuffle track"
             >
               <Shuffle className="w-4 h-4 text-[var(--text-muted)] hover:text-[#FF0000]" />
             </motion.button>
@@ -290,8 +294,7 @@ export default function YouTubeAudio() {
             {/* Volume control */}
             <div className="relative z-10 flex items-center gap-2 ml-2 pl-3 border-l border-[var(--western-brown-light)]">
               <button
-                onClick={(e) => {
-                  e.stopPropagation();
+                onClick={() => {
                   if (playerRef.current) {
                     if (volume === 0) {
                       setVolume(30);
@@ -303,6 +306,7 @@ export default function YouTubeAudio() {
                   }
                 }}
                 className="p-1 hover:bg-[var(--western-brown)]/20 transition-colors"
+                aria-label={volume === 0 ? 'Unmute' : 'Mute'}
               >
                 {volume === 0 ? (
                   <VolumeX className="w-5 h-5 text-[var(--text-muted)]" />
@@ -316,25 +320,22 @@ export default function YouTubeAudio() {
                 max="100"
                 step="1"
                 value={volume}
-                onChange={(e) => {
-                  e.stopPropagation();
-                  setVolume(parseInt(e.target.value));
-                }}
-                onClick={(e) => e.stopPropagation()}
+                onChange={(e) => setVolume(parseInt(e.target.value))}
                 className="w-20 h-2 bg-[var(--western-brown-light)] rounded-none appearance-none cursor-pointer"
                 style={{
                   background: `linear-gradient(to right, #FF0000 0%, #FF0000 ${volume}%, var(--western-brown-light) ${volume}%, var(--western-brown-light) 100%)`
                 }}
+                aria-label="Volume"
               />
             </div>
 
             {/* YouTube logo */}
             <div className="relative z-10 ml-2">
-              <svg viewBox="0 0 24 24" className="w-6 h-6 text-[#FF0000] fill-current">
+              <svg viewBox="0 0 24 24" className="w-6 h-6 text-[#FF0000] fill-current" aria-hidden="true">
                 <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
               </svg>
             </div>
-          </motion.button>
+          </motion.div>
         </div>
       </motion.div>
     </>
