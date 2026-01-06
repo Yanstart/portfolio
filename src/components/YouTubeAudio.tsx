@@ -652,7 +652,7 @@ export default function YouTubeAudio() {
             <motion.button
               onClick={togglePlay}
               disabled={!isReady && !godfatherPlaying}
-              className="relative z-10 p-1.5 sm:p-2 rounded-full cursor-pointer disabled:cursor-not-allowed"
+              className="relative z-10 p-1.5 sm:p-2 md:p-2.5 rounded-full cursor-pointer disabled:cursor-not-allowed"
               style={{
                 backgroundColor: isPlaying
                   ? '#FF0000'
@@ -668,11 +668,11 @@ export default function YouTubeAudio() {
               aria-label={isPlaying ? 'Pause' : 'Play'}
             >
               {isPlaying ? (
-                <Pause className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
+                <Pause className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-white" />
               ) : godfatherPlaying ? (
-                <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
+                <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-white" />
               ) : (
-                <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white ml-0.5" />
+                <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-white ml-0.5" />
               )}
             </motion.button>
 
@@ -680,10 +680,10 @@ export default function YouTubeAudio() {
             <button
               onClick={togglePlay}
               disabled={!isReady && !godfatherPlaying}
-              className="hidden xs:block relative z-10 text-left min-w-0 max-w-[80px] sm:max-w-[100px] cursor-pointer disabled:cursor-not-allowed bg-transparent border-none"
+              className="hidden xs:block relative z-10 text-left min-w-0 max-w-[80px] sm:max-w-[100px] md:max-w-[130px] cursor-pointer disabled:cursor-not-allowed bg-transparent border-none"
             >
               <p
-                className="text-[11px] sm:text-xs font-bold transition-colors truncate"
+                className="text-[11px] sm:text-xs md:text-sm font-bold transition-colors truncate"
                 style={{
                   fontFamily: "'Cinzel', serif",
                   color: isPlaying || godfatherPlaying ? '#FF0000' : 'var(--text-primary)',
@@ -692,7 +692,7 @@ export default function YouTubeAudio() {
               >
                 {godfatherPlaying && !isPlaying ? '🎺 Godfather' : currentTheme.title}
               </p>
-              <p className="text-[9px] sm:text-[10px] text-[var(--text-muted)] truncate" style={{ fontFamily: "'Special Elite', monospace" }}>
+              <p className="text-[9px] sm:text-[10px] md:text-xs text-[var(--text-muted)] truncate" style={{ fontFamily: "'Special Elite', monospace" }}>
                 {godfatherPlaying && !isPlaying
                   ? (isReady ? 'Prêt' : '...')
                   : (!isReady ? '...' : isPlaying ? currentTheme.category : 'Play')}
@@ -703,34 +703,34 @@ export default function YouTubeAudio() {
             <motion.button
               onClick={skipTrack}
               disabled={!isReady}
-              className="relative z-10 p-1 sm:p-1.5 hover:bg-[var(--western-brown)]/20 transition-colors disabled:opacity-50"
+              className="relative z-10 p-1 sm:p-1.5 md:p-2 hover:bg-[var(--western-brown)]/20 transition-colors disabled:opacity-50"
               whileTap={{ scale: 0.9 }}
               title="Piste suivante"
               aria-label="Skip track"
             >
-              <SkipForward className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[var(--text-muted)]" />
+              <SkipForward className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-[var(--text-muted)]" />
             </motion.button>
 
             {/* Shuffle button - hidden on mobile */}
             <motion.button
               onClick={shuffleTrack}
               disabled={!isReady}
-              className="hidden sm:block relative z-10 p-1.5 hover:bg-[var(--western-brown)]/20 transition-colors disabled:opacity-50"
+              className="hidden sm:block relative z-10 p-1.5 md:p-2 hover:bg-[var(--western-brown)]/20 transition-colors disabled:opacity-50"
               whileHover={{ rotate: 180 }}
               whileTap={{ scale: 0.9 }}
               title="Musique aléatoire"
               aria-label="Shuffle track"
             >
-              <Shuffle className="w-4 h-4 text-[var(--text-muted)]" />
+              <Shuffle className="w-4 h-4 md:w-5 md:h-5 text-[var(--text-muted)]" />
             </motion.button>
 
             {/* Sound wave animation - smaller, hidden on mobile */}
             {(isPlaying || godfatherPlaying) && (
-              <div className="hidden sm:flex relative z-10 items-end gap-0.5 h-4">
+              <div className="hidden sm:flex relative z-10 items-end gap-0.5 md:gap-1 h-4 md:h-5">
                 {[0, 1, 2].map((i) => (
                   <motion.div
                     key={i}
-                    className={`w-0.5 rounded-full ${godfatherPlaying && !isPlaying ? 'bg-[var(--western-gold)]' : 'bg-[#FF0000]'}`}
+                    className={`w-0.5 md:w-1 rounded-full ${godfatherPlaying && !isPlaying ? 'bg-[var(--western-gold)]' : 'bg-[#FF0000]'}`}
                     animate={{ height: ['40%', '100%', '40%'] }}
                     transition={{
                       duration: 0.5,
@@ -744,7 +744,7 @@ export default function YouTubeAudio() {
             )}
 
             {/* Volume control - simplified on mobile */}
-            <div className="relative z-10 flex items-center gap-1 sm:gap-1.5 pl-1.5 sm:pl-2 border-l border-[var(--western-brown-light)]">
+            <div className="relative z-10 flex items-center gap-1 sm:gap-1.5 md:gap-2 pl-1.5 sm:pl-2 md:pl-3 border-l border-[var(--western-brown-light)]">
               <button
                 onClick={() => {
                   if (playerRef.current) {
@@ -761,9 +761,9 @@ export default function YouTubeAudio() {
                 aria-label={volume === 0 ? 'Unmute' : 'Mute'}
               >
                 {volume === 0 ? (
-                  <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[var(--text-muted)]" />
+                  <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-[var(--text-muted)]" />
                 ) : (
-                  <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#FF0000]" />
+                  <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-[#FF0000]" />
                 )}
               </button>
               {/* Volume slider - hidden on mobile */}
@@ -774,7 +774,7 @@ export default function YouTubeAudio() {
                 step="1"
                 value={volume}
                 onChange={(e) => setVolume(parseInt(e.target.value))}
-                className="hidden sm:block w-12 md:w-14 h-1.5 bg-[var(--western-brown-light)] rounded-none appearance-none cursor-pointer"
+                className="hidden sm:block w-12 md:w-16 h-1.5 md:h-2 bg-[var(--western-brown-light)] rounded-none appearance-none cursor-pointer"
                 style={{
                   background: `linear-gradient(to right, #FF0000 0%, #FF0000 ${volume}%, var(--western-brown-light) ${volume}%, var(--western-brown-light) 100%)`
                 }}
@@ -782,9 +782,9 @@ export default function YouTubeAudio() {
               />
             </div>
 
-            {/* YouTube logo - smaller */}
+            {/* YouTube logo */}
             <div className="relative z-10">
-              <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#FF0000] fill-current" aria-hidden="true">
+              <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-[#FF0000] fill-current" aria-hidden="true">
                 <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
               </svg>
             </div>
