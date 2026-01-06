@@ -116,6 +116,12 @@ interface YTPlayer {
   getPlayerState: () => number;
 }
 
+// Check localStorage directly (synchronous read for SSR safety)
+const getSoundPreference = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  return localStorage.getItem('portfolio-sound-enabled') === 'true';
+};
+
 export default function YouTubeAudio() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isReady, setIsReady] = useState(false);
@@ -128,13 +134,14 @@ export default function YouTubeAudio() {
   const playerRef = useRef<YTPlayer | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const lastErrorTimeRef = useRef<number>(0);
+  const soundEnabledRef = useRef<boolean>(false);
 
   // Check localStorage for sound preference
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const savedPref = localStorage.getItem('portfolio-sound-enabled');
-      const enabled = savedPref === 'true';
+      const enabled = getSoundPreference();
       setSoundEnabled(enabled);
+      soundEnabledRef.current = enabled;
       if (enabled) {
         setHasInteracted(true);
         setShowPrompt(false);
@@ -144,19 +151,23 @@ export default function YouTubeAudio() {
 
   // Load YouTube IFrame API
   useEffect(() => {
-    if (window.YT && window.YT.Player) {
-      initPlayer();
-      return;
-    }
+    // Small delay to ensure localStorage is read first
+    const initTimeout = setTimeout(() => {
+      if (window.YT && window.YT.Player) {
+        initPlayer();
+        return;
+      }
 
-    const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      const firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
 
-    window.onYouTubeIframeAPIReady = initPlayer;
+      window.onYouTubeIframeAPIReady = initPlayer;
+    }, 100);
 
     return () => {
+      clearTimeout(initTimeout);
       if (playerRef.current) {
         playerRef.current.destroy();
       }
@@ -166,13 +177,17 @@ export default function YouTubeAudio() {
 
   const initPlayer = () => {
     if (!containerRef.current) return;
+    if (playerRef.current) return; // Prevent double init
+
+    // Read preference directly from localStorage to avoid stale closure
+    const shouldAutoPlay = getSoundPreference();
 
     playerRef.current = new window.YT.Player('youtube-player', {
       height: '0',
       width: '0',
       videoId: currentTheme.id,
       playerVars: {
-        autoplay: 0,
+        autoplay: shouldAutoPlay ? 1 : 0, // Auto-play if sound enabled
         controls: 0,
         disablekb: 1,
         fs: 0,
@@ -187,11 +202,19 @@ export default function YouTubeAudio() {
         onReady: (event) => {
           event.target.setVolume(volume);
           setIsReady(true);
-          // Auto-play if sound was enabled in loader
-          if (soundEnabled) {
+          // Double-check and auto-play if sound was enabled in loader
+          const soundPref = getSoundPreference();
+          if (soundPref) {
+            setHasInteracted(true);
+            setShowPrompt(false);
+            // Force play after a short delay
             setTimeout(() => {
-              event.target.playVideo();
-            }, 1000);
+              try {
+                event.target.playVideo();
+              } catch (e) {
+                console.warn('Auto-play failed:', e);
+              }
+            }, 500);
           }
         },
         onStateChange: (event) => {
