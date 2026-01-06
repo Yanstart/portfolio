@@ -15,6 +15,16 @@ const categoryIcons: Record<string, React.ReactNode> = {
   healthtech: <HeartPulse className="w-4 h-4" />,
 };
 
+const categoryColors: Record<string, string> = {
+  frontend: 'var(--tech-blue)',
+  backend: '#10B981',
+  database: '#8B5CF6',
+  devops: '#F59E0B',
+  tools: '#EC4899',
+  soft: '#06B6D4',
+  healthtech: '#EF4444',
+};
+
 const techHighlights = [
   { name: 'Python', color: '#3776AB' },
   { name: 'TypeScript', color: '#3178C6' },
@@ -55,59 +65,64 @@ export default function Skills() {
           </p>
         </motion.div>
 
-        {/* Skills Grid - 4 columns, 8 items (4+4) */}
+        {/* Skills Grid - 4 columns */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {skillsData.map((category, categoryIndex) => (
-            <motion.div
-              key={category.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: categoryIndex * 0.05 }}
-              viewport={{ once: true }}
-            >
-              <div className="bg-[var(--card-bg)] border-3 border-[var(--western-brown)] p-4 shadow-[3px_3px_0_var(--western-brown-dark)] hover:shadow-[4px_4px_0_var(--western-brown-dark)] hover:-translate-y-0.5 transition-all duration-200 h-full">
-                <div className="flex items-center gap-2 mb-3 pb-2 border-b border-dashed border-[var(--western-brown-light)]">
-                  <div className="p-1.5 bg-[var(--tech-blue)]/20 border border-[var(--tech-blue)] text-[var(--tech-blue)]">
-                    {categoryIcons[category.id]}
-                  </div>
-                  <h3
-                    className="text-sm uppercase tracking-wider text-[var(--text-primary)]"
-                    style={{ fontFamily: "'Cinzel', serif" }}
-                  >
-                    {t(`categories.${category.id}` as const)}
-                  </h3>
-                </div>
-                <div className="space-y-2">
-                  {category.skills.map((skill, skillIndex) => (
-                    <div key={skill.name}>
-                      <div className="flex justify-between mb-1">
-                        <span
-                          className="text-[var(--text-secondary)] text-xs"
-                          style={{ fontFamily: "'Special Elite', monospace" }}
-                        >
-                          {skill.name}
-                        </span>
-                        <span className="text-[var(--tech-blue)] text-xs font-bold">
-                          {skill.level}%
-                        </span>
-                      </div>
-                      <div className="relative h-2 bg-[var(--western-brown-dark)]/20 border border-[var(--western-brown)]">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          whileInView={{ width: `${skill.level}%` }}
-                          transition={{ duration: 0.6, delay: skillIndex * 0.05 }}
-                          viewport={{ once: true }}
-                          className="h-full bg-gradient-to-r from-[var(--tech-blue)] to-[var(--tech-cyan)]"
-                        />
-                      </div>
+          {skillsData.map((category, categoryIndex) => {
+            const accentColor = categoryColors[category.id] || 'var(--tech-blue)';
+            return (
+              <motion.div
+                key={category.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: categoryIndex * 0.05 }}
+                viewport={{ once: true }}
+              >
+                <div className="bg-[var(--card-bg)] border-3 border-[var(--western-brown)] p-4 shadow-[3px_3px_0_var(--western-brown-dark)] hover:shadow-[4px_4px_0_var(--western-brown-dark)] hover:-translate-y-0.5 transition-all duration-200 h-full">
+                  <div className="flex items-center gap-2 mb-3 pb-2 border-b border-dashed border-[var(--western-brown-light)]">
+                    <div
+                      className="p-1.5 border"
+                      style={{
+                        backgroundColor: `${accentColor}20`,
+                        borderColor: accentColor,
+                        color: accentColor,
+                      }}
+                    >
+                      {categoryIcons[category.id]}
                     </div>
-                  ))}
+                    <h3
+                      className="text-sm uppercase tracking-wider text-[var(--text-primary)]"
+                      style={{ fontFamily: "'Cinzel', serif" }}
+                    >
+                      {t(`categories.${category.id}` as const)}
+                    </h3>
+                  </div>
+                  {/* Skills as tags */}
+                  <div className="flex flex-wrap gap-1.5">
+                    {category.skills.map((skill, skillIndex) => (
+                      <motion.span
+                        key={skill.name}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.2, delay: skillIndex * 0.03 }}
+                        viewport={{ once: true }}
+                        className="px-2 py-1 text-[11px] border transition-all cursor-default hover:scale-105"
+                        style={{
+                          fontFamily: "'Special Elite', monospace",
+                          borderColor: `${accentColor}50`,
+                          backgroundColor: `${accentColor}10`,
+                          color: 'var(--text-secondary)',
+                        }}
+                      >
+                        {skill.name}
+                      </motion.span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
 
-          {/* Tech Stack - 8th item */}
+          {/* Tech Stack Highlights */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -116,14 +131,14 @@ export default function Skills() {
           >
             <div className="bg-[var(--card-bg)] border-3 border-[var(--western-brown)] p-4 shadow-[3px_3px_0_var(--western-brown-dark)] hover:shadow-[4px_4px_0_var(--western-brown-dark)] hover:-translate-y-0.5 transition-all duration-200 h-full">
               <div className="flex items-center gap-2 mb-3 pb-2 border-b border-dashed border-[var(--western-brown-light)]">
-                <div className="p-1.5 bg-[var(--tech-blue)]/20 border border-[var(--tech-blue)] text-[var(--tech-blue)]">
+                <div className="p-1.5 bg-[var(--western-gold)]/20 border border-[var(--western-gold)] text-[var(--western-gold)]">
                   <Zap className="w-4 h-4" />
                 </div>
                 <h3
                   className="text-sm uppercase tracking-wider text-[var(--text-primary)]"
                   style={{ fontFamily: "'Cinzel', serif" }}
                 >
-                  Tech Stack
+                  Favoris
                 </h3>
               </div>
               <div className="flex flex-wrap gap-1.5">
@@ -136,20 +151,17 @@ export default function Skills() {
                     viewport={{ once: true }}
                   >
                     <div
-                      className="px-2 py-1 text-[10px] border border-[var(--western-brown-light)] bg-[var(--card-bg)] hover:border-[var(--tech-blue)] hover:bg-[var(--tech-blue)]/10 transition-all cursor-default flex items-center gap-1"
+                      className="px-2 py-1 text-[11px] border border-[var(--western-brown-light)] bg-[var(--card-bg)] hover:border-[var(--western-gold)] hover:bg-[var(--western-gold)]/10 transition-all cursor-default flex items-center gap-1.5"
                       style={{ fontFamily: "'Special Elite', monospace" }}
                     >
                       <div
-                        className="w-1.5 h-1.5 rounded-full"
+                        className="w-2 h-2 rounded-full"
                         style={{ backgroundColor: tech.color }}
                       />
                       {tech.name}
                     </div>
                   </motion.div>
                 ))}
-                <span className="px-2 py-1 text-[10px] text-[var(--tech-blue)]" style={{ fontFamily: "'Special Elite', monospace" }}>
-                  +20
-                </span>
               </div>
             </div>
           </motion.div>
