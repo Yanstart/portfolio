@@ -369,15 +369,43 @@ export default function YouTubeAudio() {
       };
 
       // Also poll for the flag (storage events don't fire for same-window changes)
+      let godfatherStarted = false;
+      let youtubeStarted = false;
       const pollInterval = setInterval(() => {
         const loaderDone = localStorage.getItem('portfolio-loader-completed') === 'true';
         const soundPref = getSoundPreference();
-        if (loaderDone && soundPref && godfatherThemeRef.current && !godfatherThemeRef.current['isPlaying']) {
-          godfatherThemeRef.current.start();
-          setGodfatherPlaying(true);
-          clearInterval(pollInterval);
+
+        if (loaderDone && soundPref) {
+          // Start Godfather theme (only once)
+          if (!godfatherStarted && godfatherThemeRef.current) {
+            godfatherThemeRef.current.start();
+            setGodfatherPlaying(true);
+            godfatherStarted = true;
+          }
+
+          // Keep trying to play YouTube until it works
+          if (!youtubeStarted && playerRef.current) {
+            try {
+              const state = playerRef.current.getPlayerState?.();
+              // -1 = unstarted, 0 = ended, 1 = playing, 2 = paused, 3 = buffering, 5 = cued
+              if (state === 1) {
+                // Already playing, we're done
+                youtubeStarted = true;
+              } else if (state !== undefined) {
+                // Player is ready, try to play
+                playerRef.current.playVideo();
+              }
+            } catch {
+              // Player not ready yet, keep polling
+            }
+          }
+
+          // Stop polling only when YouTube is playing
+          if (godfatherStarted && youtubeStarted) {
+            clearInterval(pollInterval);
+          }
         }
-      }, 200);
+      }, 300);
 
       window.addEventListener('storage', handleStorageChange);
 
