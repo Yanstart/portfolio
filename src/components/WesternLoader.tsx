@@ -161,23 +161,19 @@ export default function WesternLoader({
   onLoadingComplete,
 }: WesternLoaderProps) {
   const [isLoading, setIsLoading] = useState(true);
+  const [hasStarted, setHasStarted] = useState(false); // User clicked to start
   const [showSign, setShowSign] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const [bulletHoles, setBulletHoles] = useState<BulletHole[]>([]);
   const [bulletCount, setBulletCount] = useState(0);
   const soundEngineRef = useRef<WesternSoundEngine | null>(null);
+  const timersRef = useRef<NodeJS.Timeout[]>([]);
 
-  // Initialize sound engine and start ambient wind
+  // Initialize sound engine on mount
   useEffect(() => {
     soundEngineRef.current = new WesternSoundEngine();
-
-    // Start wind sound after a short delay
-    const windTimer = setTimeout(() => {
-      soundEngineRef.current?.startWind();
-    }, 300);
-
     return () => {
-      clearTimeout(windTimer);
+      timersRef.current.forEach(t => clearTimeout(t));
       soundEngineRef.current?.destroy();
     };
   }, []);
@@ -191,7 +187,7 @@ export default function WesternLoader({
 
     const newHole: BulletHole = {
       id: Date.now(),
-      x: 15 + Math.random() * 70, // Random position on sign
+      x: 15 + Math.random() * 70,
       y: 15 + Math.random() * 70,
     };
 
@@ -199,25 +195,26 @@ export default function WesternLoader({
     setBulletCount(prev => prev + 1);
   }, [bulletCount]);
 
-  useEffect(() => {
-    const signTimer = setTimeout(() => setShowSign(true), 600);
+  // Start the experience after user click
+  const handleStart = useCallback(() => {
+    if (hasStarted) return;
+    setHasStarted(true);
 
-    // Add bullet holes after sign appears
-    const bulletTimers = [
-      setTimeout(() => addBulletHole(), 1200),
-      setTimeout(() => addBulletHole(), 1600),
-      setTimeout(() => addBulletHole(), 2100),
-      setTimeout(() => addBulletHole(), 2500),
-    ];
+    // Start wind sound immediately after user interaction
+    soundEngineRef.current?.startWind();
 
-    const readyTimer = setTimeout(() => setIsReady(true), 3000);
+    // Show sign after short delay
+    timersRef.current.push(setTimeout(() => setShowSign(true), 400));
 
-    return () => {
-      clearTimeout(signTimer);
-      clearTimeout(readyTimer);
-      bulletTimers.forEach(t => clearTimeout(t));
-    };
-  }, [addBulletHole]);
+    // Fire gunshots with delays
+    timersRef.current.push(setTimeout(() => addBulletHole(), 1000));
+    timersRef.current.push(setTimeout(() => addBulletHole(), 1400));
+    timersRef.current.push(setTimeout(() => addBulletHole(), 1900));
+    timersRef.current.push(setTimeout(() => addBulletHole(), 2300));
+
+    // Ready to enter
+    timersRef.current.push(setTimeout(() => setIsReady(true), 2800));
+  }, [hasStarted, addBulletHole]);
 
   const handleEnter = () => {
     // Stop ambient wind sound
@@ -234,7 +231,54 @@ export default function WesternLoader({
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
           className="fixed inset-0 z-[9999] overflow-hidden"
+          onClick={!hasStarted ? handleStart : undefined}
         >
+          {/* Click to start overlay */}
+          <AnimatePresence>
+            {!hasStarted && (
+              <motion.div
+                className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 cursor-pointer"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <motion.div
+                  className="text-center p-8"
+                  animate={{ scale: [1, 1.05, 1] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                >
+                  <motion.div
+                    className="text-6xl mb-4"
+                    animate={{ rotate: [0, 10, -10, 0] }}
+                    transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 1 }}
+                  >
+                    🤠
+                  </motion.div>
+                  <h2
+                    className="text-2xl md:text-4xl text-[#FFD700] mb-2"
+                    style={{ fontFamily: "'Rye', serif", textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}
+                  >
+                    HOWDY PARTNER
+                  </h2>
+                  <p
+                    className="text-lg text-[#E8D4B8]"
+                    style={{ fontFamily: "'Special Elite', monospace" }}
+                  >
+                    Cliquez pour entrer dans le Far West 🔊
+                  </p>
+                  <motion.div
+                    className="mt-6 inline-block px-6 py-3 border-2 border-[#FFD700] text-[#FFD700]"
+                    style={{ fontFamily: "'Cinzel', serif" }}
+                    whileHover={{ scale: 1.1, backgroundColor: 'rgba(255,215,0,0.2)' }}
+                  >
+                    🎵 ACTIVER LE SON 🎵
+                  </motion.div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           {/* Sky gradient */}
           <div className="absolute inset-0 bg-gradient-to-b from-[#87CEEB] via-[#F4A460] to-[#DEB887]">
             {/* Sun with rays */}
