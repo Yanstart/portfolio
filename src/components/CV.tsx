@@ -254,8 +254,9 @@ export default function CV() {
           </div>
 
           <motion.a
-            href="/docs/CV_Noel_Yando_Fotso.pdf"
+            href="https://drive.google.com/drive/u/0/folders/1pUdeRXuaKXFYtRezYkPjYE9QcwYcHJCR"
             target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-6 py-3 uppercase tracking-wider transition-all border-2 border-[var(--western-brown-dark)] shadow-[4px_4px_0_var(--western-brown-dark)] relative overflow-hidden group"
             style={{
               fontFamily: "'Cinzel', serif",

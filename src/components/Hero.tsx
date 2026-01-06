@@ -188,8 +188,9 @@ export default function Hero() {
                 <ArrowDown className="w-4 h-4 group-hover:translate-y-1 transition-transform" />
               </a>
               <a
-                href="/docs/CV_Noel_Yando_Fotso.pdf"
+                href="https://drive.google.com/drive/u/0/folders/1pUdeRXuaKXFYtRezYkPjYE9QcwYcHJCR"
                 target="_blank"
+                rel="noopener noreferrer"
                 className="px-6 py-3 border-2 border-[var(--western-brown)] bg-[var(--card-bg)]/80 backdrop-blur-sm text-[var(--text-primary)] uppercase tracking-wider hover:bg-[var(--western-brown)]/10 hover:border-[var(--western-gold)] transition-all flex items-center gap-2"
                 style={{ fontFamily: "'Cinzel', serif" }}
               >
@@ -228,7 +229,7 @@ export default function Hero() {
                   <Linkedin className="w-5 h-5" />
                 </a>
                 <a
-                  href="mailto:n.yandofotso@students.ephec.be"
+                  href="mailto:yandofotsonoeljunior@gmail.com"
                   className="p-3 bg-[var(--card-bg)]/90 backdrop-blur-sm border-2 border-[var(--western-brown)] text-[var(--text-secondary)] hover:text-[var(--tech-blue)] hover:border-[var(--tech-blue)] transition-all hover:shadow-[0_0_15px_var(--tech-blue)]"
                   aria-label="Email"
                 >

@@ -12,8 +12,8 @@ export default function Contact() {
     {
       icon: <Mail className="w-5 h-5" />,
       label: t('email'),
-      value: 'n.yandofotso@students.ephec.be',
-      href: 'mailto:n.yandofotso@students.ephec.be',
+      value: 'yandofotsonoeljunior@gmail.com',
+      href: 'mailto:yandofotsonoeljunior@gmail.com',
       color: '#EA4335',
       hoverGlow: '#EA433550',
     },
@@ -317,7 +317,15 @@ export default function Contact() {
                 </h3>
               </div>
 
-              <form className="space-y-5 relative z-10">
+              <form
+                action="https://formspree.io/f/xpwzgvqr"
+                method="POST"
+                className="space-y-5 relative z-10"
+              >
+                {/* Hidden field for Formspree to know reply-to */}
+                <input type="hidden" name="_replyto" />
+                <input type="hidden" name="_subject" value="Nouveau message depuis le Portfolio" />
+
                 {/* Name field */}
                 <div>
                   <label
