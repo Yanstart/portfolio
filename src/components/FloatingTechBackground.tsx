@@ -1,7 +1,27 @@
 'use client';
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
+
+// Hook to detect mobile/reduced motion preference
+function useReducedAnimations() {
+  const [shouldReduce, setShouldReduce] = useState(true); // Default to reduced for SSR
+
+  useEffect(() => {
+    const isMobile = window.innerWidth < 768;
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setShouldReduce(isMobile || prefersReduced);
+
+    const handleResize = () => {
+      setShouldReduce(window.innerWidth < 768 || prefersReduced);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return shouldReduce;
+}
 
 // Comprehensive tech stack - IT, DevOps, Data Science, Biotech, Hardware, Science
 const allTechnologies = [
@@ -216,71 +236,42 @@ function OrganicConnection({
   );
 }
 
-// Floating Tech Icon Component
+// Floating Tech Icon Component - Simplified
 function FloatingTechIcon({
   tech,
   params,
   index,
-  onPositionUpdate
 }: {
   tech: typeof allTechnologies[0];
   params: ReturnType<typeof generateFloatParams>;
   index: number;
-  onPositionUpdate?: (index: number, x: number, y: number) => void;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (ref.current && onPositionUpdate) {
-      const updatePosition = () => {
-        if (ref.current) {
-          const rect = ref.current.getBoundingClientRect();
-          onPositionUpdate(index, rect.left + rect.width / 2, rect.top + rect.height / 2);
-        }
-      };
-      updatePosition();
-      const interval = setInterval(updatePosition, 1000);
-      return () => clearInterval(interval);
-    }
-  }, [index, onPositionUpdate]);
-
   return (
     <motion.div
-      ref={ref}
       className="absolute pointer-events-none"
       style={{
         left: `${params.startX}%`,
         top: `${params.startY}%`,
       }}
-      initial={{
-        opacity: 0,
-        scale: 0,
-        rotate: params.rotate
-      }}
+      initial={{ opacity: 0, scale: 0 }}
       animate={{
-        opacity: [0.1, 0.25, 0.1],
-        scale: [params.scale * 0.9, params.scale * 1.1, params.scale * 0.9],
-        x: [0, params.floatX, -params.floatX * 0.5, params.floatX * 0.7, 0],
-        y: [0, -params.floatY, params.floatY * 0.8, -params.floatY * 0.5, 0],
-        rotate: [params.rotate, params.rotate + params.rotateAmount, params.rotate - params.rotateAmount, params.rotate],
+        opacity: [0.1, 0.2, 0.1],
+        scale: [params.scale * 0.95, params.scale * 1.05, params.scale * 0.95],
+        x: [0, params.floatX * 0.5, 0],
+        y: [0, -params.floatY * 0.5, 0],
       }}
       transition={{
-        opacity: { duration: params.duration, repeat: Infinity, ease: "easeInOut" },
-        scale: { duration: params.duration * 0.8, repeat: Infinity, ease: "easeInOut" },
-        x: { duration: params.duration, repeat: Infinity, ease: "easeInOut" },
-        y: { duration: params.duration * 1.2, repeat: Infinity, ease: "easeInOut" },
-        rotate: { duration: params.duration * 1.5, repeat: Infinity, ease: "easeInOut" },
+        duration: params.duration,
+        repeat: Infinity,
+        ease: "easeInOut",
         delay: params.delay,
       }}
       aria-hidden="true"
     >
       <div
         className="relative"
-        style={{
-          filter: `drop-shadow(0 0 12px ${tech.color}50)`,
-        }}
+        style={{ filter: `drop-shadow(0 0 8px ${tech.color}40)` }}
       >
-        {/* Using regular img tag to avoid LCP warnings for decorative background elements */}
         <img
           src={tech.icon}
           alt=""
@@ -289,20 +280,6 @@ function FloatingTechIcon({
           className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
           loading="lazy"
           decoding="async"
-        />
-        {/* Organic glow effect */}
-        <motion.div
-          className="absolute inset-0 rounded-full blur-xl"
-          style={{ backgroundColor: tech.color }}
-          animate={{
-            opacity: [0.2, 0.4, 0.2],
-            scale: [1, 1.5, 1],
-          }}
-          transition={{
-            duration: 3 + index % 3,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
         />
       </div>
     </motion.div>
@@ -336,44 +313,55 @@ function NeuralPulse({ x, y, color, delay }: { x: number; y: number; color: stri
 
 export default function FloatingTechBackground() {
   const [seed] = useState(() => Date.now());
-  const [positions, setPositions] = useState<{ x: number; y: number }[]>([]);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+  const reduceAnimations = useReducedAnimations();
+
+  // Limit technologies on mobile (only 12 instead of 89)
+  const visibleTechnologies = useMemo(() => {
+    if (reduceAnimations) {
+      return allTechnologies.slice(0, 12);
+    }
+    return allTechnologies;
+  }, [reduceAnimations]);
 
   // Generate float parameters
   const floatParams = useMemo(() =>
-    allTechnologies.map((_, index) => generateFloatParams(index, allTechnologies.length, seed)),
-    [seed]
+    visibleTechnologies.map((_, index) => generateFloatParams(index, visibleTechnologies.length, seed)),
+    [seed, visibleTechnologies]
   );
 
-  // Generate connections between nearby technologies
+  // Generate connections - fewer on mobile
   const connections = useMemo(() => {
-    const conns: { i: number; j: number }[] = [];
-    const maxConnections = 25;
+    if (reduceAnimations) return []; // No connections on mobile
 
-    for (let i = 0; i < allTechnologies.length && conns.length < maxConnections; i++) {
-      for (let j = i + 1; j < allTechnologies.length && conns.length < maxConnections; j++) {
+    const conns: { i: number; j: number }[] = [];
+    const maxConnections = 15; // Reduced from 25
+
+    for (let i = 0; i < visibleTechnologies.length && conns.length < maxConnections; i++) {
+      for (let j = i + 1; j < visibleTechnologies.length && conns.length < maxConnections; j++) {
         const p1 = floatParams[i];
         const p2 = floatParams[j];
         const dist = Math.sqrt((p1.startX - p2.startX) ** 2 + (p1.startY - p2.startY) ** 2);
 
-        // Connect nearby nodes
-        if (dist < 25 && seededRandom(seed + i * j) > 0.5) {
+        if (dist < 25 && seededRandom(seed + i * j) > 0.6) {
           conns.push({ i, j });
         }
       }
     }
     return conns;
-  }, [floatParams, seed]);
+  }, [floatParams, seed, reduceAnimations, visibleTechnologies.length]);
 
-  // Neural pulse positions
+  // Neural pulse positions - fewer on mobile
   const pulsePositions = useMemo(() => {
-    return Array.from({ length: 15 }, (_, i) => ({
+    if (reduceAnimations) return []; // No pulses on mobile
+
+    return Array.from({ length: 8 }, (_, i) => ({ // Reduced from 15
       x: seededRandom(seed + i * 1000) * 100,
       y: seededRandom(seed + i * 2000) * 100,
       color: allTechnologies[i % allTechnologies.length].color,
-      delay: i * 0.5,
+      delay: i * 0.8,
     }));
-  }, [seed]);
+  }, [seed, reduceAnimations]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -384,6 +372,52 @@ export default function FloatingTechBackground() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Mobile: Simple static gradient background only
+  if (reduceAnimations) {
+    return (
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0" aria-hidden="true">
+        {/* Simple gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[var(--bg-primary)] via-[var(--bg-secondary)] to-[var(--bg-primary)]" />
+
+        {/* Static ambient glows - no animation */}
+        <div
+          className="absolute top-1/4 left-1/4 w-[300px] h-[300px] rounded-full blur-3xl opacity-[0.07]"
+          style={{ background: 'radial-gradient(circle, var(--tech-blue) 0%, transparent 70%)' }}
+        />
+        <div
+          className="absolute bottom-1/4 right-1/4 w-[250px] h-[250px] rounded-full blur-3xl opacity-[0.05]"
+          style={{ background: 'radial-gradient(circle, var(--western-gold) 0%, transparent 70%)' }}
+        />
+
+        {/* Minimal floating icons - static positions, simple fade */}
+        {visibleTechnologies.map((tech, index) => (
+          <div
+            key={tech.name}
+            className="absolute pointer-events-none opacity-[0.15]"
+            style={{
+              left: `${floatParams[index].startX}%`,
+              top: `${floatParams[index].startY}%`,
+              transform: `scale(${floatParams[index].scale})`,
+            }}
+          >
+            <img
+              src={tech.icon}
+              alt=""
+              width={32}
+              height={32}
+              className="w-6 h-6 object-contain"
+              loading="lazy"
+            />
+          </div>
+        ))}
+
+        {/* Vignette */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,var(--bg-primary)_70%)] pointer-events-none opacity-40" />
+      </div>
+    );
+  }
+
+  // Desktop: Full animations
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0" aria-hidden="true">
       {/* Gradient background */}
@@ -396,8 +430,6 @@ export default function FloatingTechBackground() {
         animate={{
           scale: [1, 1.2, 1],
           opacity: [0.05, 0.1, 0.05],
-          x: [0, 50, 0],
-          y: [0, -30, 0],
         }}
         transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
       />
@@ -407,19 +439,8 @@ export default function FloatingTechBackground() {
         animate={{
           scale: [1.2, 1, 1.2],
           opacity: [0.03, 0.08, 0.03],
-          x: [0, -40, 0],
-          y: [0, 40, 0],
         }}
         transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-3xl"
-        style={{ background: 'radial-gradient(circle, #10B981 0%, transparent 70%)' }}
-        animate={{
-          scale: [1, 1.3, 1],
-          opacity: [0.02, 0.06, 0.02],
-        }}
-        transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
       />
 
       {/* SVG layer for organic connections */}
@@ -431,8 +452,8 @@ export default function FloatingTechBackground() {
             y1={floatParams[i].startY * windowSize.height / 100}
             x2={floatParams[j].startX * windowSize.width / 100}
             y2={floatParams[j].startY * windowSize.height / 100}
-            color1={allTechnologies[i].color}
-            color2={allTechnologies[j].color}
+            color1={visibleTechnologies[i].color}
+            color2={visibleTechnologies[j].color}
             index={idx}
           />
         ))}
@@ -443,49 +464,8 @@ export default function FloatingTechBackground() {
         <NeuralPulse key={`pulse-${i}`} {...pulse} />
       ))}
 
-      {/* DNA helix decorative elements */}
-      <svg className="absolute left-0 top-0 w-20 h-full opacity-10" viewBox="0 0 80 1000" preserveAspectRatio="none">
-        <motion.path
-          d="M40 0 Q60 50 40 100 Q20 150 40 200 Q60 250 40 300 Q20 350 40 400 Q60 450 40 500 Q20 550 40 600 Q60 650 40 700 Q20 750 40 800 Q60 850 40 900 Q20 950 40 1000"
-          fill="none"
-          stroke="var(--tech-blue)"
-          strokeWidth="2"
-          animate={{ pathLength: [0, 1] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-        />
-        <motion.path
-          d="M40 0 Q20 50 40 100 Q60 150 40 200 Q20 250 40 300 Q60 350 40 400 Q20 450 40 500 Q60 550 40 600 Q20 650 40 700 Q60 750 40 800 Q20 850 40 900 Q60 950 40 1000"
-          fill="none"
-          stroke="var(--western-gold)"
-          strokeWidth="2"
-          strokeDasharray="5 10"
-          animate={{ pathLength: [0, 1] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "linear", delay: 0.5 }}
-        />
-      </svg>
-
-      <svg className="absolute right-0 top-0 w-20 h-full opacity-10" viewBox="0 0 80 1000" preserveAspectRatio="none">
-        <motion.path
-          d="M40 0 Q20 50 40 100 Q60 150 40 200 Q20 250 40 300 Q60 350 40 400 Q20 450 40 500 Q60 550 40 600 Q20 650 40 700 Q60 750 40 800 Q20 850 40 900 Q60 950 40 1000"
-          fill="none"
-          stroke="#10B981"
-          strokeWidth="2"
-          animate={{ pathLength: [0, 1] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-        />
-        <motion.path
-          d="M40 0 Q60 50 40 100 Q20 150 40 200 Q60 250 40 300 Q20 350 40 400 Q60 450 40 500 Q20 550 40 600 Q60 650 40 700 Q60 750 40 800 Q20 850 40 900 Q60 950 40 1000"
-          fill="none"
-          stroke="var(--tech-cyan)"
-          strokeWidth="2"
-          strokeDasharray="5 10"
-          animate={{ pathLength: [0, 1] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "linear", delay: 0.5 }}
-        />
-      </svg>
-
       {/* Floating tech icons */}
-      {allTechnologies.map((tech, index) => (
+      {visibleTechnologies.map((tech, index) => (
         <FloatingTechIcon
           key={tech.name}
           tech={tech}
