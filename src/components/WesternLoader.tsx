@@ -211,6 +211,10 @@ export default function WesternLoader({ onLoadingComplete }: WesternLoaderProps)
 
   useEffect(() => {
     soundEngineRef.current = new WesternSoundEngine();
+    // Clear the loader-completed flag on mount so it's fresh for this session
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('portfolio-loader-completed');
+    }
     return () => {
       timersRef.current.forEach(t => clearTimeout(t));
       soundEngineRef.current?.destroy();
@@ -259,6 +263,10 @@ export default function WesternLoader({ onLoadingComplete }: WesternLoaderProps)
   const handleEnter = () => {
     if (soundEnabled) {
       soundEngineRef.current?.stopWind();
+    }
+    // Set flag so YouTubeAudio knows loader completed - triggers Godfather theme
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('portfolio-loader-completed', 'true');
     }
     setIsLoading(false);
     onLoadingComplete?.(soundEnabled);

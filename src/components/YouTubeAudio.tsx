@@ -4,16 +4,37 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Volume2, VolumeX, Play, Pause, Shuffle, SkipForward } from 'lucide-react';
 
-// Western Ambient Music Generator - plays instantly while YouTube loads
-class WesternAmbientMusic {
+// The Godfather Theme Generator - plays instantly while YouTube loads
+class GodfatherTheme {
   private audioContext: AudioContext | null = null;
   private masterGain: GainNode | null = null;
   private isPlaying = false;
-  private oscillators: OscillatorNode[] = [];
-  private intervalId: NodeJS.Timeout | null = null;
+  private timeouts: NodeJS.Timeout[] = [];
 
-  // Western pentatonic scale (A minor pentatonic - classic western feel)
-  private readonly notes = [220, 261.63, 293.66, 329.63, 392, 440, 523.25, 587.33];
+  // The Godfather main theme melody (simplified) - in D minor
+  // Notes: D4, F4, A4, D5, C5, Bb4, A4, G4, F4, E4, D4
+  private readonly melody: Array<{ freq: number; duration: number; delay: number }> = [
+    // Opening phrase - "Speak softly love"
+    { freq: 293.66, duration: 0.8, delay: 0 },      // D4
+    { freq: 349.23, duration: 0.6, delay: 0.9 },    // F4
+    { freq: 440.00, duration: 0.8, delay: 1.6 },    // A4
+    { freq: 587.33, duration: 1.2, delay: 2.5 },    // D5 (hold)
+    { freq: 523.25, duration: 0.6, delay: 3.8 },    // C5
+    { freq: 466.16, duration: 0.8, delay: 4.5 },    // Bb4
+    { freq: 440.00, duration: 0.6, delay: 5.4 },    // A4
+    { freq: 392.00, duration: 0.8, delay: 6.1 },    // G4
+    { freq: 349.23, duration: 1.0, delay: 7.0 },    // F4
+    { freq: 329.63, duration: 0.6, delay: 8.1 },    // E4
+    { freq: 293.66, duration: 1.5, delay: 8.8 },    // D4 (resolve)
+    // Second phrase
+    { freq: 349.23, duration: 0.8, delay: 10.5 },   // F4
+    { freq: 440.00, duration: 0.6, delay: 11.4 },   // A4
+    { freq: 523.25, duration: 1.0, delay: 12.1 },   // C5
+    { freq: 587.33, duration: 1.4, delay: 13.2 },   // D5 (hold)
+    { freq: 523.25, duration: 0.5, delay: 14.7 },   // C5
+    { freq: 466.16, duration: 0.5, delay: 15.3 },   // Bb4
+    { freq: 440.00, duration: 1.2, delay: 15.9 },   // A4 (hold)
+  ];
 
   init() {
     if (this.audioContext) return;
@@ -28,10 +49,9 @@ class WesternAmbientMusic {
   }
 
   start() {
-    if (this.isPlaying || !this.audioContext || !this.masterGain) {
-      this.init();
-      if (!this.audioContext || !this.masterGain) return;
-    }
+    this.init();
+    if (!this.audioContext || !this.masterGain) return;
+    if (this.isPlaying) return;
 
     if (this.audioContext.state === 'suspended') {
       this.audioContext.resume();
@@ -39,121 +59,112 @@ class WesternAmbientMusic {
 
     this.isPlaying = true;
 
-    // Fade in
+    // Fade in master
     const now = this.audioContext.currentTime;
     this.masterGain.gain.setValueAtTime(0, now);
-    this.masterGain.gain.linearRampToValueAtTime(0.15, now + 1);
+    this.masterGain.gain.linearRampToValueAtTime(0.25, now + 0.5);
 
-    // Start ambient drone (low humming like wind through canyon)
-    this.startDrone();
-
-    // Start melody loop
-    this.startMelody();
+    // Play the melody
+    this.playMelody();
   }
 
-  private startDrone() {
+  private playMelody() {
     if (!this.audioContext || !this.masterGain) return;
 
     const ctx = this.audioContext;
+    const startTime = ctx.currentTime;
 
-    // Low drone note
-    const drone = ctx.createOscillator();
-    drone.type = 'sine';
-    drone.frequency.value = 110; // Low A
+    this.melody.forEach((note) => {
+      const timeout = setTimeout(() => {
+        if (!this.isPlaying || !this.audioContext || !this.masterGain) return;
 
-    const droneGain = ctx.createGain();
-    droneGain.gain.value = 0.3;
+        const noteTime = this.audioContext.currentTime;
 
-    // Add slight vibrato
-    const vibrato = ctx.createOscillator();
-    vibrato.type = 'sine';
-    vibrato.frequency.value = 0.5;
-    const vibratoGain = ctx.createGain();
-    vibratoGain.gain.value = 2;
-    vibrato.connect(vibratoGain);
-    vibratoGain.connect(drone.frequency);
+        // Create trumpet/horn-like sound (Godfather uses trumpet)
+        const osc1 = ctx.createOscillator();
+        const osc2 = ctx.createOscillator();
+        const osc3 = ctx.createOscillator();
 
-    // Filter for warmth
-    const filter = ctx.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.value = 400;
+        // Main tone
+        osc1.type = 'sine';
+        osc1.frequency.value = note.freq;
 
-    drone.connect(droneGain);
-    droneGain.connect(filter);
-    filter.connect(this.masterGain);
+        // Harmonics for richness
+        osc2.type = 'sine';
+        osc2.frequency.value = note.freq * 2; // Octave
 
-    drone.start();
-    vibrato.start();
+        osc3.type = 'sine';
+        osc3.frequency.value = note.freq * 3; // Fifth harmonic
 
-    this.oscillators.push(drone, vibrato);
-  }
+        // Vibrato for expressiveness
+        const vibrato = ctx.createOscillator();
+        vibrato.type = 'sine';
+        vibrato.frequency.value = 5.5;
+        const vibratoGain = ctx.createGain();
+        vibratoGain.gain.value = 4;
+        vibrato.connect(vibratoGain);
+        vibratoGain.connect(osc1.frequency);
 
-  private startMelody() {
-    if (!this.audioContext || !this.masterGain) return;
+        // Gain nodes
+        const gain1 = ctx.createGain();
+        const gain2 = ctx.createGain();
+        const gain3 = ctx.createGain();
 
-    let noteIndex = 0;
+        // ADSR-like envelope
+        gain1.gain.setValueAtTime(0, noteTime);
+        gain1.gain.linearRampToValueAtTime(0.5, noteTime + 0.08);
+        gain1.gain.linearRampToValueAtTime(0.35, noteTime + 0.15);
+        gain1.gain.linearRampToValueAtTime(0.3, noteTime + note.duration * 0.7);
+        gain1.gain.exponentialRampToValueAtTime(0.01, noteTime + note.duration);
 
-    // Play a note every 800-1500ms (random for natural feel)
-    const playNote = () => {
-      if (!this.isPlaying || !this.audioContext || !this.masterGain) return;
+        gain2.gain.setValueAtTime(0, noteTime);
+        gain2.gain.linearRampToValueAtTime(0.15, noteTime + 0.1);
+        gain2.gain.exponentialRampToValueAtTime(0.01, noteTime + note.duration * 0.8);
 
-      const ctx = this.audioContext;
-      const now = ctx.currentTime;
+        gain3.gain.setValueAtTime(0, noteTime);
+        gain3.gain.linearRampToValueAtTime(0.08, noteTime + 0.1);
+        gain3.gain.exponentialRampToValueAtTime(0.01, noteTime + note.duration * 0.6);
 
-      // Pick a note from the scale
-      const freq = this.notes[noteIndex % this.notes.length];
-      noteIndex++;
+        // Filter for warmth
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = 2500;
+        filter.Q.value = 1;
 
-      // Create harmonica-like sound (multiple oscillators)
-      const osc1 = ctx.createOscillator();
-      const osc2 = ctx.createOscillator();
+        // Connect
+        osc1.connect(gain1);
+        osc2.connect(gain2);
+        osc3.connect(gain3);
+        gain1.connect(filter);
+        gain2.connect(filter);
+        gain3.connect(filter);
+        filter.connect(this.masterGain!);
 
-      osc1.type = 'sine';
-      osc2.type = 'triangle';
+        // Start and stop
+        const stopTime = noteTime + note.duration + 0.1;
+        osc1.start(noteTime);
+        osc2.start(noteTime);
+        osc3.start(noteTime);
+        vibrato.start(noteTime);
 
-      osc1.frequency.value = freq;
-      osc2.frequency.value = freq * 2.01; // Slight detune for richness
+        osc1.stop(stopTime);
+        osc2.stop(stopTime);
+        osc3.stop(stopTime);
+        vibrato.stop(stopTime);
 
-      // Envelope
-      const noteGain = ctx.createGain();
-      noteGain.gain.setValueAtTime(0, now);
-      noteGain.gain.linearRampToValueAtTime(0.4, now + 0.1);
-      noteGain.gain.exponentialRampToValueAtTime(0.01, now + 2);
+      }, note.delay * 1000);
 
-      // Vibrato for harmonica feel
-      const noteVibrato = ctx.createOscillator();
-      noteVibrato.type = 'sine';
-      noteVibrato.frequency.value = 5;
-      const noteVibratoGain = ctx.createGain();
-      noteVibratoGain.gain.value = 3;
-      noteVibrato.connect(noteVibratoGain);
-      noteVibratoGain.connect(osc1.frequency);
+      this.timeouts.push(timeout);
+    });
 
-      // Filter
-      const noteFilter = ctx.createBiquadFilter();
-      noteFilter.type = 'lowpass';
-      noteFilter.frequency.value = 2000;
-
-      osc1.connect(noteGain);
-      osc2.connect(noteGain);
-      noteGain.connect(noteFilter);
-      noteFilter.connect(this.masterGain!);
-
-      osc1.start(now);
-      osc2.start(now);
-      noteVibrato.start(now);
-
-      osc1.stop(now + 2.5);
-      osc2.stop(now + 2.5);
-      noteVibrato.stop(now + 2.5);
-
-      // Schedule next note
-      const nextDelay = 800 + Math.random() * 700;
-      this.intervalId = setTimeout(playNote, nextDelay);
-    };
-
-    // Start first note after short delay
-    this.intervalId = setTimeout(playNote, 500);
+    // Loop the melody
+    const totalDuration = 17.5 * 1000; // Total melody duration
+    const loopTimeout = setTimeout(() => {
+      if (this.isPlaying) {
+        this.playMelody();
+      }
+    }, totalDuration);
+    this.timeouts.push(loopTimeout);
   }
 
   fadeOut(duration = 2) {
@@ -163,22 +174,13 @@ class WesternAmbientMusic {
     this.masterGain.gain.setValueAtTime(this.masterGain.gain.value, now);
     this.masterGain.gain.linearRampToValueAtTime(0, now + duration);
 
-    // Stop after fade
     setTimeout(() => this.stop(), duration * 1000 + 100);
   }
 
   stop() {
     this.isPlaying = false;
-
-    if (this.intervalId) {
-      clearTimeout(this.intervalId);
-      this.intervalId = null;
-    }
-
-    this.oscillators.forEach(osc => {
-      try { osc.stop(); } catch {}
-    });
-    this.oscillators = [];
+    this.timeouts.forEach(t => clearTimeout(t));
+    this.timeouts = [];
   }
 
   destroy() {
@@ -317,34 +319,72 @@ export default function YouTubeAudio() {
   const [currentTheme, setCurrentTheme] = useState(() => getRandomTheme());
   const [soundEnabled, setSoundEnabled] = useState(false);
   const [errorCount, setErrorCount] = useState(0);
-  const [ambientPlaying, setAmbientPlaying] = useState(false);
+  const [godfatherPlaying, setGodfatherPlaying] = useState(false);
   const playerRef = useRef<YTPlayer | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const lastErrorTimeRef = useRef<number>(0);
   const soundEnabledRef = useRef<boolean>(false);
-  const ambientMusicRef = useRef<WesternAmbientMusic | null>(null);
+  const godfatherThemeRef = useRef<GodfatherTheme | null>(null);
 
-  // Initialize ambient music
+  // Initialize Godfather theme
   useEffect(() => {
-    ambientMusicRef.current = new WesternAmbientMusic();
+    godfatherThemeRef.current = new GodfatherTheme();
     return () => {
-      ambientMusicRef.current?.destroy();
+      godfatherThemeRef.current?.destroy();
     };
   }, []);
 
-  // Check localStorage for sound preference and start ambient music immediately
+  // Check localStorage for sound preference
+  // Godfather theme starts ONLY after loader completes (checks for loader-completed flag)
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const enabled = getSoundPreference();
       setSoundEnabled(enabled);
       soundEnabledRef.current = enabled;
+
       if (enabled) {
         setHasInteracted(true);
         setShowPrompt(false);
-        // Start ambient music IMMEDIATELY
-        ambientMusicRef.current?.start();
-        setAmbientPlaying(true);
+
+        // Check if loader has completed (flag set by WesternLoader on "Entre Cowboi" click)
+        const loaderCompleted = localStorage.getItem('portfolio-loader-completed') === 'true';
+
+        if (loaderCompleted) {
+          // Start Godfather theme immediately after entering
+          godfatherThemeRef.current?.start();
+          setGodfatherPlaying(true);
+        }
       }
+
+      // Listen for storage changes (when loader sets the completed flag)
+      const handleStorageChange = (e: StorageEvent) => {
+        if (e.key === 'portfolio-loader-completed' && e.newValue === 'true') {
+          const soundPref = getSoundPreference();
+          if (soundPref && !godfatherThemeRef.current) return;
+          if (soundPref) {
+            godfatherThemeRef.current?.start();
+            setGodfatherPlaying(true);
+          }
+        }
+      };
+
+      // Also poll for the flag (storage events don't fire for same-window changes)
+      const pollInterval = setInterval(() => {
+        const loaderDone = localStorage.getItem('portfolio-loader-completed') === 'true';
+        const soundPref = getSoundPreference();
+        if (loaderDone && soundPref && godfatherThemeRef.current && !godfatherThemeRef.current['isPlaying']) {
+          godfatherThemeRef.current.start();
+          setGodfatherPlaying(true);
+          clearInterval(pollInterval);
+        }
+      }, 200);
+
+      window.addEventListener('storage', handleStorageChange);
+
+      return () => {
+        window.removeEventListener('storage', handleStorageChange);
+        clearInterval(pollInterval);
+      };
     }
   }, []);
 
@@ -403,27 +443,29 @@ export default function YouTubeAudio() {
           setIsReady(true);
           // Double-check and auto-play if sound was enabled in loader
           const soundPref = getSoundPreference();
-          if (soundPref) {
+          const loaderCompleted = localStorage.getItem('portfolio-loader-completed') === 'true';
+
+          if (soundPref && loaderCompleted) {
             setHasInteracted(true);
             setShowPrompt(false);
-            // Force play after a short delay
+            // Force play after a short delay - this will trigger Godfather fadeout
             setTimeout(() => {
               try {
                 event.target.playVideo();
               } catch (e) {
                 console.warn('Auto-play failed:', e);
               }
-            }, 500);
+            }, 800);
           }
         },
         onStateChange: (event) => {
           if (event.data === window.YT.PlayerState.PLAYING) {
             setIsPlaying(true);
             setErrorCount(0);
-            // Fade out ambient music when YouTube starts
-            if (ambientMusicRef.current) {
-              ambientMusicRef.current.fadeOut(2);
-              setAmbientPlaying(false);
+            // Fade out Godfather theme when YouTube starts
+            if (godfatherThemeRef.current) {
+              godfatherThemeRef.current.fadeOut(2);
+              setGodfatherPlaying(false);
             }
           } else if (event.data === window.YT.PlayerState.PAUSED || event.data === window.YT.PlayerState.ENDED) {
             setIsPlaying(false);
@@ -559,12 +601,12 @@ export default function YouTubeAudio() {
 
           {/* Main player container */}
           <motion.div
-            className={`flex items-center gap-4 bg-[var(--card-bg)]/98 backdrop-blur-md border-3 border-[var(--western-brown)] shadow-[5px_5px_0_var(--western-brown-dark)] px-5 py-4 transition-all group relative overflow-hidden ${!isReady && !ambientPlaying ? 'opacity-70' : ''}`}
+            className={`flex items-center gap-4 bg-[var(--card-bg)]/98 backdrop-blur-md border-3 border-[var(--western-brown)] shadow-[5px_5px_0_var(--western-brown-dark)] px-5 py-4 transition-all group relative overflow-hidden ${!isReady && !godfatherPlaying ? 'opacity-70' : ''}`}
             style={{
-              borderColor: isPlaying ? '#FF0000' : ambientPlaying ? 'var(--western-gold)' : undefined,
+              borderColor: isPlaying ? '#FF0000' : godfatherPlaying ? 'var(--western-gold)' : undefined,
               boxShadow: isPlaying
                 ? '5px 5px 0 var(--western-brown-dark), 0 0 20px #FF000040'
-                : ambientPlaying
+                : godfatherPlaying
                   ? '5px 5px 0 var(--western-brown-dark), 0 0 15px rgba(218, 165, 32, 0.4)'
                   : undefined,
             }}
@@ -579,7 +621,7 @@ export default function YouTubeAudio() {
             transition={!hasInteracted ? { duration: 1.5, repeat: Infinity } : {}}
           >
             {/* Animated background when playing */}
-            {(isPlaying || ambientPlaying) && (
+            {(isPlaying || godfatherPlaying) && (
               <motion.div
                 className={`absolute inset-0 ${
                   isPlaying
@@ -594,18 +636,18 @@ export default function YouTubeAudio() {
             {/* Play/Pause button */}
             <motion.button
               onClick={togglePlay}
-              disabled={!isReady && !ambientPlaying}
+              disabled={!isReady && !godfatherPlaying}
               className="relative z-10 p-2 rounded-full cursor-pointer disabled:cursor-not-allowed"
               style={{
                 backgroundColor: isPlaying
                   ? '#FF0000'
-                  : ambientPlaying
+                  : godfatherPlaying
                     ? 'var(--western-gold)'
                     : isReady
                       ? 'var(--western-rust)'
                       : 'var(--western-brown-light)'
               }}
-              animate={(isPlaying || ambientPlaying) ? { scale: [1, 1.1, 1] } : {}}
+              animate={(isPlaying || godfatherPlaying) ? { scale: [1, 1.1, 1] } : {}}
               transition={{ duration: 1, repeat: Infinity }}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
@@ -613,7 +655,7 @@ export default function YouTubeAudio() {
             >
               {isPlaying ? (
                 <Pause className="w-5 h-5 text-white" />
-              ) : ambientPlaying ? (
+              ) : godfatherPlaying ? (
                 <Volume2 className="w-5 h-5 text-white" />
               ) : (
                 <Play className="w-5 h-5 text-white ml-0.5" />
@@ -623,25 +665,25 @@ export default function YouTubeAudio() {
             {/* Music info */}
             <button
               onClick={togglePlay}
-              disabled={!isReady && !ambientPlaying}
+              disabled={!isReady && !godfatherPlaying}
               className="relative z-10 text-left min-w-0 max-w-[120px] cursor-pointer disabled:cursor-not-allowed bg-transparent border-none"
             >
               <p
                 className="text-sm font-bold transition-colors truncate"
                 style={{
                   fontFamily: "'Cinzel', serif",
-                  color: isPlaying || ambientPlaying ? '#FF0000' : 'var(--text-primary)',
+                  color: isPlaying || godfatherPlaying ? '#FF0000' : 'var(--text-primary)',
                 }}
-                title={ambientPlaying && !isPlaying ? 'Western Ambient' : currentTheme.title}
+                title={godfatherPlaying && !isPlaying ? 'The Godfather Theme' : currentTheme.title}
               >
-                {ambientPlaying && !isPlaying ? '🎸 Western Ambient' : currentTheme.title}
+                {godfatherPlaying && !isPlaying ? '🎺 The Godfather' : currentTheme.title}
               </p>
               <p className="text-xs text-[var(--text-muted)] truncate" style={{ fontFamily: "'Special Elite', monospace" }} title={currentTheme.artist}>
-                {ambientPlaying && !isPlaying
+                {godfatherPlaying && !isPlaying
                   ? (isReady ? 'YouTube prêt...' : 'Chargement YouTube...')
                   : (!isReady ? 'Chargement...' : isPlaying ? currentTheme.artist : 'Cliquez pour jouer')}
               </p>
-              {!ambientPlaying && currentTheme.category && (
+              {!godfatherPlaying && currentTheme.category && (
                 <span className="text-[10px] text-[var(--western-rust)] opacity-70">{currentTheme.category}</span>
               )}
             </button>
@@ -672,16 +714,16 @@ export default function YouTubeAudio() {
               <Shuffle className="w-4 h-4 text-[var(--text-muted)] hover:text-[#FF0000]" />
             </motion.button>
 
-            {/* Sound wave animation when playing (YouTube or Ambient) */}
-            {(isPlaying || ambientPlaying) && (
+            {/* Sound wave animation when playing (YouTube or Godfather) */}
+            {(isPlaying || godfatherPlaying) && (
               <div className="relative z-10 flex items-end gap-1 h-6 ml-1">
                 {[0, 1, 2, 3].map((i) => (
                   <motion.div
                     key={i}
-                    className={`w-1 rounded-full ${ambientPlaying && !isPlaying ? 'bg-[var(--western-gold)]' : 'bg-[#FF0000]'}`}
+                    className={`w-1 rounded-full ${godfatherPlaying && !isPlaying ? 'bg-[var(--western-gold)]' : 'bg-[#FF0000]'}`}
                     animate={{ height: ['40%', '100%', '40%'] }}
                     transition={{
-                      duration: ambientPlaying && !isPlaying ? 0.8 : 0.5,
+                      duration: godfatherPlaying && !isPlaying ? 0.8 : 0.5,
                       repeat: Infinity,
                       delay: i * 0.1,
                       ease: "easeInOut",
