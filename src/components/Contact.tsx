@@ -94,7 +94,7 @@ export default function Contact() {
       {/* Decorative top with gradient */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[var(--tech-blue)] via-[var(--western-gold)] to-[#10B981]" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="container-wide relative z-10">
         {/* Header - Telegram Office Style */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

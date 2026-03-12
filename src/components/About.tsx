@@ -8,46 +8,46 @@ import {
   TrendingDown,
   Lightbulb,
   Rocket,
-  Dna,
-  Database,
-  Microscope,
+  GraduationCap,
+  Briefcase,
+  Users,
   Star,
 } from "lucide-react";
 import { strengthsData, weaknessesData } from "@/data/skills";
 
 const professionalProjectText = {
   fr: {
-    vision: "Data Engineer avec une vision vers les technologies du vivant",
+    vision: "Je conçois des systèmes informatisés afin de délivrer de la valeur",
     intro:
-      "Actuellement etudiant en 3eme annee de  a l'EPHEC, je me specialise dans l'ingenierie des donnees avec une passion profonde pour les biotechnologies et la nanotechnologie. Je complete mon profil avec un Bachelier en Technologies de la Sante, me permettant de mettre mes competences IT au service du domaine medical - un secteur rigoureux ou la precision compte. Les competences acquises dans ce milieu exigeant sont transferables a tout autre domaine.",
+      "J'aime comprendre les systèmes en profondeur avant d'en concevoir de nouveaux. C'est ce qui m'a amené à construire un accélérateur de trafic satellite chez neXat et une plateforme d'analyse d'images au CHU UCL Namur — deux domaines différents, même approche. Ma formation en informatique m'a donné la rigueur technique : architecture système, réseaux, programmation. Ma spécialisation en technologies de la santé y a ajouté la conformité réglementaire (RGPD), la gestion des risques, et la capacité à travailler avec des profils aussi divers que leur paradigme de travail.",
     shortTerm:
-      "A court terme, je vise a consolider mon expertise en pipelines de donnees, imagerie medicale et systemes embarques a travers mes stages et projets academiques.",
+      "Consolider mon expertise à travers des projets critiques délivrant un bénéfice concret — comme ceux chez neXat et au CHU UCL Namur.",
     mediumTerm:
-      "A moyen terme, je souhaite integrer une entreprise innovante dans le domaine de la sante numerique ou des biotechnologies, ou je pourrai combiner mes competences en data engineering avec ma fascination pour les sciences du vivant.",
+      "Rejoindre une équipe d'ingénierie travaillant sur de l'infrastructure critique. Accumuler l'expérience terrain et la crédibilité technique.",
     longTerm:
-      "A long terme, mon ambition est de contribuer au developpement de solutions technologiques qui font le pont entre l'informatique et les sciences de la vie, notamment dans les domaines de la bio-informatique et des nanotechnologies medicales.",
+      "Lancer mon activité de conseil et former des équipes autour d'une vision : exploiter les forces de l'informatique et les mettre au service d'autres métiers.",
   },
   en: {
-    vision: "Data Engineer with a vision towards living technologies",
+    vision: "I design IT systems to deliver value",
     intro:
-      "Currently a 3rd year student in Bachelor of Information Technology at EPHEC, I specialize in data engineering with a deep passion for biotechnology and nanotechnology. I'm complementing my profile with a Bachelor in Health Technologies, allowing me to apply my IT skills in the medical field - a rigorous domain where precision matters. The skills acquired in this demanding environment are transferable to any other field.",
+      "I like to understand systems deeply before I design new ones. That's what led me to build a satellite traffic accelerator at neXat and an image analysis platform at CHU UCL Namur — two different domains, same approach. My IT training gave me the technical foundation: systems architecture, networking, programming. My health technologies specialization added regulatory compliance (GDPR), risk management, and the ability to work with profiles as diverse as their work paradigms.",
     shortTerm:
-      "In the short term, I aim to consolidate my expertise in data pipelines, medical imaging, and embedded systems through my internships and academic projects.",
+      "Consolidate my expertise through critical projects delivering tangible benefits — such as those at neXat and CHU UCL Namur.",
     mediumTerm:
-      "In the medium term, I want to join an innovative company in digital health or biotechnology, where I can combine my data engineering skills with my fascination for life sciences.",
+      "Join an engineering team working on critical infrastructure. Build field experience and technical credibility.",
     longTerm:
-      "In the long term, my ambition is to contribute to developing technological solutions that bridge computer science and life sciences, particularly in bioinformatics and medical nanotechnology.",
+      "Launch my own consultancy and build teams around a vision: leverage the strengths of IT and put them at the service of other disciplines.",
   },
   nl: {
-    vision: "Data Engineer met een visie op levenswetenschappen",
+    vision: "Ik ontwerp IT-systemen om waarde te leveren",
     intro:
-      "Momenteel 3e jaars student Bachelor Informatietechnologie aan EPHEC, specialiseer ik me in data engineering met een diepe passie voor biotechnologie en nanotechnologie. Ik vul mijn profiel aan met een Bachelor in Gezondheidstechnologieen, waardoor ik mijn IT-vaardigheden kan inzetten in de medische sector - een rigoureus domein waar precisie telt. De vaardigheden die in deze veeleisende omgeving worden verworven, zijn overdraagbaar naar elk ander domein.",
+      "Ik begrijp systemen graag in de diepte voordat ik nieuwe ontwerp. Dat heeft me ertoe gebracht een satellietverkeersversneller te bouwen bij neXat en een beeldanalyseplatform bij CHU UCL Namur — twee verschillende domeinen, dezelfde aanpak. Mijn IT-opleiding gaf me de technische basis: systeemarchitectuur, netwerken, programmeren. Mijn specialisatie gezondheidstechnologieën voegde regelgevende compliance (GDPR), risicobeheer en het vermogen om samen te werken met profielen zo divers als hun werkparadigma's toe.",
     shortTerm:
-      "Op korte termijn wil ik mijn expertise in datapipelines, medische beeldvorming en embedded systemen consolideren via mijn stages en academische projecten.",
+      "Mijn expertise consolideren via kritieke projecten die concreet voordeel opleveren — zoals die bij neXat en CHU UCL Namur.",
     mediumTerm:
-      "Op middellange termijn wil ik bij een innovatief bedrijf in digitale gezondheid of biotechnologie werken, waar ik mijn data engineering vaardigheden kan combineren met mijn fascinatie voor levenswetenschappen.",
+      "Een engineering team versterken dat werkt aan kritieke infrastructuur. Praktijkervaring en technische geloofwaardigheid opbouwen.",
     longTerm:
-      "Op lange termijn is mijn ambitie om bij te dragen aan technologische oplossingen die informatica en levenswetenschappen verbinden, met name in bio-informatica en medische nanotechnologie.",
+      "Mijn eigen adviesbureau starten en teams vormen rond een visie: de kracht van IT benutten en ten dienste stellen van andere disciplines.",
   },
 };
 
@@ -72,7 +72,7 @@ export default function About() {
       {/* Decorative top border */}
       <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-transparent via-[var(--western-brown)] to-transparent opacity-30" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container-wide">
         {/* Section Header - Western Style */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -156,7 +156,7 @@ export default function About() {
                 className="relative"
               >
                 <div className="absolute -top-3 left-4 bg-[var(--card-bg)] px-2">
-                  <Database className="w-5 h-5 text-[var(--western-rust)]" />
+                  <GraduationCap className="w-5 h-5 text-[var(--western-rust)]" />
                 </div>
                 <div className="p-4 border-2 border-[var(--western-brown)] bg-[var(--card-bg)] h-full">
                   <span
@@ -187,7 +187,7 @@ export default function About() {
                 className="relative lg:-mt-4"
               >
                 <div className="absolute -top-3 left-4 bg-[var(--card-bg)] px-2">
-                  <Microscope className="w-5 h-5 text-[var(--western-gold)]" />
+                  <Briefcase className="w-5 h-5 text-[var(--western-gold)]" />
                 </div>
                 <div className="p-4 border-2 border-[var(--western-gold)] bg-[var(--card-bg)] shadow-[4px_4px_0_var(--western-brown-dark)] h-full">
                   <span
@@ -218,7 +218,7 @@ export default function About() {
                 className="relative"
               >
                 <div className="absolute -top-3 left-4 bg-[var(--card-bg)] px-2">
-                  <Dna className="w-5 h-5 text-emerald-600" />
+                  <Users className="w-5 h-5 text-emerald-600" />
                 </div>
                 <div className="p-4 border-2 border-[var(--western-brown)] bg-[var(--card-bg)] h-full">
                   <span

@@ -106,7 +106,7 @@ export default function Activities() {
 
   return (
     <section id="activities" className="py-12 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container-wide">
         {/* Header - Compact */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

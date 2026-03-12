@@ -48,7 +48,7 @@ export default function Hero() {
       <div className="absolute top-24 left-8 text-[var(--western-gold)] text-4xl opacity-30 z-10" aria-hidden="true">❧</div>
       <div className="absolute top-24 right-8 text-[var(--western-gold)] text-4xl opacity-30 scale-x-[-1] z-10" aria-hidden="true">❧</div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10 w-full">
+      <div className="container-wide py-12 relative z-10 w-full">
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
 
           {/* Left Column - Wanted Poster Style Card */}

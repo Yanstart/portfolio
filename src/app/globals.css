@@ -87,34 +87,11 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: 'IM Fell English', 'Playfair Display', Georgia, serif;
-  font-size: 18px;
+  /* Fluid typography: scales from 16px at 320px viewport to 28px at 1920px viewport */
+  font-size: clamp(1rem, 0.75rem + 0.75vw, 1.75rem);
   line-height: 1.85;
   transition: background-color 0.3s ease, color 0.3s ease;
   position: relative;
-}
-
-@media (min-width: 768px) {
-  body {
-    font-size: 20px;
-  }
-}
-
-@media (min-width: 1024px) {
-  body {
-    font-size: 22px;
-  }
-}
-
-@media (min-width: 1280px) {
-  body {
-    font-size: 24px;
-  }
-}
-
-@media (min-width: 1536px) {
-  body {
-    font-size: 26px;
-  }
 }
 
 /* Parchment texture overlay */
@@ -242,90 +219,46 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: uppercase;
 }
 
+/* Fluid heading sizes - scale smoothly with viewport */
 h1 {
-  font-size: 4.5rem;
+  font-size: clamp(2.5rem, 1.5rem + 3vw, 6rem);
   text-shadow: 3px 3px 0 var(--western-brown-dark);
 }
 h2 {
-  font-size: 3.5rem;
+  font-size: clamp(2rem, 1rem + 2.5vw, 5rem);
   text-shadow: 2px 2px 0 var(--western-brown-dark);
 }
 h3 {
-  font-size: 2.5rem;
+  font-size: clamp(1.5rem, 1rem + 1.5vw, 3.5rem);
 }
 h4 {
-  font-size: 1.875rem;
+  font-size: clamp(1.25rem, 1rem + 0.75vw, 2.5rem);
 }
 h5 {
-  font-size: 1.5rem;
+  font-size: clamp(1.125rem, 1rem + 0.5vw, 1.75rem);
 }
 h6 {
-  font-size: 1.25rem;
+  font-size: clamp(1rem, 0.9rem + 0.35vw, 1.5rem);
 }
 
-@media (max-width: 768px) {
-  h1 { font-size: 2.5rem; }
-  h2 { font-size: 2rem; }
-  h3 { font-size: 1.5rem; }
-  h4 { font-size: 1.25rem; }
-}
-
-@media (min-width: 1280px) {
-  h1 { font-size: 5rem; }
-  h2 { font-size: 4rem; }
-  h3 { font-size: 2.75rem; }
-  h4 { font-size: 2rem; }
-}
-
-@media (min-width: 1536px) {
-  h1 { font-size: 5.5rem; }
-  h2 { font-size: 4.5rem; }
-  h3 { font-size: 3rem; }
-  h4 { font-size: 2.25rem; }
-}
-
-/* Paragraph and text elements */
+/* Paragraph and text elements - fluid sizing */
 p {
-  font-size: 1.1rem;
+  font-size: clamp(1.1rem, 0.9rem + 0.5vw, 1.625rem);
   line-height: 1.85;
   margin-bottom: 1.25rem;
 }
 
-@media (min-width: 768px) {
-  p {
-    font-size: 1.2rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  p {
-    font-size: 1.3rem;
-  }
-}
-
-@media (min-width: 1280px) {
-  p {
-    font-size: 1.4rem;
-  }
-}
-
-@media (min-width: 1536px) {
-  p {
-    font-size: 1.5rem;
-  }
-}
-
-/* Larger text utility */
+/* Larger text utilities - fluid sizing */
 .text-lg {
-  font-size: 1.25rem !important;
+  font-size: clamp(1.25rem, 1rem + 0.5vw, 1.625rem) !important;
 }
 
 .text-xl {
-  font-size: 1.5rem !important;
+  font-size: clamp(1.5rem, 1.1rem + 0.75vw, 2rem) !important;
 }
 
 .text-2xl {
-  font-size: 1.75rem !important;
+  font-size: clamp(1.75rem, 1.25rem + 1vw, 2.5rem) !important;
 }
 
 /* Western decorative fonts */
@@ -478,6 +411,49 @@ p {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* Responsive container - wider on large screens */
+.container-wide {
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-wide {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-wide {
+    max-width: 95%;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container-wide {
+    max-width: 1400px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container-wide {
+    max-width: 1600px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .container-wide {
+    max-width: 1800px;
+  }
 }
 
 /* ============================================

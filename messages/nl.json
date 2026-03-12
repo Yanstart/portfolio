@@ -14,9 +14,9 @@
   },
   "hero": {
     "greeting": "Hallo, ik ben",
-    "title": "Ontwikkelaar & IT-ingenieur",
-    "subtitle": "Gepassioneerd door informatietechnologie en software-engineering",
-    "cta": "Ontdek mijn reis",
+    "title": "Systeem- & Full-Stack Ontwikkelaar",
+    "subtitle": "Kritieke systemen en infrastructuur",
+    "cta": "Bekijk mijn werk",
     "downloadCV": "CV Downloaden"
   },
   "about": {
@@ -24,20 +24,24 @@
     "professionalProject": "Carriere Doelen",
     "strengths": "Sterke punten",
     "weaknesses": "Verbeterpunten",
-    "strengthsIntro": "Mijn belangrijkste troeven voor succes",
-    "weaknessesIntro": "Vaardigheden die ik actief ontwikkel"
+    "strengthsIntro": "Wat ik een team breng",
+    "weaknessesIntro": "Waar ik aan werk"
   },
   "skills": {
     "title": "Technische Vaardigheden",
-    "subtitle": "Technologieen en tools die ik beheers",
+    "subtitle": "Technologieen en tools waarmee ik werk",
     "categories": {
       "frontend": "Frontend",
-      "backend": "Backend",
+      "backend": "Backend & Systeemtalen",
+      "systems": "Netwerken & Transport",
       "database": "Databases",
-      "devops": "DevOps & Cloud",
+      "devops": "DevOps & Monitoring",
       "tools": "Tools",
       "soft": "Soft Skills",
-      "healthtech": "Gezondheidstech"
+      "healthtech": "Gezondheidstech",
+      "ml": "ML & Data",
+      "security": "Cybersecurity",
+      "compliance": "Normen & Compliance"
     }
   },
   "activities": {
@@ -59,7 +63,7 @@
   },
   "contact": {
     "title": "Neem contact op",
-    "subtitle": "Neem gerust contact op voor elke mogelijkheid",
+    "subtitle": "Interesse om samen te werken? Laten we praten.",
     "email": "E-mail",
     "phone": "Telefoon",
     "location": "Locatie",

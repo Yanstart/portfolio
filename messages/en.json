@@ -14,9 +14,9 @@
   },
   "hero": {
     "greeting": "Hello, I am",
-    "title": "Developer & IT Engineer",
-    "subtitle": "Passionate about information technology and software engineering",
-    "cta": "Discover my journey",
+    "title": "Systems & Full-Stack Developer",
+    "subtitle": "Critical systems and infrastructure",
+    "cta": "See my work",
     "downloadCV": "Download Resume"
   },
   "about": {
@@ -24,20 +24,24 @@
     "professionalProject": "Career Goals",
     "strengths": "Strengths",
     "weaknesses": "Areas for Improvement",
-    "strengthsIntro": "My key assets for success",
-    "weaknessesIntro": "Skills I am actively developing"
+    "strengthsIntro": "What I bring to a team",
+    "weaknessesIntro": "Where I'm working to improve"
   },
   "skills": {
     "title": "Technical Skills",
-    "subtitle": "Technologies and tools I master",
+    "subtitle": "Technologies and tools I work with",
     "categories": {
       "frontend": "Frontend",
-      "backend": "Backend",
+      "backend": "Backend & Systems Languages",
+      "systems": "Networks & Transport",
       "database": "Databases",
-      "devops": "DevOps & Cloud",
+      "devops": "DevOps & Monitoring",
       "tools": "Tools",
       "soft": "Soft Skills",
-      "healthtech": "Health Tech"
+      "healthtech": "Health Tech",
+      "ml": "ML & Data",
+      "security": "Cybersecurity",
+      "compliance": "Standards & Compliance"
     }
   },
   "activities": {
@@ -59,7 +63,7 @@
   },
   "contact": {
     "title": "Contact Me",
-    "subtitle": "Feel free to reach out for any opportunity",
+    "subtitle": "Interested in working together? Let's talk.",
     "email": "Email",
     "phone": "Phone",
     "location": "Location",

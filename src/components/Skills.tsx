@@ -1,47 +1,56 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { motion } from 'framer-motion';
 import { skillsData } from '@/data/skills';
-import { Code, Server, Database, Cloud, Wrench, Users, Star, Zap, HeartPulse } from 'lucide-react';
+import { Code, Server, Database, Cloud, Wrench, Users, Star, Zap, HeartPulse, Network, Brain, Shield, Scale } from 'lucide-react';
 
 const categoryIcons: Record<string, React.ReactNode> = {
   frontend: <Code className="w-4 h-4" />,
   backend: <Server className="w-4 h-4" />,
+  systems: <Network className="w-4 h-4" />,
   database: <Database className="w-4 h-4" />,
   devops: <Cloud className="w-4 h-4" />,
   tools: <Wrench className="w-4 h-4" />,
   soft: <Users className="w-4 h-4" />,
   healthtech: <HeartPulse className="w-4 h-4" />,
+  ml: <Brain className="w-4 h-4" />,
+  security: <Shield className="w-4 h-4" />,
+  compliance: <Scale className="w-4 h-4" />,
 };
 
 const categoryColors: Record<string, string> = {
   frontend: 'var(--tech-blue)',
   backend: '#10B981',
+  systems: '#F97316',
   database: '#8B5CF6',
   devops: '#F59E0B',
   tools: '#EC4899',
   soft: '#06B6D4',
   healthtech: '#EF4444',
+  ml: '#7C3AED',
+  security: '#DC2626',
+  compliance: '#0D9488',
 };
 
 const techHighlights = [
+  { name: 'Rust', color: '#DEA584' },
   { name: 'Python', color: '#3776AB' },
   { name: 'TypeScript', color: '#3178C6' },
   { name: 'React', color: '#61DAFB' },
-  { name: 'Next.js', color: '#000000' },
   { name: 'Docker', color: '#2496ED' },
-  { name: 'PostgreSQL', color: '#336791' },
   { name: 'FastAPI', color: '#009688' },
-  { name: 'Kubernetes', color: '#326CE5' },
+  { name: 'QUIC', color: '#F97316' },
+  { name: 'Prometheus', color: '#E6522C' },
 ];
 
 export default function Skills() {
   const t = useTranslations('skills');
+  const locale = useLocale();
 
   return (
     <section id="skills" className="py-12 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container-wide">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -138,7 +147,7 @@ export default function Skills() {
                   className="text-sm uppercase tracking-wider text-[var(--text-primary)]"
                   style={{ fontFamily: "'Cinzel', serif" }}
                 >
-                  Favoris
+                  {locale === 'fr' ? 'Favoris' : locale === 'nl' ? 'Favorieten' : 'Favorites'}
                 </h3>
               </div>
               <div className="flex flex-wrap gap-1.5">

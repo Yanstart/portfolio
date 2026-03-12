@@ -12,7 +12,7 @@ export default function Footer() {
       {/* Decorative top border */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[var(--western-gold)] to-transparent" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="container-wide py-8">
         <div className="flex flex-col items-center gap-6">
           {/* Decorative divider */}
           <div className="flex items-center gap-4">

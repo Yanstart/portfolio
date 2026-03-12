@@ -1,77 +1,81 @@
 {
   "metadata": {
-    "title": "Portfolio - Noel Yando Fotso",
+    "title": "Portfolio - Noël Yando Fotso",
     "description": "Portfolio professionnel en Technologies de l'Informatique"
   },
   "nav": {
     "home": "Accueil",
-    "about": "A propos",
+    "about": "À propos",
     "cv": "CV",
     "project": "Projet Pro",
-    "skills": "Competences",
-    "activities": "Activites",
+    "skills": "Compétences",
+    "activities": "Activités",
     "contact": "Contact"
   },
   "hero": {
     "greeting": "Bonjour, je suis",
-    "title": "Developpeur & Ingenieur IT",
-    "subtitle": "Passionne par les technologies de l'informatique et l'ingenierie logicielle",
-    "cta": "Decouvrir mon parcours",
-    "downloadCV": "Telecharger CV"
+    "title": "Développeur Système & Full-Stack",
+    "subtitle": "Systèmes critiques et infrastructure",
+    "cta": "Voir mon travail",
+    "downloadCV": "Télécharger CV"
   },
   "about": {
-    "title": "A propos de moi",
+    "title": "À propos de moi",
     "professionalProject": "Projet Professionnel",
     "strengths": "Points Forts",
-    "weaknesses": "Points a Ameliorer",
-    "strengthsIntro": "Mes atouts cles pour reussir",
-    "weaknessesIntro": "Les competences que je developpe activement"
+    "weaknesses": "Points à Améliorer",
+    "strengthsIntro": "Ce que j'apporte à une équipe",
+    "weaknessesIntro": "Ce sur quoi je travaille"
   },
   "skills": {
-    "title": "Competences Techniques",
-    "subtitle": "Technologies et outils que je maitrise",
+    "title": "Compétences Techniques",
+    "subtitle": "Technologies et outils que j'utilise",
     "categories": {
       "frontend": "Frontend",
-      "backend": "Backend",
-      "database": "Bases de donnees",
-      "devops": "DevOps & Cloud",
+      "backend": "Backend & Langages Système",
+      "systems": "Réseaux & Transport",
+      "database": "Bases de données",
+      "devops": "DevOps & Monitoring",
       "tools": "Outils",
       "soft": "Soft Skills",
-      "healthtech": "Tech Sante"
+      "healthtech": "Tech Santé",
+      "ml": "ML & Data",
+      "security": "Cybersécurité",
+      "compliance": "Normes & Conformité"
     }
   },
   "activities": {
-    "title": "Activites d'Acquisition de Competences",
+    "title": "Activités d'Acquisition de Compétences",
     "subtitle": "",
     "hours": "heures",
-    "theme": "Theme",
-    "description": "Description des activites",
-    "reflection": "Analyse Reflexive",
+    "theme": "Thème",
+    "description": "Description des activités",
+    "reflection": "Analyse Réflexive",
     "proof": "Certifications",
     "viewMore": "Voir plus"
   },
   "cv": {
     "title": "Curriculum Vitae",
-    "download": "Telecharger le CV complet",
-    "experience": "Experience Professionnelle",
+    "download": "Télécharger le CV complet",
+    "experience": "Expérience Professionnelle",
     "education": "Formation",
     "certifications": "Certifications"
   },
   "contact": {
     "title": "Me Contacter",
-    "subtitle": "N'hesitez pas a me contacter pour toute opportunite",
+    "subtitle": "Envie de collaborer ? Parlons-en.",
     "email": "Email",
-    "phone": "Telephone",
+    "phone": "Téléphone",
     "location": "Localisation",
     "linkedin": "LinkedIn",
     "github": "GitHub"
   },
   "footer": {
-    "rights": "Tous droits reserves",
-    "madeWith": "Realise avec"
+    "rights": "Tous droits réservés",
+    "madeWith": "Réalisé avec"
   },
   "language": {
-    "fr": "Francais",
+    "fr": "Français",
     "en": "English",
     "nl": "Nederlands"
   }

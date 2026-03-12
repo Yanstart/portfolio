@@ -8,39 +8,45 @@ const experiences = [
   {
     id: 'exp-0',
     title: {
-      fr: 'Stagiaire Network & Cloud Integration',
-      en: 'Network & Cloud Integration Intern',
-      nl: 'Stagiair Network & Cloud Integratie'
+      fr: 'Stagiaire Infrastructure Réseau & Projet QUICK-',
+      en: 'Network Infrastructure Intern & QUICK- Project',
+      nl: 'Stagiair Netwerkinfrastructuur & QUICK- Project'
     },
     company: 'neXat',
     companyUrl: 'https://nexat.be/',
     location: 'Belgique',
-    period: '10/2025 - 01/2026',
-    upcoming: true,
+    period: '2025 - Present',
     description: {
-      fr: 'Installation et validation de la plateforme de demonstration neXat Service Delivery Platform. Focus sur le module Traffic Shaping and Routing (TSR) pour les communications satellite. Integration MANO avec OpenShift et orchestration Cisco CSR.',
-      en: 'Installation and validation of neXat Service Delivery Platform demonstration. Focus on Traffic Shaping and Routing (TSR) module for satellite communications. MANO integration with OpenShift and Cisco CSR orchestration.',
-      nl: 'Installatie en validatie van neXat Service Delivery Platform demonstratie. Focus op Traffic Shaping and Routing (TSR) module voor satellietcommunicatie. MANO integratie met OpenShift en Cisco CSR orchestratie.',
+      fr: 'Stage : mise en place de la plateforme satellite neXat (Traffic Shaping, OpenShift, Cisco CSR). Projet : conception d\'un tunnel TCP-over-QUIC en Rust qui accélère le trafic là où les solutions classiques sont aveugles au chiffrement QUIC.',
+      en: 'Internship: setup of neXat satellite platform (Traffic Shaping, OpenShift, Cisco CSR). Project: TCP-over-QUIC tunnel in Rust that accelerates traffic where traditional solutions are blind to QUIC encryption.',
+      nl: 'Stage: opzet van neXat satellietplatform (Traffic Shaping, OpenShift, Cisco CSR). Project: TCP-over-QUIC tunnel in Rust die verkeer versnelt waar traditionele oplossingen blind zijn voor QUIC-encryptie.',
     },
-    tags: ['OpenShift', 'Cisco CSR', 'MANO', 'Network Orchestration', 'Python', 'Linux'],
+    projectLinks: [
+      { label: 'GitHub', url: 'https://github.com/Yanstart/Quick-' },
+      { label: 'Benchmarks', url: 'https://yanstart.github.io/Quick-/' },
+    ],
+    tags: ['Rust', 'QUIC', 'BBR', 'Docker', 'Satellite'],
     color: '#326CE5',
   },
   {
     id: 'exp-1',
     title: {
-      fr: 'Stagiaire Data & Medical Imaging',
-      en: 'Data & Medical Imaging Intern',
-      nl: 'Stagiair Data & Medische Beeldvorming'
+      fr: 'Développeur & Projet Varuna',
+      en: 'Developer & Varuna Project',
+      nl: 'Ontwikkelaar & Varuna Project'
     },
     company: 'CHU UCL Namur',
     location: 'Namur, Belgique',
-    period: '2024 - 2025',
+    period: 'Feb 2025 - Present',
     description: {
-      fr: 'Developpement de solutions pour l\'imagerie medicale et l\'analyse de donnees pathologiques. Travail sur des projets de detection automatique et visualisation de lames medicales.',
-      en: 'Development of solutions for medical imaging and pathological data analysis. Work on automatic detection projects and visualization of medical slides.',
-      nl: 'Ontwikkeling van oplossingen voor medische beeldvorming en pathologische data-analyse. Werken aan automatische detectieprojecten en visualisatie van medische dia\'s.',
+      fr: 'Plateforme web permettant aux pathologistes de visualiser et analyser des lames histologiques gigapixel directement dans leur navigateur, avec détection automatique, respect du RGPD, et monitoring de production. Collaboration quotidienne avec médecins et radiophysiciens. Démo sur demande (les modèles ML nécessitent un GPU).',
+      en: 'Web platform enabling pathologists to view and analyze gigapixel histological slides directly in their browser, with automatic detection, GDPR compliance, and production monitoring. Daily collaboration with physicians and radiophysicists. Demo available on request (ML models require GPU).',
+      nl: 'Webplatform waarmee pathologen gigapixel histologische dia\'s direct in hun browser kunnen bekijken en analyseren, met automatische detectie, GDPR-compliance en productiemonitoring. Dagelijkse samenwerking met artsen en radiofysici. Demo op aanvraag (ML-modellen vereisen GPU).',
     },
-    tags: ['Python', 'OpenSlide', 'Medical Imaging', 'Data Analysis'],
+    projectLinks: [
+      { label: 'GitHub', url: 'https://github.com/Yanstart/VarunaPoC' },
+    ],
+    tags: ['Python', 'FastAPI', 'React', 'TypeScript', 'Docker', 'Keycloak'],
     color: '#10B981',
   },
   {
@@ -55,9 +61,9 @@ const experiences = [
     location: 'Bruxelles, Belgique',
     period: '2024',
     description: {
-      fr: 'Collaboration avec des Data Engineers sur des projets de qualite des donnees. Decouverte des coulisses de l\'AI scraping et utilisation des APIs (OpenAI). Innovation sur les pipelines de donnees.',
-      en: 'Collaboration with Data Engineers on data quality projects. Discovery of AI scraping behind the scenes and API usage (OpenAI). Innovation on data pipelines.',
-      nl: 'Samenwerking met Data Engineers aan datakwaliteitsprojecten. Ontdekking van AI scraping achter de schermen en API-gebruik (OpenAI). Innovatie op datapipelines.',
+      fr: 'Collaboration avec des Data Engineers sur des projets de qualité des données. Découverte des techniques d\'AI scraping et utilisation des APIs (OpenAI). Contribution à l\'amélioration de la qualité et de l\'automatisation des pipelines de données.',
+      en: 'Collaboration with Data Engineers on data quality projects. Learned AI scraping techniques and OpenAI API usage. Contributed to improving data pipeline quality and automation.',
+      nl: 'Samenwerking met Data Engineers aan datakwaliteitsprojecten. AI scraping-technieken en OpenAI API-gebruik geleerd. Bijgedragen aan de verbetering van datapipelinekwaliteit en automatisering.',
     },
     tags: ['Python', 'OpenAI API', 'Data Quality', 'Web Scraping'],
     color: '#8B5CF6',
@@ -65,7 +71,7 @@ const experiences = [
   {
     id: 'exp-3',
     title: {
-      fr: 'Etudiant benevole international',
+      fr: 'Étudiant bénévole international',
       en: 'International Student Volunteer',
       nl: 'Internationale Studentenvrijwilliger'
     },
@@ -74,7 +80,7 @@ const experiences = [
     location: 'Bruxelles, Belgique',
     period: '2023 - Present',
     description: {
-      fr: 'Accompagnement d\'etudiants internationaux, soutien scolaire via Schola ULB, et participation active a la vie associative de l\'EPHEC.',
+      fr: 'Accompagnement d\'étudiants internationaux, soutien scolaire via Schola ULB, et participation active à la vie associative de l\'EPHEC.',
       en: 'Support for international students, tutoring via Schola ULB, and active participation in EPHEC\'s student associations.',
       nl: 'Begeleiding van internationale studenten, bijles via Schola ULB, en actieve deelname aan het studentenleven van EPHEC.',
     },
@@ -86,20 +92,20 @@ const education = [
   {
     id: 'edu-0',
     degree: {
-      fr: 'Bachelier de specialisation en Technologies de la Sante',
+      fr: 'Bachelier de spécialisation en Technologies de la Santé',
       en: 'Specialization Bachelor in Health Technologies',
       nl: 'Specialisatie Bachelor in Gezondheidstechnologieen'
     },
-    school: 'EPHEC & Haute Ecole Leonard de Vinci',
+    school: 'EPHEC & Haute École Léonard de Vinci',
     location: 'Bruxelles, Belgique',
     period: '2025 - 2026',
     upcoming: true,
     description: {
-      fr: 'Formation interdisciplinaire: E-Health, dispositifs (para)medicaux connectes, maintenance des equipements, bio-informatique. Pont entre IT et sciences de la vie.',
-      en: 'Interdisciplinary program: E-Health, connected (para)medical devices, equipment maintenance, bioinformatics. Bridge between IT and life sciences.',
-      nl: 'Interdisciplinair programma: E-Health, verbonden (para)medische apparaten, apparatuuronderhoud, bio-informatica. Brug tussen IT en levenswetenschappen.',
+      fr: 'Interopérabilité santé (HL7/FHIR/DICOM), gestion dossiers patients et GDPR, équipements médicaux, collaboration interdisciplinaire avec médecins et ingénieurs biomédicaux.',
+      en: 'Healthcare interoperability (HL7/FHIR/DICOM), patient records and GDPR, medical equipment, interdisciplinary collaboration with physicians and biomedical engineers.',
+      nl: 'Zorginteroperabiliteit (HL7/FHIR/DICOM), patientendossiers en GDPR, medische apparatuur, interdisciplinaire samenwerking met artsen en biomedisch ingenieurs.',
     },
-    courses: ['E-Health', 'Medical Devices', 'BioInformatics', 'Healthcare IT'],
+    courses: ['HL7/FHIR/DICOM', 'Patient Records & GDPR', 'Medical Equipment', 'Interdisciplinary Collaboration'],
     color: '#EC4899',
   },
   {
@@ -111,12 +117,13 @@ const education = [
     },
     school: 'EPHEC',
     location: 'Louvain-la-Neuve, Belgique',
-    period: '2022 - 2025',
+    period: '2022 - 2026',
     description: {
-      fr: 'Specialisation en developpement logiciel, data engineering, reseaux et systemes embarques. Projets: Varuna (monitoring IoT), QUICK- (telecom).',
-      en: 'Specialization in software development, data engineering, networks and embedded systems. Projects: Varuna (IoT monitoring), QUICK- (telecom).',
-      nl: 'Specialisatie in softwareontwikkeling, data engineering, netwerken en embedded systemen. Projecten: Varuna (IoT monitoring), QUICK- (telecom).',
+      fr: 'Développement logiciel, administration système et réseau, cybersécurité, gestion de projet. Projets : QUICK- (tunnel QUIC en Rust) et Varuna (plateforme d\'analyse d\'images médicales).',
+      en: 'Software development, system and network administration, cybersecurity, project management. Projects: QUICK- (QUIC tunnel in Rust) and Varuna (medical image analysis platform).',
+      nl: 'Softwareontwikkeling, systeem- en netwerkbeheer, cybersecurity, projectmanagement. Projecten: QUICK- (QUIC tunnel in Rust) en Varuna (medisch beeldanalyseplatform).',
     },
+    courses: ['Networking', 'Linux Admin', 'Cybersecurity', 'Java / C#', 'Databases', 'Project Management', 'DevOps'],
     color: '#0EA5E9',
   },
 ];
@@ -173,18 +180,23 @@ const certifications = [
   {
     id: "cert-7",
     name: "GitHub CoPilot for Beginners",
-    issuer: "CopilotCoursera",
+    issuer: "Coursera",
     date: "Mar 2025",
     verifyUrl: "https://coursera.org/verify/UJCAS77WLF6A",
     color: "#8B5CF6",
   },
 ];
 
+// CEFR scale: A1=1, A2=2, B1=3, B2=4, C1=5, C2=6, Native=6
+const cefrToWidth: Record<string, string> = {
+  'A1': '16%', 'A2': '33%', 'B1': '50%', 'B2': '66%', 'C1': '83%', 'C2': '100%',
+};
+
 const languages = [
-  { name: { fr: 'Francais', en: 'French', nl: 'Frans' }, level: { fr: 'Natif', en: 'Native', nl: 'Moedertaal' }, color: '#3B82F6', percent: 100 },
-  { name: { fr: 'Anglais', en: 'English', nl: 'Engels' }, level: 'B2', color: '#10B981', percent: 75 },
-  { name: { fr: 'Neerlandais', en: 'Dutch', nl: 'Nederlands' }, level: 'B1', color: '#F59E0B', percent: 60 },
-  { name: { fr: 'Allemand', en: 'German', nl: 'Duits' }, level: 'A2', color: '#EF4444', percent: 40 },
+  { name: { fr: 'Francais', en: 'French', nl: 'Frans' }, level: { fr: 'Natif', en: 'Native', nl: 'Moedertaal' }, color: '#3B82F6', width: '100%' },
+  { name: { fr: 'Anglais', en: 'English', nl: 'Engels' }, level: 'B2', color: '#10B981', width: cefrToWidth['B2'] },
+  { name: { fr: 'Neerlandais', en: 'Dutch', nl: 'Nederlands' }, level: 'B1', color: '#F59E0B', width: cefrToWidth['B1'] },
+  { name: { fr: 'Allemand', en: 'German', nl: 'Duits' }, level: 'A2', color: '#EF4444', width: cefrToWidth['A2'] },
 ];
 
 export default function CV() {
@@ -226,7 +238,7 @@ export default function CV() {
       {/* Decorative top with gradient */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[var(--tech-blue)] via-[#8B5CF6] to-[#10B981]" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="container-wide relative z-10">
         {/* Header - Newspaper Style */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -490,13 +502,13 @@ export default function CV() {
                         {typeof lang.level === 'string' ? lang.level : lang.level[locale]}
                       </span>
                     </div>
-                    {/* Progress bar */}
+                    {/* CEFR progress bar */}
                     <div className="h-2 bg-[var(--western-brown-dark)]/20 border border-[var(--western-brown-light)] overflow-hidden">
                       <motion.div
                         className="h-full"
                         style={{ backgroundColor: lang.color }}
                         initial={{ width: 0 }}
-                        whileInView={{ width: `${lang.percent}%` }}
+                        whileInView={{ width: lang.width }}
                         transition={{ duration: 1, delay: index * 0.1 }}
                         viewport={{ once: true }}
                       />
@@ -528,6 +540,7 @@ interface CVCardProps {
     upcoming?: boolean;
     tags?: string[];
     courses?: string[];
+    projectLinks?: { label: string; url: string }[];
     color?: string;
   };
   index: number;
@@ -623,6 +636,30 @@ function CVCard({ item, index, locale, isEducation }: CVCardProps) {
           <p className="text-[var(--text-secondary)] text-sm leading-relaxed" style={{ fontFamily: "'IM Fell English', serif" }}>
             {item.description[locale]}
           </p>
+
+          {/* Project Links */}
+          {item.projectLinks && item.projectLinks.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-2">
+              {item.projectLinks.map((link) => (
+                <motion.a
+                  key={link.url}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 px-2 py-0.5 text-xs border transition-all"
+                  style={{
+                    borderColor: accentColor,
+                    color: accentColor,
+                    fontFamily: "'Special Elite', monospace",
+                  }}
+                  whileHover={{ scale: 1.05, backgroundColor: `${accentColor}15` }}
+                >
+                  <ExternalLink className="w-3 h-3" />
+                  {link.label}
+                </motion.a>
+              ))}
+            </div>
+          )}
 
           {/* Tags */}
           {item.tags && item.tags.length > 0 && (
