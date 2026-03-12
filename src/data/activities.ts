@@ -221,14 +221,14 @@ const telecomActivities: Activity[] = [
     hours: 10,
     type: 'competition',
     title: {
-      fr: 'Cyber Security Challenge Belgium 2026 — 11e place',
-      en: 'Cyber Security Challenge Belgium 2026 — 11th place',
-      nl: 'Cyber Security Challenge Belgium 2026 — 11e plaats',
+      fr: 'Cyber Security Challenge Belgium 2026 (11e place)',
+      en: 'Cyber Security Challenge Belgium 2026 (11th place)',
+      nl: 'Cyber Security Challenge Belgium 2026 (11e plaats)',
     },
     description: {
-      fr: 'Plus grande compétition de cybersécurité de Belgique (1 000+ participants, 30+ entreprises partenaires). Qualifications en ligne (jeopardy CTF solo) puis finale sur site à Bruxelles. Épreuves : cryptographie, reverse engineering, pwn, web, forensics, programmation, hardware. 11e place — qualifié pour la sélection Team Red Daemon (équipe nationale ECSC Europe).',
-      en: 'Belgium\'s largest cybersecurity competition (1,000+ participants, 30+ partner companies). Online qualifiers (solo jeopardy CTF) then on-site finals in Brussels. Challenges: cryptography, reverse engineering, pwn, web, forensics, programming, hardware. 11th place — qualified for Team Red Daemon selection (national ECSC Europe team).',
-      nl: 'Grootste cybersecuritycompetitie van België (1.000+ deelnemers, 30+ partnersbedrijven). Online kwalificaties (solo jeopardy CTF) en finale op locatie in Brussel. Uitdagingen: cryptografie, reverse engineering, pwn, web, forensics, programmering, hardware. 11e plaats — gekwalificeerd voor Team Red Daemon selectie (nationaal ECSC Europe team).',
+      fr: 'Plus grande compétition de cybersécurité de Belgique (1 000+ participants, 30+ entreprises partenaires). Qualifications en ligne (jeopardy CTF solo) puis finale sur site à Bruxelles. Épreuves : cryptographie, reverse engineering, pwn, web, forensics, programmation, hardware. 11e place, qualifié pour la sélection Team Red Daemon (équipe nationale ECSC Europe).',
+      en: 'Belgium\'s largest cybersecurity competition (1,000+ participants, 30+ partner companies). Online qualifiers (solo jeopardy CTF) then on-site finals in Brussels. Challenges: cryptography, reverse engineering, pwn, web, forensics, programming, hardware. 11th place, qualified for Team Red Daemon selection (national ECSC Europe team).',
+      nl: 'Grootste cybersecuritycompetitie van België (1.000+ deelnemers, 30+ partnersbedrijven). Online kwalificaties (solo jeopardy CTF) en finale op locatie in Brussel. Uitdagingen: cryptografie, reverse engineering, pwn, web, forensics, programmering, hardware. 11e plaats, gekwalificeerd voor Team Red Daemon selectie (nationaal ECSC Europe team).',
     },
     reflection: {
       fr: 'Ce challenge m\'a confronté à des problèmes de sécurité réels sous pression : analyser un binaire, exploiter une vulnérabilité web, casser un chiffrement, le tout en temps limité. La 11e place sur 1 000+ participants valide une compétence transversale : la sécurité n\'est pas un domaine à part, c\'est une dimension de tout système que je construis.',

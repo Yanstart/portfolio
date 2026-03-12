@@ -30,6 +30,7 @@ import {
   Star,
   ChevronLeft,
   ChevronRight,
+  Swords,
 } from 'lucide-react';
 import { activitiesData, activityTypes, themes, type Activity } from '@/data/activities';
 
@@ -38,7 +39,7 @@ const ITEMS_PER_PAGE = 6; // 2 rows of 3
 // Icon mapping for activity types
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Trophy, BookOpen, Mic, Building2, Users, Landmark,
-  Rocket, Award, GraduationCap, Heart, Sun, Handshake, Briefcase,
+  Rocket, Award, GraduationCap, Heart, Sun, Handshake, Briefcase, Swords,
 };
 
 // Icon mapping for themes
@@ -194,7 +195,7 @@ export default function Activities() {
             >
               All types
             </button>
-            {activityTypeKeys.slice(0, 6).map((key) => {
+            {activityTypeKeys.map((key) => {
               const typeInfo = activityTypes[key];
               const IconComponent = iconMap[typeInfo.lucideIcon];
               return (

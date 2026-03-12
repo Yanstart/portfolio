@@ -19,9 +19,9 @@ const professionalProjectText = {
   fr: {
     vision: "Je conçois des systèmes informatisés afin de délivrer de la valeur",
     intro:
-      "J'aime comprendre les systèmes en profondeur avant d'en concevoir de nouveaux. C'est ce qui m'a amené à construire un accélérateur de trafic satellite chez neXat et une plateforme d'analyse d'images au CHU UCL Namur — deux domaines différents, même approche. Ma formation en informatique m'a donné la rigueur technique : architecture système, réseaux, programmation. Ma spécialisation en technologies de la santé y a ajouté la conformité réglementaire (RGPD), la gestion des risques, et la capacité à travailler avec des profils aussi divers que leur paradigme de travail.",
+      "J'aime comprendre les systèmes en profondeur avant d'en concevoir de nouveaux. C'est ce qui m'a amené à construire un accélérateur de trafic satellite chez neXat et une plateforme d'analyse d'images au CHU UCL Namur. Deux domaines différents, même approche. Ma formation en informatique m'a donné la rigueur technique : architecture système, réseaux, programmation. Ma spécialisation en technologies de la santé y a ajouté la conformité réglementaire (RGPD), la gestion des risques, et la capacité à travailler avec des profils aussi divers que leur paradigme de travail.",
     shortTerm:
-      "Consolider mon expertise à travers des projets critiques délivrant un bénéfice concret — comme ceux chez neXat et au CHU UCL Namur.",
+      "Consolider mon expertise à travers des projets critiques délivrant un bénéfice concret, comme ceux chez neXat et au CHU UCL Namur.",
     mediumTerm:
       "Rejoindre une équipe d'ingénierie travaillant sur de l'infrastructure critique. Accumuler l'expérience terrain et la crédibilité technique.",
     longTerm:
@@ -30,9 +30,9 @@ const professionalProjectText = {
   en: {
     vision: "I design IT systems to deliver value",
     intro:
-      "I like to understand systems deeply before I design new ones. That's what led me to build a satellite traffic accelerator at neXat and an image analysis platform at CHU UCL Namur — two different domains, same approach. My IT training gave me the technical foundation: systems architecture, networking, programming. My health technologies specialization added regulatory compliance (GDPR), risk management, and the ability to work with profiles as diverse as their work paradigms.",
+      "I like to understand systems deeply before I design new ones. That's what led me to build a satellite traffic accelerator at neXat and an image analysis platform at CHU UCL Namur. Two different domains, same approach. My IT training gave me the technical foundation: systems architecture, networking, programming. My health technologies specialization added regulatory compliance (GDPR), risk management, and the ability to work with profiles as diverse as their work paradigms.",
     shortTerm:
-      "Consolidate my expertise through critical projects delivering tangible benefits — such as those at neXat and CHU UCL Namur.",
+      "Consolidate my expertise through critical projects delivering tangible benefits, such as those at neXat and CHU UCL Namur.",
     mediumTerm:
       "Join an engineering team working on critical infrastructure. Build field experience and technical credibility.",
     longTerm:
@@ -41,9 +41,9 @@ const professionalProjectText = {
   nl: {
     vision: "Ik ontwerp IT-systemen om waarde te leveren",
     intro:
-      "Ik begrijp systemen graag in de diepte voordat ik nieuwe ontwerp. Dat heeft me ertoe gebracht een satellietverkeersversneller te bouwen bij neXat en een beeldanalyseplatform bij CHU UCL Namur — twee verschillende domeinen, dezelfde aanpak. Mijn IT-opleiding gaf me de technische basis: systeemarchitectuur, netwerken, programmeren. Mijn specialisatie gezondheidstechnologieën voegde regelgevende compliance (GDPR), risicobeheer en het vermogen om samen te werken met profielen zo divers als hun werkparadigma's toe.",
+      "Ik begrijp systemen graag in de diepte voordat ik nieuwe ontwerp. Dat heeft me ertoe gebracht een satellietverkeersversneller te bouwen bij neXat en een beeldanalyseplatform bij CHU UCL Namur. Twee verschillende domeinen, dezelfde aanpak. Mijn IT-opleiding gaf me de technische basis: systeemarchitectuur, netwerken, programmeren. Mijn specialisatie gezondheidstechnologieën voegde regelgevende compliance (GDPR), risicobeheer en het vermogen om samen te werken met profielen zo divers als hun werkparadigma's toe.",
     shortTerm:
-      "Mijn expertise consolideren via kritieke projecten die concreet voordeel opleveren — zoals die bij neXat en CHU UCL Namur.",
+      "Mijn expertise consolideren via kritieke projecten die concreet voordeel opleveren, zoals die bij neXat en CHU UCL Namur.",
     mediumTerm:
       "Een engineering team versterken dat werkt aan kritieke infrastructuur. Praktijkervaring en technische geloofwaardigheid opbouwen.",
     longTerm:
