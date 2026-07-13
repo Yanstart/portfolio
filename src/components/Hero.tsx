@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
-import { ArrowDown, Download, Github, Linkedin, Mail, Star } from 'lucide-react';
+import { ArrowDown, Download, Github, Linkedin, Mail, Star, Crosshair } from 'lucide-react';
 import Image from 'next/image';
 
 // Typewriter effect hook
@@ -109,6 +109,16 @@ export default function Hero() {
                 </p>
               </div>
 
+              {/* Availability stamp */}
+              <div className="mt-5 flex justify-center">
+                <div
+                  className="rotate-[-4deg] border-4 border-[var(--western-red)] text-[var(--western-red)] px-4 py-1.5 uppercase tracking-[0.12em] text-sm font-bold opacity-90"
+                  style={{ fontFamily: "'Special Elite', monospace" }}
+                >
+                  {t('stamp')}
+                </div>
+              </div>
+
               {/* Decorative bottom border */}
               <div className="mt-6 pt-4 border-t border-dashed border-[var(--western-brown-light)]">
                 <p className="text-center text-xs uppercase tracking-[0.2em] text-[var(--text-muted)]" style={{ fontFamily: "'Special Elite', monospace" }}>
@@ -197,6 +207,15 @@ export default function Hero() {
                 <Download className="w-4 h-4" />
                 {t('downloadCV')}
               </a>
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new Event('open-duel'))}
+                className="px-6 py-3 border-2 border-[var(--western-red)] bg-[var(--card-bg)]/80 backdrop-blur-sm text-[var(--western-red)] uppercase tracking-wider hover:bg-[var(--western-red)] hover:text-[var(--western-cream)] transition-all flex items-center gap-2"
+                style={{ fontFamily: "'Cinzel', serif" }}
+              >
+                <Crosshair className="w-4 h-4" />
+                {t('duelCta')}
+              </button>
             </motion.div>
 
             {/* Social Links - Sheriff Badge Style */}

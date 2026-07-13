@@ -17,35 +17,35 @@ import { strengthsData, weaknessesData } from "@/data/skills";
 
 const professionalProjectText = {
   fr: {
-    vision: "Je conçois des systèmes informatisés afin de délivrer de la valeur",
+    vision: "Du pilotage de systèmes au pilotage de projets, de la qualité et de la performance",
     intro:
-      "J'aime comprendre les systèmes en profondeur avant d'en concevoir de nouveaux. C'est ce qui m'a amené à construire un accélérateur de trafic satellite chez neXat et une plateforme d'analyse d'images au CHU UCL Namur. Deux domaines différents, même approche. Ma formation en informatique m'a donné la rigueur technique : architecture système, réseaux, programmation. Ma spécialisation en technologies de la santé y a ajouté la conformité réglementaire (RGPD), la gestion des risques, et la capacité à travailler avec des profils aussi divers que leur paradigme de travail.",
+      "J'aime comprendre les systèmes en profondeur avant d'agir. C'est ce qui m'a mené à livrer deux systèmes en production réelle : Varuna, plateforme d'imagerie médicale utilisée par des pathologistes au CHU UCL Namur, et la mise en service de la plateforme satellite de neXat. Ma spécialisation en Technologies de la Santé y a ajouté le contexte qui manquait : normes pharma (GMP, GAMP 5, 21 CFR Part 11), gestion des risques (ISO 14971), maintenance d'équipements et collaboration quotidienne avec des cliniciens. En mai 2026, j'ai remporté CyberWars à Porto avec AEGIS-Rx, un pare-feu IA pour données réglementées, aujourd'hui développé comme un vrai produit : dossier de validation IQ/OQ/PQ, audit trail ALCOA+, 13 change controls. Ces projets m'ont appris plus que le code : cadrer un besoin avec des experts métier, tenir des exigences qualité, piloter par indicateurs et livrer en environnement critique.",
     shortTerm:
-      "Consolider mon expertise à travers des projets critiques délivrant un bénéfice concret, comme ceux chez neXat et au CHU UCL Namur.",
+      "Décrocher une alternance en qualité, production ou business (septembre 2026) dans le cadre d'un master en alternance, et transformer mes réflexes de terrain en méthode professionnelle.",
     mediumTerm:
-      "Rejoindre une équipe d'ingénierie travaillant sur de l'infrastructure critique. Accumuler l'expérience terrain et la crédibilité technique.",
+      "Piloter des projets et la performance dans un environnement réglementé (pharma, santé, industrie) : KPIs, change control, coordination de parties prenantes.",
     longTerm:
       "Lancer mon activité de conseil et former des équipes autour d'une vision : exploiter les forces de l'informatique et les mettre au service d'autres métiers.",
   },
   en: {
-    vision: "I design IT systems to deliver value",
+    vision: "From managing systems to managing projects, quality and performance",
     intro:
-      "I like to understand systems deeply before I design new ones. That's what led me to build a satellite traffic accelerator at neXat and an image analysis platform at CHU UCL Namur. Two different domains, same approach. My IT training gave me the technical foundation: systems architecture, networking, programming. My health technologies specialization added regulatory compliance (GDPR), risk management, and the ability to work with profiles as diverse as their work paradigms.",
+      "I like to understand systems deeply before I act. That led me to ship two systems to real production: Varuna, a medical imaging platform used by pathologists at CHU UCL Namur, and the commissioning of neXat's satellite service platform. My Health Technologies specialization added the context I was missing: pharma standards (GMP, GAMP 5, 21 CFR Part 11), risk management (ISO 14971), equipment maintenance and daily collaboration with clinicians. In May 2026 I won CyberWars in Porto with AEGIS-Rx, an AI firewall for regulated data, now developed as a real product: IQ/OQ/PQ validation dossier, ALCOA+ audit trail, 13 change controls. These projects taught me more than code: framing needs with domain experts, meeting quality requirements, managing by indicators and delivering in critical environments.",
     shortTerm:
-      "Consolidate my expertise through critical projects delivering tangible benefits, such as those at neXat and CHU UCL Namur.",
+      "Land a work-study contract in quality, production or business (September 2026) as part of a work-study master, and turn my field reflexes into professional method.",
     mediumTerm:
-      "Join an engineering team working on critical infrastructure. Build field experience and technical credibility.",
+      "Manage projects and performance in a regulated environment (pharma, health, industry): KPIs, change control, stakeholder coordination.",
     longTerm:
       "Launch my own consultancy and build teams around a vision: leverage the strengths of IT and put them at the service of other disciplines.",
   },
   nl: {
-    vision: "Ik ontwerp IT-systemen om waarde te leveren",
+    vision: "Van systeembeheer naar project-, kwaliteits- en performantiebeheer",
     intro:
-      "Ik begrijp systemen graag in de diepte voordat ik nieuwe ontwerp. Dat heeft me ertoe gebracht een satellietverkeersversneller te bouwen bij neXat en een beeldanalyseplatform bij CHU UCL Namur. Twee verschillende domeinen, dezelfde aanpak. Mijn IT-opleiding gaf me de technische basis: systeemarchitectuur, netwerken, programmeren. Mijn specialisatie gezondheidstechnologieën voegde regelgevende compliance (GDPR), risicobeheer en het vermogen om samen te werken met profielen zo divers als hun werkparadigma's toe.",
+      "Ik begrijp systemen graag in de diepte voordat ik handel. Zo leverde ik twee systemen in echte productie: Varuna, een medisch beeldvormingsplatform gebruikt door pathologen bij CHU UCL Namur, en de ingebruikname van het satellietplatform van neXat. Mijn specialisatie Gezondheidstechnologieën voegde de ontbrekende context toe: farmanormen (GMP, GAMP 5, 21 CFR Part 11), risicobeheer (ISO 14971), onderhoud van apparatuur en dagelijkse samenwerking met clinici. In mei 2026 won ik CyberWars in Porto met AEGIS-Rx, een AI-firewall voor gereguleerde data, nu ontwikkeld als een echt product: IQ/OQ/PQ-validatiedossier, ALCOA+ audit trail, 13 change controls. Deze projecten leerden me meer dan code: behoeften kaderen met domeinexperts, kwaliteitseisen halen, sturen op indicatoren en leveren in kritieke omgevingen.",
     shortTerm:
-      "Mijn expertise consolideren via kritieke projecten die concreet voordeel opleveren, zoals die bij neXat en CHU UCL Namur.",
+      "Een werk-leertraject vinden in kwaliteit, productie of business (september 2026) binnen een alternerende master, en mijn veldreflexen omzetten in professionele methode.",
     mediumTerm:
-      "Een engineering team versterken dat werkt aan kritieke infrastructuur. Praktijkervaring en technische geloofwaardigheid opbouwen.",
+      "Projecten en performantie beheren in een gereguleerde omgeving (farma, gezondheid, industrie): KPI's, change control, stakeholdercoördinatie.",
     longTerm:
       "Mijn eigen adviesbureau starten en teams vormen rond een visie: de kracht van IT benutten en ten dienste stellen van andere disciplines.",
   },

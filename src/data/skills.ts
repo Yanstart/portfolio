@@ -69,6 +69,21 @@ export const skillsData: SkillCategory[] = [
     ],
   },
   {
+    id: 'quality',
+    skills: [
+      { name: 'GMP / cGMP' },
+      { name: 'GxP' },
+      { name: 'ICH Q9 / Q10' },
+      { name: 'GAMP 5' },
+      { name: '21 CFR Part 11' },
+      { name: 'ISO 14971' },
+      { name: 'ISO 13485' },
+      { name: 'IEC 62304' },
+      { name: 'Change Control' },
+      { name: 'ALCOA+ Audit Trail' },
+    ],
+  },
+  {
     id: 'tools',
     skills: [
       { name: 'VS Code' },

@@ -10,14 +10,17 @@
     "project": "Projet Pro",
     "skills": "Compétences",
     "activities": "Activités",
-    "contact": "Contact"
+    "contact": "Contact",
+    "wanted": "Avis de recherche"
   },
   "hero": {
     "greeting": "Bonjour, je suis",
-    "title": "Développeur Système & Full-Stack",
-    "subtitle": "Systèmes critiques et infrastructure",
-    "cta": "Voir mon travail",
-    "downloadCV": "Télécharger CV"
+    "title": "Gestion de projet · Qualité & Santé Tech",
+    "subtitle": "Deux systèmes livrés en production, dans des environnements où l'erreur ne pardonne pas : imagerie médicale au CHU UCL Namur, télécoms satellitaires chez neXat. Aujourd'hui je cherche une alternance (septembre 2026) pour passer du pilotage de systèmes au pilotage de projets, de la qualité et de la performance.",
+    "cta": "Voir mes projets",
+    "downloadCV": "Télécharger le CV",
+    "stamp": "RECHERCHE ALTERNANCE — SEPT. 2026",
+    "duelCta": "Défie-moi en duel"
   },
   "about": {
     "title": "À propos de moi",
@@ -41,7 +44,8 @@
       "healthtech": "Tech Santé",
       "ml": "ML & Data",
       "security": "Cybersécurité",
-      "compliance": "Normes & Conformité"
+      "compliance": "Normes & Conformité",
+      "quality": "Qualité & Réglementaire (Pharma)"
     }
   },
   "activities": {
@@ -78,5 +82,41 @@
     "fr": "Français",
     "en": "English",
     "nl": "Nederlands"
+  },
+  "wanted": {
+    "title": "Avis de recherche",
+    "subtitle": "Mes projets, morts ou vifs — prime affichée en résultats mesurables",
+    "bounty": "PRIME",
+    "viewCode": "Voir le code",
+    "private": "Dossier confidentiel — accès sur demande"
+  },
+  "duel": {
+    "nav": "Duel",
+    "title": "Duel au soleil couchant",
+    "intro": "Trois adversaires t'attendent devant le saloon. Attends la cloche… puis dégaine plus vite qu'eux. Un tir avant la cloche et tu es disqualifié.",
+    "start": "Commencer le duel",
+    "wait": "Attends la cloche…",
+    "draw": "DÉGAINE !",
+    "tooSoon": "Trop tôt, cowboy. Tu as dégainé avant la cloche.",
+    "youWin": "Touché ! {ms} ms",
+    "youLose": "Il t'a eu… {ms} ms contre {oms} ms",
+    "best": "Meilleur tir",
+    "next": "Adversaire suivant",
+    "retry": "Rejouer",
+    "victory": "La ville est à toi. Trois duels, trois victoires.",
+    "victorySub": "Ce genre de réflexes, ça s'embauche. Parlons-en.",
+    "contact": "Me contacter",
+    "close": "Fermer",
+    "round": "Duel {n}/3",
+    "defeat": "La poussière retombe… entraîne-toi et reviens.",
+    "opp1": "Le Bug",
+    "opp2": "La Deadline",
+    "opp3": "Le Code Légataire"
+  },
+  "counters": {
+    "years": "années de code",
+    "systems": "systèmes en production",
+    "tests": "tests Rust sur AEGIS-Rx",
+    "langs": "langues parlées"
   }
 }

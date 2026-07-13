@@ -10,14 +10,17 @@
     "project": "Career Goals",
     "skills": "Skills",
     "activities": "Activities",
-    "contact": "Contact"
+    "contact": "Contact",
+    "wanted": "Wanted"
   },
   "hero": {
     "greeting": "Hello, I am",
-    "title": "Systems & Full-Stack Developer",
-    "subtitle": "Critical systems and infrastructure",
+    "title": "Project Management · Quality & Health Tech",
+    "subtitle": "Two systems shipped to production, in environments where mistakes are not forgiven: medical imaging at CHU UCL Namur, satellite telecoms at neXat. I am now looking for a work-study contract (September 2026) to move from managing systems to managing projects, quality and performance.",
     "cta": "See my work",
-    "downloadCV": "Download Resume"
+    "downloadCV": "Download Resume",
+    "stamp": "SEEKING WORK-STUDY — SEPT. 2026",
+    "duelCta": "Challenge me to a duel"
   },
   "about": {
     "title": "About Me",
@@ -41,7 +44,8 @@
       "healthtech": "Health Tech",
       "ml": "ML & Data",
       "security": "Cybersecurity",
-      "compliance": "Standards & Compliance"
+      "compliance": "Standards & Compliance",
+      "quality": "Quality & Regulatory (Pharma)"
     }
   },
   "activities": {
@@ -78,5 +82,41 @@
     "fr": "Francais",
     "en": "English",
     "nl": "Nederlands"
+  },
+  "wanted": {
+    "title": "Wanted Board",
+    "subtitle": "My projects, dead or alive — bounty displayed in measurable results",
+    "bounty": "BOUNTY",
+    "viewCode": "View code",
+    "private": "Classified file — access on request"
+  },
+  "duel": {
+    "nav": "Duel",
+    "title": "Duel at sundown",
+    "intro": "Three outlaws wait for you outside the saloon. Wait for the bell… then draw faster than they do. Shoot before the bell and you are disqualified.",
+    "start": "Start the duel",
+    "wait": "Wait for the bell…",
+    "draw": "DRAW!",
+    "tooSoon": "Too soon, cowboy. You drew before the bell.",
+    "youWin": "Hit! {ms} ms",
+    "youLose": "He got you… {ms} ms against {oms} ms",
+    "best": "Best shot",
+    "next": "Next outlaw",
+    "retry": "Play again",
+    "victory": "The town is yours. Three duels, three wins.",
+    "victorySub": "Reflexes like these deserve a contract. Let's talk.",
+    "contact": "Contact me",
+    "close": "Close",
+    "round": "Duel {n}/3",
+    "defeat": "The dust settles… practice and come back.",
+    "opp1": "The Bug",
+    "opp2": "The Deadline",
+    "opp3": "Legacy Code"
+  },
+  "counters": {
+    "years": "years of code",
+    "systems": "systems in production",
+    "tests": "Rust tests on AEGIS-Rx",
+    "langs": "languages spoken"
   }
 }

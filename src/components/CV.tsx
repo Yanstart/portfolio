@@ -8,14 +8,14 @@ const experiences = [
   {
     id: 'exp-0',
     title: {
-      fr: 'Stagiaire Infrastructure Réseau & Projet QUICK-',
-      en: 'Network Infrastructure Intern & QUICK- Project',
-      nl: 'Stagiair Netwerkinfrastructuur & QUICK- Project'
+      fr: 'Stagiaire Infrastructure — Mise en service & validation de plateforme (+ projet QUICK-)',
+      en: 'Infrastructure Intern — Platform Commissioning & Validation (+ QUICK- project)',
+      nl: 'Stagiair Infrastructuur — Ingebruikname & validatie van platform (+ QUICK- project)'
     },
     company: 'neXat',
     companyUrl: 'https://nexat.be/',
     location: 'Belgique',
-    period: '2025 - Present',
+    period: 'Sep 2025 - Feb 2026',
     description: {
       fr: 'Stage : mise en place de la plateforme satellite neXat (Traffic Shaping, OpenShift, Cisco CSR). Projet : conception d\'un tunnel TCP-over-QUIC en Rust qui accélère le trafic là où les solutions classiques sont aveugles au chiffrement QUIC.',
       en: 'Internship: setup of neXat satellite platform (Traffic Shaping, OpenShift, Cisco CSR). Project: TCP-over-QUIC tunnel in Rust that accelerates traffic where traditional solutions are blind to QUIC encryption.',
@@ -31,13 +31,13 @@ const experiences = [
   {
     id: 'exp-1',
     title: {
-      fr: 'Développeur & Projet Varuna',
-      en: 'Developer & Varuna Project',
-      nl: 'Ontwikkelaar & Varuna Project'
+      fr: 'Ingénieur logiciel & Chef de projet Varuna',
+      en: 'Software Engineer & Varuna Project Lead',
+      nl: 'Software Engineer & Varuna Projectleider'
     },
     company: 'CHU UCL Namur',
     location: 'Namur, Belgique',
-    period: 'Feb 2025 - Present',
+    period: 'Feb 2025 - Mar 2026',
     description: {
       fr: 'Plateforme web permettant aux pathologistes de visualiser et analyser des lames histologiques gigapixel directement dans leur navigateur, avec détection automatique, respect du RGPD, et monitoring de production. Collaboration quotidienne avec médecins et radiophysiciens. Démo sur demande (les modèles ML nécessitent un GPU).',
       en: 'Web platform enabling pathologists to view and analyze gigapixel histological slides directly in their browser, with automatic detection, GDPR compliance, and production monitoring. Daily collaboration with physicians and radiophysicists. Demo available on request (ML models require GPU).',
@@ -90,6 +90,25 @@ const experiences = [
 
 const education = [
   {
+    id: 'edu-master',
+    degree: {
+      fr: 'Master en alternance — Management & Transformation digitale ou Gestion de production',
+      en: 'Work-study Master — Management & Digital Transformation or Production Management',
+      nl: 'Alternerende Master — Management & Digitale Transformatie of Productiebeheer'
+    },
+    school: 'Belgique',
+    location: 'Belgique',
+    period: '2026 - 2028',
+    upcoming: true,
+    description: {
+      fr: 'Rentrée septembre 2026, en alternance avec un contrat en entreprise (qualité, production ou business). Convention tripartite école–étudiant–entreprise.',
+      en: 'Starting September 2026, combined with an in-company contract (quality, production or business). Tripartite agreement school–student–company.',
+      nl: 'Start september 2026, gecombineerd met een bedrijfscontract (kwaliteit, productie of business). Tripartiete overeenkomst school–student–bedrijf.',
+    },
+    courses: ['Project Management', 'Business Process Management', 'Digital Transformation', 'Performance & KPIs'],
+    color: '#C9A227',
+  },
+  {
     id: 'edu-0',
     degree: {
       fr: 'Bachelier de spécialisation en Technologies de la Santé',
@@ -99,11 +118,10 @@ const education = [
     school: 'EPHEC & Haute École Léonard de Vinci',
     location: 'Bruxelles, Belgique',
     period: '2025 - 2026',
-    upcoming: true,
     description: {
-      fr: 'Interopérabilité santé (HL7/FHIR/DICOM), gestion dossiers patients et GDPR, équipements médicaux, collaboration interdisciplinaire avec médecins et ingénieurs biomédicaux.',
-      en: 'Healthcare interoperability (HL7/FHIR/DICOM), patient records and GDPR, medical equipment, interdisciplinary collaboration with physicians and biomedical engineers.',
-      nl: 'Zorginteroperabiliteit (HL7/FHIR/DICOM), patientendossiers en GDPR, medische apparatuur, interdisciplinaire samenwerking met artsen en biomedisch ingenieurs.',
+      fr: 'Normes et règlements (10 ECTS), maintenance et contrôle des équipements médicaux, e-santé et dispositifs connectés, interopérabilité (HL7/FHIR/DICOM), gestion des risques, collaboration interdisciplinaire. Échange international : CyberWars (Erasmus+, Porto) — vainqueur de la compétition finale.',
+      en: 'Regulations and standards (10 ECTS), maintenance and control of medical equipment, e-health and connected devices, interoperability (HL7/FHIR/DICOM), risk management, interdisciplinary collaboration. International exchange: CyberWars (Erasmus+, Porto) — winner of the final competition.',
+      nl: 'Normen en regelgeving (10 ECTS), onderhoud en controle van medische apparatuur, e-health en verbonden apparaten, interoperabiliteit (HL7/FHIR/DICOM), risicobeheer, interdisciplinaire samenwerking. Internationale uitwisseling: CyberWars (Erasmus+, Porto) — winnaar van de eindcompetitie.',
     },
     courses: ['HL7/FHIR/DICOM', 'Patient Records & GDPR', 'Medical Equipment', 'Interdisciplinary Collaboration'],
     color: '#EC4899',
@@ -119,9 +137,9 @@ const education = [
     location: 'Louvain-la-Neuve, Belgique',
     period: '2022 - 2026',
     description: {
-      fr: 'Développement logiciel, administration système et réseau, cybersécurité, gestion de projet. Projets : QUICK- (tunnel QUIC en Rust) et Varuna (plateforme d\'analyse d\'images médicales).',
-      en: 'Software development, system and network administration, cybersecurity, project management. Projects: QUICK- (QUIC tunnel in Rust) and Varuna (medical image analysis platform).',
-      nl: 'Softwareontwikkeling, systeem- en netwerkbeheer, cybersecurity, projectmanagement. Projecten: QUICK- (QUIC tunnel in Rust) en Varuna (medisch beeldanalyseplatform).',
+      fr: 'Développement logiciel, administration système et réseau, cybersécurité, gestion de projet. Échange académique à l\'International University (VNU) de Ho Chi Minh City, Vietnam. Summer school React Native (2024) avec Seneca Polytechnic (Canada) et Business Academy Aarhus (Danemark).',
+      en: 'Software development, system and network administration, cybersecurity, project management. Academic exchange at the International University (VNU), Ho Chi Minh City, Vietnam. React Native summer school (2024) with Seneca Polytechnic (Canada) and Business Academy Aarhus (Denmark).',
+      nl: 'Softwareontwikkeling, systeem- en netwerkbeheer, cybersecurity, projectmanagement. Academische uitwisseling aan de International University (VNU), Ho Chi Minh City, Vietnam. React Native summer school (2024) met Seneca Polytechnic (Canada) en Business Academy Aarhus (Denemarken).',
     },
     courses: ['Networking', 'Linux Admin', 'Cybersecurity', 'Java / C#', 'Databases', 'Project Management', 'DevOps'],
     color: '#0EA5E9',

@@ -21,6 +21,7 @@ export default function Navbar() {
   const navItems = [
     { href: '#home', label: t('home') },
     { href: '#about', label: t('about') },
+    { href: '#wanted', label: t('wanted') },
     { href: '#skills', label: t('skills') },
     { href: '#activities', label: t('activities') },
     { href: '#cv', label: t('cv') },

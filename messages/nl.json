@@ -10,14 +10,17 @@
     "project": "Carriere",
     "skills": "Vaardigheden",
     "activities": "Activiteiten",
-    "contact": "Contact"
+    "contact": "Contact",
+    "wanted": "Gezocht"
   },
   "hero": {
     "greeting": "Hallo, ik ben",
-    "title": "Systeem- & Full-Stack Ontwikkelaar",
-    "subtitle": "Kritieke systemen en infrastructuur",
+    "title": "Projectmanagement · Kwaliteit & Health Tech",
+    "subtitle": "Twee systemen in productie geleverd, in omgevingen waar fouten niet vergeven worden: medische beeldvorming bij CHU UCL Namur, satelliettelecom bij neXat. Ik zoek nu een werk-leertraject (september 2026) om van systeembeheer naar project-, kwaliteits- en performantiebeheer te gaan.",
     "cta": "Bekijk mijn werk",
-    "downloadCV": "CV Downloaden"
+    "downloadCV": "Download CV",
+    "stamp": "ZOEKT WERK-LEERTRAJECT — SEPT. 2026",
+    "duelCta": "Daag me uit voor een duel"
   },
   "about": {
     "title": "Over mij",
@@ -41,7 +44,8 @@
       "healthtech": "Gezondheidstech",
       "ml": "ML & Data",
       "security": "Cybersecurity",
-      "compliance": "Normen & Compliance"
+      "compliance": "Normen & Compliance",
+      "quality": "Kwaliteit & Regelgeving (Farma)"
     }
   },
   "activities": {
@@ -78,5 +82,41 @@
     "fr": "Francais",
     "en": "English",
     "nl": "Nederlands"
+  },
+  "wanted": {
+    "title": "Gezocht",
+    "subtitle": "Mijn projecten, dood of levend — premie in meetbare resultaten",
+    "bounty": "PREMIE",
+    "viewCode": "Bekijk code",
+    "private": "Vertrouwelijk dossier — toegang op aanvraag"
+  },
+  "duel": {
+    "nav": "Duel",
+    "title": "Duel bij zonsondergang",
+    "intro": "Drie schurken wachten op je voor de saloon. Wacht op de bel… en trek sneller dan zij. Schiet je vóór de bel, dan ben je gediskwalificeerd.",
+    "start": "Start het duel",
+    "wait": "Wacht op de bel…",
+    "draw": "TREK!",
+    "tooSoon": "Te vroeg, cowboy. Je trok vóór de bel.",
+    "youWin": "Raak! {ms} ms",
+    "youLose": "Hij had je… {ms} ms tegen {oms} ms",
+    "best": "Beste schot",
+    "next": "Volgende schurk",
+    "retry": "Opnieuw",
+    "victory": "De stad is van jou. Drie duels, drie overwinningen.",
+    "victorySub": "Zulke reflexen verdienen een contract. Laten we praten.",
+    "contact": "Contacteer me",
+    "close": "Sluiten",
+    "round": "Duel {n}/3",
+    "defeat": "Het stof daalt neer… oefen en kom terug.",
+    "opp1": "De Bug",
+    "opp2": "De Deadline",
+    "opp3": "Legacy Code"
+  },
+  "counters": {
+    "years": "jaar code",
+    "systems": "systemen in productie",
+    "tests": "Rust-tests op AEGIS-Rx",
+    "langs": "gesproken talen"
   }
 }

@@ -26,31 +26,41 @@ const imFell = IM_Fell_English({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://noel-yando-fotso.dev'),
+  metadataBase: new URL('https://yanstart.dev'),
   title: {
-    default: 'Noel Junior Yando Fotso | Data Engineer & Future Nanotechnologist',
+    default: 'Noel Junior Yando Fotso | Quality & Health Tech Project Management',
     template: '%s | Noel Yando Fotso'
   },
-  description: 'Portfolio de Noel Junior Yando Fotso - Data Engineer passionne par les technologies du vivant et la nanotechnologie. Specialise en pipelines de donnees, imagerie medicale et systemes embarques.',
+  description: 'Portfolio of Noel Junior Yando Fotso. Two systems shipped to production (medical imaging at CHU UCL Namur, satellite telecoms at neXat). CyberWars 2026 winner with AEGIS-Rx. Seeking a work-study contract, September 2026.',
   keywords: [
-    'Data Engineer', 'Nanotechnology', 'BioInformatics', 'Python', 'TypeScript',
-    'Machine Learning', 'Medical Imaging', 'IoT', 'Full Stack Developer',
-    'EPHEC', 'Belgium', 'Noel Yando Fotso'
+    'Project Management', 'Quality Assurance', 'Pharma Compliance', 'GAMP 5', '21 CFR Part 11',
+    'Health Tech', 'Medical Imaging', 'KPI', 'Rust', 'Python', 'TypeScript',
+    'EPHEC', 'Belgium', 'Work-study', 'Alternance', 'Noel Yando Fotso'
   ],
   authors: [{ name: 'Noel Junior Yando Fotso' }],
   creator: 'Noel Junior Yando Fotso',
   openGraph: {
     type: 'website',
+    url: 'https://yanstart.dev',
     locale: 'fr_BE',
     alternateLocale: ['en_US', 'nl_BE'],
-    title: 'Noel Junior Yando Fotso | Data Engineer',
-    description: 'Portfolio - Data Engineering, Medical Imaging & Nanotechnology',
+    title: 'Noel Junior Yando Fotso | Quality & Health Tech Project Management',
+    description: 'Two systems shipped to production. CyberWars 2026 winner. Seeking a work-study contract, September 2026.',
     siteName: 'Portfolio Noel Yando Fotso',
+    images: [
+      {
+        url: '/medias/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Noel Junior Yando Fotso - Portfolio',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Noel Junior Yando Fotso | Data Engineer',
-    description: 'Portfolio - Data Engineering, Medical Imaging & Nanotechnology',
+    title: 'Noel Junior Yando Fotso | Quality & Health Tech Project Management',
+    description: 'Two systems shipped to production. CyberWars 2026 winner. Seeking a work-study contract, September 2026.',
+    images: ['/medias/og-image.png'],
   },
   robots: {
     index: true,

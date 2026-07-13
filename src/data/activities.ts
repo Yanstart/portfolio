@@ -149,6 +149,30 @@ const medicalImagingActivities: Activity[] = [
     date: '2024-05',
     tags: ['Biopython', 'Genomics', 'NCBI', 'Data Analysis'],
   },
+  {
+    id: 'med-bridge',
+    theme: { fr: 'Imagerie Medicale & BioTech', en: 'Medical Imaging & BioTech', nl: 'Medische Beeldvorming & BioTech' },
+    hours: 8,
+    type: 'projet',
+    title: {
+      fr: 'Bridge - Passerelle d\'interoperabilite pour dispositifs medicaux legacy',
+      en: 'Bridge - Interoperability Gateway for Legacy Medical Devices',
+      nl: 'Bridge - Interoperabiliteitsgateway voor Legacy Medische Apparaten',
+    },
+    description: {
+      fr: 'Passerelle edge qui traduit les trames proprietaires de dispositifs medicaux anciens (RS-232, BLE, HL7v2, exports fichiers) en ressources FHIR R4, pour connecter l\'ancien materiel a un systeme d\'information hospitalier moderne. Projet de la specialisation Technologies de la Sante.',
+      en: 'Edge gateway that translates proprietary frames from legacy medical devices (RS-232, BLE, HL7v2, file exports) into FHIR R4 resources, connecting old equipment to a modern hospital information system. Health Technologies specialization project.',
+      nl: 'Edge-gateway die propriëtaire frames van legacy medische apparaten (RS-232, BLE, HL7v2, bestandsexports) vertaalt naar FHIR R4-resources.',
+    },
+    reflection: {
+      fr: 'Bridge m\'a plonge dans la realite du terrain hospitalier : le materiel a 15 ans, les normes evoluent, et la valeur vient de l\'interoperabilite. Comprendre HL7v2 et FHIR en profondeur m\'a donne un langage commun avec les equipes biomedicales.',
+      en: 'Bridge immersed me in hospital field reality: equipment is 15 years old, standards evolve, and value comes from interoperability. Understanding HL7v2 and FHIR in depth gave me a common language with biomedical teams.',
+      nl: 'Bridge dompelde me onder in de realiteit van het ziekenhuis: apparatuur is 15 jaar oud en de waarde komt van interoperabiliteit.',
+    },
+    date: '2026-03',
+    link: 'https://github.com/Yanstart/Bridge',
+    tags: ['FHIR R4', 'HL7v2', 'RS-232', 'BLE', 'Edge', 'Interoperability'],
+  },
 ];
 
 // ============================================
@@ -283,22 +307,22 @@ const iotActivities: Activity[] = [
     hours: 6,
     type: 'projet',
     title: {
-      fr: 'Rubyx - Station Meteo Arduino avec Dashboard',
-      en: 'Rubyx - Arduino Weather Station with Dashboard',
-      nl: 'Rubyx - Arduino Weerstation met Dashboard',
+      fr: 'Rubyx - Robot resolveur de Rubik\'s Cube',
+      en: 'Rubyx - Rubik\'s Cube Solving Robot',
+      nl: 'Rubyx - Rubik\'s Cube Oplossende Robot',
     },
     description: {
-      fr: 'Station meteo connectee basee sur Arduino: capteurs BME280, stockage des donnees sur carte SD, transmission LoRa longue portee, dashboard web temps reel avec graphiques D3.js.',
-      en: 'Connected weather station based on Arduino: BME280 sensors, SD card data storage, long-range LoRa transmission, real-time web dashboard with D3.js charts.',
-      nl: 'Verbonden weerstation gebaseerd op Arduino: BME280 sensoren, SD-kaart gegevensopslag, lange-afstand LoRa transmissie.',
+      fr: 'Robot qui resout un Rubik\'s Cube automatiquement : OpenCV scanne les six faces, l\'algorithme de Kociemba calcule la solution, un Arduino Nano pilote 8 servomoteurs sur un PCB fait maison. Projet d\'equipe realise pendant l\'echange international a l\'International University (VNU), Ho Chi Minh City.',
+      en: 'Robot that solves a Rubik\'s Cube automatically: OpenCV scans the six faces, the Kociemba algorithm computes the solution, an Arduino Nano drives 8 servo motors on a custom PCB. Team project built during the international exchange at International University (VNU), Ho Chi Minh City.',
+      nl: 'Robot die automatisch een Rubik\'s Cube oplost: OpenCV scant de zes vlakken, het Kociemba-algoritme berekent de oplossing, een Arduino Nano stuurt 8 servomotoren op een zelfgemaakte PCB. Teamproject tijdens de internationale uitwisseling aan de International University (VNU), Ho Chi Minh City.',
     },
     reflection: {
-      fr: 'Rubyx m\'a enseigne l\'acquisition de donnees en environnement contraint et la transmission radio basse consommation. La visualisation des donnees meteorologiques en temps reel est une competence directement applicable au monitoring de biosystemes et aux applications de surveillance environnementale.',
-      en: 'Rubyx taught me data acquisition in constrained environments and low-power radio transmission. Real-time weather data visualization is a skill directly applicable to biosystem monitoring and environmental surveillance applications.',
-      nl: 'Rubyx leerde me gegevensacquisitie in beperkte omgevingen en energiezuinige radiotransmissie.',
+      fr: 'Rubyx m\'a appris a faire cooperer vision par ordinateur, algorithmique et hardware dans un systeme physique complet, en equipe internationale. Valider le modele numerique avant d\'agir sur le monde reel : un reflexe directement transposable a la qualite et au controle de process.',
+      en: 'Rubyx taught me to make computer vision, algorithms and hardware cooperate in a complete physical system, within an international team. Validating the digital model before acting on the real world: a reflex directly transferable to quality and process control.',
+      nl: 'Rubyx leerde me computervisie, algoritmen en hardware laten samenwerken in een compleet fysiek systeem, in een internationaal team.',
     },
     date: '2024-01',
-    link: 'https://github.com/juniorymusic/Rubyx',
+    link: 'https://github.com/Yanstart/Rubyx',
     tags: ['Arduino', 'LoRa', 'D3.js', 'BME280', 'Data Visualization'],
   },
   {
@@ -418,6 +442,29 @@ const fullStackActivities: Activity[] = [
     proof: '/docs/makeitgreen-certificate.pdf',
     tags: ['React Native', 'Hackathon', 'Mobile', 'Sustainability'],
   },
+  {
+    id: 'fs-summerschool',
+    theme: { fr: 'Developpement Full-Stack', en: 'Full-Stack Development', nl: 'Full-Stack Ontwikkeling' },
+    hours: 10,
+    type: 'summer_school',
+    title: {
+      fr: 'Summer School React Native (2024)',
+      en: 'React Native Summer School (2024)',
+      nl: 'React Native Summer School (2024)',
+    },
+    description: {
+      fr: 'Summer school internationale de developpement mobile React Native, avec des etudiants de Seneca Polytechnic (Canada) et de Business Academy Aarhus (Danemark). Travail en equipes mixtes sur un projet mobile complet.',
+      en: 'International React Native mobile development summer school, with students from Seneca Polytechnic (Canada) and Business Academy Aarhus (Denmark). Mixed international teams working on a complete mobile project.',
+      nl: 'Internationale React Native summer school, met studenten van Seneca Polytechnic (Canada) en Business Academy Aarhus (Denemarken).',
+    },
+    reflection: {
+      fr: 'Premiere vraie experience de collaboration internationale en anglais, avant le Vietnam et Porto. J\'y ai appris a m\'aligner vite avec des coequipiers aux methodes differentes : la base du travail en environnement matriciel.',
+      en: 'First real international collaboration experience in English, before Vietnam and Porto. I learned to align quickly with teammates who work differently: the basis of working in a matrix environment.',
+      nl: 'Eerste echte internationale samenwerkingservaring in het Engels, voor Vietnam en Porto.',
+    },
+    date: '2024-07',
+    tags: ['React Native', 'Mobile', 'International', 'Teamwork'],
+  },
 ];
 
 // ============================================
@@ -505,6 +552,54 @@ const aiActivities: Activity[] = [
     date: '2024-09',
     link: 'https://github.com/juniorymusic/Varuna',
     tags: ['PyTorch', 'U-Net', 'OpenSlide', 'Computer Vision', 'Medical AI'],
+  },
+  {
+    id: 'ai-cyberwars',
+    theme: { fr: 'IA & Automatisation', en: 'AI & Automation', nl: 'AI & Automatisering' },
+    hours: 10,
+    type: 'competition',
+    title: {
+      fr: 'CyberWars 2026 (Porto) - Vainqueur',
+      en: 'CyberWars 2026 (Porto) - Winner',
+      nl: 'CyberWars 2026 (Porto) - Winnaar',
+    },
+    description: {
+      fr: 'Programme intensif Erasmus+ (ISLA Gaia, Porto) melant cybersecurite et entrepreneuriat : defis d\'entreprises reelles, prototype, business model et pitch final devant jury (Dragon\'s Den). Notre equipe internationale a remporte la competition avec le concept AEGIS-Rx.',
+      en: 'Erasmus+ intensive programme (ISLA Gaia, Porto) mixing cybersecurity and entrepreneurship: real company challenges, prototype, business model and final pitch in front of a jury (Dragon\'s Den). Our international team won the competition with the AEGIS-Rx concept.',
+      nl: 'Erasmus+ intensief programma (ISLA Gaia, Porto) dat cybersecurity en ondernemerschap combineert: echte bedrijfsuitdagingen, prototype, businessmodel en eindpitch voor een jury. Ons internationale team won de competitie met het AEGIS-Rx concept.',
+    },
+    reflection: {
+      fr: 'CyberWars m\'a confirme que je suis aussi a l\'aise sur un business model que sur une architecture technique. Cadrer un probleme client, prioriser, pitcher : exactement les competences que je veux professionnaliser en gestion de projet.',
+      en: 'CyberWars confirmed that I am as comfortable with a business model as with a technical architecture. Framing a client problem, prioritising, pitching: exactly the skills I want to professionalise in project management.',
+      nl: 'CyberWars bevestigde dat ik me even comfortabel voel bij een businessmodel als bij een technische architectuur.',
+    },
+    date: '2026-05',
+    link: 'https://ehub.islagaia.pt/events/cyberwars',
+    tags: ['Entrepreneurship', 'Cybersecurity', 'Pitch', 'Erasmus+', 'Winner'],
+  },
+  {
+    id: 'ai-aegis',
+    theme: { fr: 'IA & Automatisation', en: 'AI & Automation', nl: 'AI & Automatisering' },
+    hours: 10,
+    type: 'projet',
+    title: {
+      fr: 'AEGIS-Rx - Pare-feu IA pour donnees reglementees',
+      en: 'AEGIS-Rx - AI Firewall for Regulated Data',
+      nl: 'AEGIS-Rx - AI Firewall voor Gereguleerde Data',
+    },
+    description: {
+      fr: 'Suite du concept gagnant de CyberWars, developpe comme un vrai produit : agent Rust avec SLM local (ONNX), aucune donnee ne quitte le poste, audit trail ALCOA+ (HMAC chaine), extensions Chrome/Firefox/Safari, management node on-premise. Pack pharma cle en main : dossier de validation IQ/OQ/PQ, GAMP 5, 21 CFR Part 11, 13 change controls. 345 tests Rust, F1 > 0,95, latence P99 < 30 ms.',
+      en: 'Follow-up of the winning CyberWars concept, developed as a real product: Rust agent with local SLM (ONNX), no data leaves the device, ALCOA+ audit trail (chained HMAC), Chrome/Firefox/Safari extensions, on-premise management node. Turnkey pharma pack: IQ/OQ/PQ validation dossier, GAMP 5, 21 CFR Part 11, 13 change controls. 345 Rust tests, F1 > 0.95, P99 latency < 30 ms.',
+      nl: 'Vervolg op het winnende CyberWars-concept, ontwikkeld als een echt product: Rust-agent met lokale SLM (ONNX), geen data verlaat het toestel, ALCOA+ audit trail, Chrome/Firefox/Safari-extensies, on-premise management node. Kant-en-klaar farmapakket: IQ/OQ/PQ-validatiedossier, GAMP 5, 21 CFR Part 11, 13 change controls.',
+    },
+    reflection: {
+      fr: 'AEGIS-Rx est mon ecole de la qualite pharma : j\'y vis le change control, la tracabilite ALCOA+ et la validation IQ/OQ/PQ au quotidien, sur un produit que je pilote de bout en bout.',
+      en: 'AEGIS-Rx is my pharma quality school: I live change control, ALCOA+ traceability and IQ/OQ/PQ validation daily, on a product I manage end to end.',
+      nl: 'AEGIS-Rx is mijn school voor farmakwaliteit: change control, ALCOA+ traceerbaarheid en IQ/OQ/PQ-validatie, dagelijks.',
+    },
+    date: '2026-04',
+    link: 'https://github.com/Yanstart/AEGIS-Rx',
+    tags: ['Rust', 'ONNX', 'GAMP 5', '21 CFR Part 11', 'ALCOA+', 'Change Control'],
   },
 ];
 
