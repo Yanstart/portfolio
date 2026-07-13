@@ -119,6 +119,17 @@ export default function DuelGame() {
     return () => window.removeEventListener('keydown', onKey);
   }, [close]);
 
+  // Lock page scroll while the duel is open
+  useEffect(() => {
+    if (open) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+  }, [open]);
+
   const startRound = useCallback(() => {
     setPhase('steady');
     const delay = 1200 + Math.random() * 2800;
@@ -181,7 +192,7 @@ export default function DuelGame() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+        className="fixed inset-0 z-[200] flex items-center justify-center p-4"
         style={{
           background:
             phase === 'draw'
@@ -194,6 +205,7 @@ export default function DuelGame() {
         {/* Close */}
         <button
           onClick={close}
+          onMouseDown={(e) => e.stopPropagation()}
           className="absolute top-6 right-6 p-2 text-[var(--western-cream)] opacity-60 hover:opacity-100 transition-opacity"
           aria-label={t('close')}
         >

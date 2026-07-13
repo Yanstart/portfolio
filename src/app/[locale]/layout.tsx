@@ -107,7 +107,7 @@ export default async function LocaleLayout({ children, params }: Props) {
               {/* Skip to main content - Accessibility */}
               <a
                 href="#main-content"
-                className="skip-link focus:top-0"
+                className="skip-link"
               >
                 Skip to main content
               </a>

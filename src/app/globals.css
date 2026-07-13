@@ -126,21 +126,22 @@ body::before {
   outline-offset: 3px;
 }
 
-/* Skip to main content link */
+/* Skip to main content link: invisible until keyboard focus */
 .skip-link {
-  position: absolute;
-  top: -40px;
-  left: 0;
+  position: fixed;
+  top: 0;
+  left: 8px;
+  transform: translateY(-150%);
   background: var(--western-rust);
   color: var(--western-cream);
   padding: 8px 16px;
-  z-index: 100;
-  transition: top 0.3s;
+  z-index: 90;
+  transition: transform 0.2s;
   font-family: 'Special Elite', monospace;
 }
 
-.skip-link:focus {
-  top: 0;
+.skip-link:focus-visible {
+  transform: translateY(8px);
 }
 
 /* Reduced motion for users who prefer it */
